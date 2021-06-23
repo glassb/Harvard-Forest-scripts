@@ -1,33 +1,20 @@
 # Benjamin Glass
-# June 22, 2021
+# Last Edits: June 23, 2021
 
+# Script overview: the goal of this script is to allow our raster data to interact with
+#     our flux footprint prediction (FFP) model data.
 
-# -------------------------------------------------------------------------------------------
-# -------------------------------------------------------------------------------------------
-# ------------------------------------ MASTER SCRIPT ----------------------------------------
-# -------------------------------------------------------------------------------------------
-# -------------------------------------------------------------------------------------------
-
-
-# Script overview: this script takes in FFP_output.csv files and offers a filter function
-#     in order to specify which r value and decimal day you want. The end goal with this 
-#     script is to take the overlapping footprint area as a vector polygon and clip the
-#     landsat raster imagery by the polygon (which will have the flux values as attributes).
-#     Then, we will have the ability to do raster calculations on the clipped raster image. 
-
-##### ------------------------------- FRONT MATTER -------------------------------------
+##### ------------------------------- 00 FRONT MATTER -------------------------------------
 library(tidyverse)
 library(sp)
 library(raster)
 library(rgdal)
+library(rgeos)
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/misc")
 
 
-
-
-
-##### ------------------------------- getFootprint FUNCTION -------------------------------------
+##### ------------------------------- 01: FUNCTION getFootprint -------------------------------------
 # function that puts in decimal day, r, and file and gets out a single vector ring
 getFootprint <- function(file,dayVar,rVar) {
   
@@ -70,22 +57,16 @@ sps = SpatialPolygons(list(ps),proj4string = CRS("+proj=utm +zone=18 +ellps=WGS8
 print(sps)
 
 
-##### ------------------------------- LANDSAT SCRIPT -------------------------------------
+##### ------------------------------- 02: FUNCTION nat/inf composites  -------------------------------------
 
 # Benjamin Glass
 # June 22, 2021
 
 
-# Script overview: this script loads in Landsat8 image files from our GEE editor. 
+# Function overview: this function loads in Landsat8 image files from our GEE editor. 
 #     It takes in raster image collections of all the bands in an IC and offers
 #     some functions in order to manipulate that function. 
 
-
-
-library(raster)
-library(rgdal)
-library(rgeos)
-library(tidyverse)
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/Landsat8_outputs")
 
@@ -136,7 +117,7 @@ FFP_masked <- infComp(crop(masked,sps))
 
 
 
-##### ------------------------------- getRasterMask FUNCTION* -------------------------------------
+##### ------------------------------- 03: FUNCTION getRasterMask * -------------------------------------
 
 # inputs: raster tif, FFP_output file, dayVar, and rVar
 getRasterMask <- function(FFP_file,dayVar,rVar,rasterImage) {
@@ -189,7 +170,7 @@ read <- getRasterMask("FFP.hr.lines.96.11.csv",306.5417,.75,"2017-05-20-140.tif"
 
 #the resulting output is a raster that we can now do raster calculations on
 
-##### ------------------------------- getRasterMask (megaplot.tif) -----------------------------
+##### ------------------------------- 04: FUNCTION getRasterMask (with megaplot.tif) -----------------------------
 
 #gets pixels of Megaplot tif file based on FFP output parameters
 getRasterMaskMEGAPLOT <- function(FFP_file,dayVar,rVar) {
@@ -240,5 +221,6 @@ getRasterMaskMEGAPLOT <- function(FFP_file,dayVar,rVar) {
   
 } 
 
+##### ------------------------------- TESTS ----
 
 read <- getRasterMaskMEGAPLOT("FFP.hr.lines.96.11.csv",307,.75)
