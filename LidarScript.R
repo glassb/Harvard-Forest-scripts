@@ -2,6 +2,7 @@
 # This script reads in LIDAR raster tiles from a specific year (NEON data)
 # and exports a mosaic raster of all the raster tiles based on a specific extent
 
+#https://data.neonscience.org/data-products/DP3.30015.001
 
 library(tidyverse)
 library(sp)
