@@ -1,3 +1,5 @@
+#this file just previews all the raster input data that we are collecting
+
 
 library(raster)
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/00 spatial deliverables")
@@ -14,9 +16,8 @@ plot(conProp)
 plot(decidProp)
 plot(soilDrainage)
 plot(pht)
-plot(chm201908)
+#plot(chm201908)
 
 soilDrainage
 pht
-
 
