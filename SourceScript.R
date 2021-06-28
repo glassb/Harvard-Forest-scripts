@@ -1,8 +1,7 @@
 
 setwd("/Users/benjaminglass/HF21-Scripts")
 
-source("RasterProducts.R")
-source("FFP-Raster_interactions.R")
+source("00_projectFunctions.R")
 source("getStatsf.R")
 
 

@@ -30,7 +30,7 @@ getFootprint <- function(file,dayVar,rVar) {
   FFP <- SpatialPointsDataFrame(FFP_filtered[,6:7],
                                 FFP_filtered,
                                 proj4string = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-  print(FFP)
+  #print(FFP)
   plot(FFP,pch=20,col="red")
   
   return(FFP)
@@ -49,12 +49,12 @@ fprint <- fprint %>%
          dec.day == 363)
 
 coords = cbind(fprint[6],fprint[7])
-print(coords)
+#print(coords)
 
 p = Polygon(coords)
 ps = Polygons(list(p),1)
 sps = SpatialPolygons(list(ps),proj4string = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-print(sps)
+#print(sps)
 
 
 ##### ------------------------------- 02: FUNCTION nat/inf composites  -------------------------------------
@@ -110,10 +110,10 @@ file = "2017-05-20-140.tif"
 ##### ------------------------------- TESTS AND OTHER MISC -------------------------------------
 
 masked <- mask(stack(file),sps)
-natComp(masked)
+#natComp(masked)
 
 #FINAL PRODUCT
-FFP_masked <- infComp(crop(masked,sps))
+#FFP_masked <- infComp(crop(masked,sps))
 
 
 
