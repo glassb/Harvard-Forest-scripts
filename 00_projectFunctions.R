@@ -39,7 +39,7 @@ getFootprint <- function(file,dayVar,rVar) {
 
 ##### ------------------------------- TESTS AND OTHER MISC -------------------------------------
 #calling the function with a specific file and other params
-FFP_test <- getFootprint("FFP_test.csv",363,.75)
+#FFP_test <- getFootprint("FFP_test.csv",363,.75)
 
 # CREATES POLYGON AND MASKS RASTER TO IT
 fprint <- read.csv("FFP_test.csv",stringsAsFactors=FALSE)
@@ -109,7 +109,7 @@ file = "2017-05-20-140.tif"
 
 ##### ------------------------------- TESTS AND OTHER MISC -------------------------------------
 
-masked <- mask(stack(file),sps)
+#masked <- mask(stack(file),sps)
 #natComp(masked)
 
 #FINAL PRODUCT
@@ -166,66 +166,66 @@ getRasterMask <- function(FFP_file,dayVar,rVar,rasterImage) {
 
 ##### ------------------------------- TESTS -------------------------------------
 
-read <- getRasterMask("FFP.hr.lines.96.11.csv",306.5417,.75,"2017-05-20-140.tif")
+#read <- getRasterMask("FFP.hr.lines.96.11.csv",306.5417,.75,"2017-05-20-140.tif")
 
 #the resulting output is a raster that we can now do raster calculations on
 
 ##### ------------------------------- 04: FUNCTION getRasterMask (with megaplot.tif) -----------------------------
 
-#gets pixels of Megaplot tif file based on FFP output parameters
-getRasterMaskMEGAPLOT <- function(FFP_file,dayVar,rVar) {
-  
-  # go to FFP outputs file (EMS tower FFP output files)
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_outputs")
-  
-  #(getFootprint(FFP_file,dayVar,rVar))
-  
-  #reads in EMS FFP file
-  FFP_output <- read.csv(FFP_file,stringsAsFactors=FALSE)
-  print("FFP output file READ IN.")
-  
-  #filters by dec.day and r
-  FFP_filtered <- FFP_output %>%
-    filter(r==rVar,
-           dec.day == dayVar) %>%
-    mutate(easting = xr+732275,
-           northing=yr+4713368)
-  print("FFP output FILTERED.")
-  
-  #define coords as coordinates of all the vector points in FFP filtered
-  coords = cbind(FFP_filtered[5],FFP_filtered[6])
-  
-  #create spatial polygon with all FFP filtered vector points (vector points -> polygon)
-  p = Polygon(coords)
-  ps = Polygons(list(p),1)
-  sps = SpatialPolygons(list(ps),proj4string = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-  print("Spatial Polygon CREATED.")
-  
-  #set working directory to where Landsat8 outputs are
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/GIS")
-  
-  #create raster stack from landsat8 imagery
-  megaplotDP <- raster("DecidiousProportionMegaPlot.tif")
-  
-  print("Raster Image READ IN.")
-  
-  #mask landsat imagery by FFP spatial polygon
-  masked <- mask(megaplotDP,sps)
-  
-  par(mfrow=c(1,2))
-  plot(megaplotDP,axes=FALSE)
-  plot(masked,axes=FALSE)
-  #FFP_masked <- crop(masked,sps)
-  #plot(FFP_masked)
-  return(crop(masked,sps))
-  
-} 
+# #gets pixels of Megaplot tif file based on FFP output parameters
+# getRasterMaskMEGAPLOT <- function(FFP_file,dayVar,rVar) {
+#   
+#   # go to FFP outputs file (EMS tower FFP output files)
+#   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_outputs")
+#   
+#   #(getFootprint(FFP_file,dayVar,rVar))
+#   
+#   #reads in EMS FFP file
+#   FFP_output <- read.csv(FFP_file,stringsAsFactors=FALSE)
+#   print("FFP output file READ IN.")
+#   
+#   #filters by dec.day and r
+#   FFP_filtered <- FFP_output %>%
+#     filter(r==rVar,
+#            dec.day == dayVar) %>%
+#     mutate(easting = xr+732275,
+#            northing=yr+4713368)
+#   print("FFP output FILTERED.")
+#   
+#   #define coords as coordinates of all the vector points in FFP filtered
+#   coords = cbind(FFP_filtered[5],FFP_filtered[6])
+#   
+#   #create spatial polygon with all FFP filtered vector points (vector points -> polygon)
+#   p = Polygon(coords)
+#   ps = Polygons(list(p),1)
+#   sps = SpatialPolygons(list(ps),proj4string = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+#   print("Spatial Polygon CREATED.")
+#   
+#   #set working directory to where Landsat8 outputs are
+#   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/GIS")
+#   
+#   #create raster stack from landsat8 imagery
+#   megaplotDP <- raster("DecidiousProportionMegaPlot.tif")
+#   
+#   print("Raster Image READ IN.")
+#   
+#   #mask landsat imagery by FFP spatial polygon
+#   masked <- mask(megaplotDP,sps)
+#   
+#   par(mfrow=c(1,2))
+#   plot(megaplotDP,axes=FALSE)
+#   plot(masked,axes=FALSE)
+#   #FFP_masked <- crop(masked,sps)
+#   #plot(FFP_masked)
+#   return(crop(masked,sps))
+#   
+# } 
 
 
 
 ##### ------------------------------- TESTS ----
 
-read <- getRasterMaskMEGAPLOT("FFP.hr.lines.96.11.csv",307,.75)
+#read <- getRasterMaskMEGAPLOT("FFP.hr.lines.96.11.csv",307,.75)
 
 
 
@@ -237,21 +237,21 @@ read <- getRasterMaskMEGAPLOT("FFP.hr.lines.96.11.csv",307,.75)
 RasterClipbyFFP <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   
   # go to FFP outputs file (EMS tower FFP output files)
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_outputs")
+  #setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_outputs")
   
   #(getFootprint(FFP_file,dayVar,rVar))
   
   #reads in EMS FFP file
-  FFP_output <- read.csv(FFP_file,stringsAsFactors=FALSE)
-  print("FFP output file READ IN.")
+  #FFP_output <- read.csv(FFP_file,stringsAsFactors=FALSE)
+  #print("FFP output file READ IN.")
   
   #filters by dec.day and r
-  FFP_filtered <- FFP_output %>%
+  FFP_filtered <- FFP_file %>%
     filter(r==rVar,
            dec.day == dayVar) %>%
     mutate(easting = xr+732275,
            northing=yr+4713368)
-  print("FFP output FILTERED.")
+  #print("FFP output FILTERED.")
   
   #define coords as coordinates of all the vector points in FFP filtered
   coords = cbind(FFP_filtered[5],FFP_filtered[6])
@@ -260,7 +260,7 @@ RasterClipbyFFP <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   p = Polygon(coords)
   ps = Polygons(list(p),1)
   sps = SpatialPolygons(list(ps),proj4string = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-  print("Spatial Polygon CREATED.")
+  #print("Spatial Polygon CREATED.")
   plot(sps)
   
   #set working directory to where outputs are
@@ -268,17 +268,27 @@ RasterClipbyFFP <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   
   #create raster stack from landsat8 imagery
   rast <- raster(rasterImage)
-  print("Raster Image READ IN.")
+  #print("Raster Image READ IN.")
   
   #mask landsat imagery by FFP spatial polygon
   masked <- mask(rast,sps)
-  print(masked)
+  #print(masked)
   #FFP_masked <- crop(masked,sps))
   
-  par(mfrow=c(1,2))
-  plot(rast,axes=FALSE)
-  plot(masked,axes=FALSE)
-  return(crop(masked,sps))
+  #par(mfrow=c(1,2))
+  #plot(rast,axes=FALSE)
+  #plot(masked,axes=FALSE)
+  #return(crop(masked,sps))
+  
+  #setwd("/Users/benjaminglass/HF21-Scripts")
+  #source("getStatsf.R")
+  #print(summary(crop(masked,sps)))
+  #return(getStats(crop(masked,sps)))
+  raster <- crop(masked,sps)
+  return(c(cellStats(raster, stat='mean', na.rm=TRUE),
+           cellStats(raster, stat='sd', na.rm=TRUE)))
+  
+  
 } 
 
 
