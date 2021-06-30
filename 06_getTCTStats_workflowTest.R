@@ -19,6 +19,8 @@ getTCTStats <- function(FFP_file,dayVar,rVar,rast) {
   greennessRast <- projectRaster(green, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   
+  #plot(greennessRast)
+  
   
   # go to FFP outputs file (EMS tower FFP output files)
   #setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_outputs")
@@ -50,7 +52,7 @@ getTCTStats <- function(FFP_file,dayVar,rVar,rast) {
   ps = Polygons(list(p),1)
   sps = SpatialPolygons(list(ps),proj4string = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   #print("Spatial Polygon CREATED.")
-  plot(sps)
+  #plot(sps)
   
   #set working directory to where outputs are
   
@@ -63,9 +65,9 @@ getTCTStats <- function(FFP_file,dayVar,rVar,rast) {
   #mask landsat imagery by FFP spatial polygon
  
   
-  # par(mfrow=c(1,2))
-  # plot(rast,axes=FALSE)
-  # plot(raster,axes=FALSE)
+  par(mfrow=c(1,2))
+  plot(rast,axes=FALSE)
+  plot(raster,axes=FALSE)
   
   
   maskedB <- mask(brightnessRast,sps)

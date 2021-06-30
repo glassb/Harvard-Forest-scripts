@@ -231,10 +231,34 @@ getRasterMask <- function(FFP_file,dayVar,rVar,rasterImage) {
 
 
 
-##### ------------------------------- 05: FUNCTION: RasterClipbyFFP ------------------------
 
-# inputs: raster tif, FFP_output file, dayVar, and rVar
-RasterClipbyFFP <- function(FFP_file,dayVar,rVar,rasterImage,path) {
+
+
+
+
+
+
+
+# BLANK SPACE
+
+
+# BLANK SPACE
+
+
+
+
+
+
+
+
+
+
+
+
+##### ------------------------------- 05: FUNCTION: extractStats ------------------------
+
+# inputs: raster tif, FFP_output file, dayVar, and rVar, raster and raster path
+extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   
   # go to FFP outputs file (EMS tower FFP output files)
   #setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_outputs")
@@ -284,10 +308,19 @@ RasterClipbyFFP <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   #source("getStatsf.R")
   #print(summary(crop(masked,sps)))
   #return(getStats(crop(masked,sps)))
-  raster <- crop(masked,sps)
-  return(c(cellStats(raster, stat='mean', na.rm=TRUE),
-           cellStats(raster, stat='sd', na.rm=TRUE)))
   
+  
+  # raster <- crop(masked,sps)
+  # return(c(cellStats(raster, stat='mean', na.rm=TRUE),
+     #      cellStats(raster, stat='sd', na.rm=TRUE)))
+  
+  # print(c(extract(rast,sps,method='simple',buffer=NULL,fun=mean,na.rm=TRUE),
+  #         (extract(rast,sps,method='simple',buffer=NULL,fun=sd,na.rm=TRUE))))
+  
+  return(   c(extract(rast,sps,method='simple',buffer=NULL,fun=mean,na.rm=TRUE),
+              (extract(rast,sps,method='simple',buffer=NULL,fun=sd,na.rm=TRUE))
+              )
+  )
   
 } 
 

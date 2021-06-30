@@ -7,9 +7,14 @@ source("00_projectFunctions.R")
 #choose a single month of footprints
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_outputs")
 
-FFPDec2010 <- read.csv("FFP.hr.lines.10.12.csv",stringsAsFactors=FALSE)
-results <- data.frame(decDay=NA,mean=NA,std=NA)
+file <- "FFP.hr.lines.10.12.csv"
+FFPDec2010 <- read.csv(file,stringsAsFactors=FALSE)
+results <- data.frame(year=NA,decDay=NA,mean=NA,std=NA)
 #for each unique day in the FFP data file
+year <- substr(file,14,15)
+
+
+
 for (decDay in unique(FFPDec2010$dec.day)) { 
   print(decDay)
   
@@ -17,10 +22,11 @@ for (decDay in unique(FFPDec2010$dec.day)) {
   FFP <- FFPDec2010[FFPDec2010$dec.day == decDay, ]
   
   #get stats for the DecProp.tif
-  stats <- RasterClipbyFFP(FFP,decDay,.75,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
+
+  stats <- extractStats(FFP,decDay,.75,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
   
   #print(stats[2])
-  new_row <- c(decDay,stats[1],stats[2])
+  new_row <- c(year,decDay,stats[1],stats[2])
   results <- rbind(results,new_row)
   #print(results)
   
