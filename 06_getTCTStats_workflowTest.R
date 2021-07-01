@@ -15,11 +15,14 @@ getTCTStats <- function(FFP_file,dayVar,rVar,rast) {
   green <- subset(bandStack,2)
   wet <- subset(bandStack,3)
   
+  print(bright)
+  
   brightnessRast <- projectRaster(bright, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   greennessRast <- projectRaster(green, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   
   #plot(greennessRast)
+  print(brightnessRast)
   
   
   # go to FFP outputs file (EMS tower FFP output files)

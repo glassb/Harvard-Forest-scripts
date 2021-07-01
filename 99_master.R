@@ -1,31 +1,47 @@
 
 
+library(tidyverse)
+
 #read in all the fpp lines
 #create dataframe 
 setwd("/Users/benjaminglass/HF21-Scripts")
-
 source("10_getMGP_stats.R")
 source("12_getLIDAR_stats.R")
+source("13_getTCT_stats.R")
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
 
 temp = list.files(pattern="*.csv")
 
+#create a master results file
+  #masterResults <- df()
 
-# for (currentFile in temp) {
-#   print(currentFile)
-#   
-#   results_MGP_C <- getMGP_C_stats(currentFile)
-#   results_MGP_D <- getMGP_D_stats(currentFile)
-#   
-#   results_LIDAR_2014 <- getLIDAR_2014_stats(currentFile)
-#   results_LIDAR_2016 <- getLIDAR_2016_stats(currentFile)
-#   results_LIDAR_2017 <- getLIDAR_2017_stats(currentFile)
-#   results_LIDAR_2018 <- getLIDAR_2018_stats(currentFile)
-#   results_LIDAR_2019 <- getLIDAR_2019_stats(currentFile)
-# 
-#   
-# }
+for (currentFile in temp) {
+  print(currentFile)
+
+  results_MGP_C <- getMGP_C_stats(currentFile)
+  results_MGP_D <- getMGP_D_stats(currentFile)
+
+  results_LIDAR_2014 <- getLIDAR_2014_stats(currentFile)
+  
+  results_TCT <- getTCTStats(currentFile)
+  
+  #need to merge all these four results files together
+    #master <- merge(results_MGP_C,results_MGP_D,by = c("year","decDay"))
+  
+  #add new results to the master results file
+  
+  # year <- substr(currentFile,14,15)
+  # results_LIDAR_2016 <- getLIDAR_2016_stats(currentFile)
+  # results_LIDAR_2017 <- getLIDAR_2017_stats(currentFile)
+  # results_LIDAR_2018 <- getLIDAR_2018_stats(currentFile)
+  # results_LIDAR_2019 <- getLIDAR_2019_stats(currentFile)
+  
+  
+  
+
+
+}
 
 
 #myfiles = lapply(temp, read.delim)
@@ -34,14 +50,15 @@ temp = list.files(pattern="*.csv")
 
 
 
-results_MGP_C <- getMGP_C_stats("FFP.hr.lines.10.12.csv")
-results_MGP_D <- getMGP_D_stats("FFP.hr.lines.10.12.csv")
-
+# results_MGP_C <- getMGP_C_stats("FFP.hr.lines.10.12.csv")
+# results_MGP_D <- getMGP_D_stats("FFP.hr.lines.10.12.csv")
+# 
 # results_LIDAR_2014 <- getLIDAR_2014_stats("FFP.hr.lines.10.12.csv")
 # results_LIDAR_2016 <- getLIDAR_2016_stats("FFP.hr.lines.10.12.csv")
 # results_LIDAR_2017 <- getLIDAR_2017_stats("FFP.hr.lines.10.12.csv")
 # results_LIDAR_2018 <- getLIDAR_2018_stats("FFP.hr.lines.10.12.csv")
 # results_LIDAR_2019 <- getLIDAR_2019_stats("FFP.hr.lines.10.12.csv")
+
 
 
 

@@ -13,8 +13,7 @@ getLIDAR_2014_stats <- function(FFP_file)  {
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L14_mean=NA,L14_std=NA)
   #for each unique day in the FFP data file
-  year <- substr(file,14,15)
-  
+  year <- substr(FFP_file,14,15)
   
   for (decDay in unique(file$dec.day)) { 
     print(decDay)
@@ -29,7 +28,7 @@ getLIDAR_2014_stats <- function(FFP_file)  {
     #print(stats[2])
     new_row <- c(year,decDay,stats[1],stats[2])
     results <- rbind(results,new_row)
-    #print(results)
+    print(results)
     
     
     # FFP_prime <- FFP %>%
@@ -49,7 +48,7 @@ getLIDAR_2016_stats <- function(FFP_file)  {
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L15_mean=NA,L15_std=NA)
   #for each unique day in the FFP data file
-  year <- substr(file,14,15)
+  year <- substr(FFP_file,14,15)
   
   
   for (decDay in unique(file$dec.day)) { 
@@ -85,7 +84,7 @@ getLIDAR_2017_stats <- function(FFP_file)  {
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L17_mean=NA,L17_std=NA)
   #for each unique day in the FFP data file
-  year <- substr(file,14,15)
+  year <- substr(FFP_file,14,15)
   
   
   for (decDay in unique(file$dec.day)) { 
@@ -121,7 +120,7 @@ getLIDAR_2018_stats <- function(FFP_file)  {
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L18_mean=NA,L18_std=NA)
   #for each unique day in the FFP data file
-  year <- substr(file,14,15)
+  year <- substr(FFP_file,14,15)
   
   
   for (decDay in unique(file$dec.day)) { 
@@ -157,7 +156,7 @@ getLIDAR_2019_stats <- function(FFP_file)  {
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L19_mean=NA,L19_std=NA)
   #for each unique day in the FFP data file
-  year <- substr(file,14,15)
+  year <- substr(FFP_file,14,15)
   
   
   for (decDay in unique(file$dec.day)) { 
