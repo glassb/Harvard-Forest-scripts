@@ -1,6 +1,6 @@
 # HF21-Scripts
-A backup for my scripts for the [Harvard Forest] (https://harvardforest.fas.harvard.edu/) REU program, in collaboration
-with the [Wofsy-Munger Group] (http://atmos.seas.harvard.edu/lab/) on Biosphere-Atmosphere Exchange (Harvard University).
+A backup for my scripts for the [Harvard Forest](https://harvardforest.fas.harvard.edu/) REU program, in collaboration
+with the [Wofsy-Munger Group](http://atmos.seas.harvard.edu/lab/) on Biosphere-Atmosphere Exchange (Harvard University).
 
 Google Earth Engine Scripts that wrangle input data can be found here: https://code.earthengine.google.com/?accept_repo=users/bglass/HF21
 
