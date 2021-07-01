@@ -18,16 +18,16 @@ getTCTStats <- function(FFP_file) {
     FFP <- file[file$dec.day == decDay, ]
     
     
-    
-    
+    # NEED TO DO THIS
     #find out most recent landsat image
-    #grab that landsat image
-    #find out stats about the landsat image in the following rows
+        # based on the decDay and year of the FFP, find the raster tif file that is most recent
     
     # TCT_brightness, TCT_greenness, TCT_wetness
   
     setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
     TCTimage <- stack("test.tif")
+    
+    #print the year and decDay of FFP, and print the year and DecDay of raster tif file
     #print(TCTimage)
 
     bright <- subset(TCTimage,1)

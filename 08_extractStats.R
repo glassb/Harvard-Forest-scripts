@@ -49,7 +49,7 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   #create raster stack from landsat8 imagery
   rast <- raster(rasterImage)
   #print("Raster Image READ IN.")
-  print(rast)
+  #print(rast)
   
   #mask landsat imagery by FFP spatial polygon
   masked <- mask(rast,sps)
