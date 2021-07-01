@@ -19,35 +19,43 @@ temp = list.files(pattern="*.csv")
 for (currentFile in temp) {
   print(currentFile)
   year <- substr(currentFile,14,15)
-
+  
+  # FIRST SET OF FUNCTIONS FOR MEGAPLOT
   #results_MGP_C <- getMGP_C_stats(currentFile)
   #results_MGP_D <- getMGP_D_stats(currentFile)
   
-  #if statement that decides which lidar year to get
-  if (as.numeric(year)>= 90 | as.numeric(year) <= 14 ) {
-    print(paste0(year," Lidar 2014"))
-    results_LIDAR <- getLIDAR_2014_stats(currentFile)
-  } else if (as.numeric(year) <= 16) {
-    print(paste0(year,"Lidar 2016"))
-    results_LIDAR <- getLIDAR_2016_stats(currentFile)
-  } else if (as.numeric(year) <= 17) {
-    print(paste0(year,"Lidar 2017"))
-    results_LIDAR <- getLIDAR_2017_stats(currentFile)
-  } else if (as.numeric(year) <= 18) {
-    print(paste0(year,"Lidar 2018"))
-    results_LIDAR <- getLIDAR_2018_stats(currentFile)
-  } else if (as.numeric(year) <= 19) {
-    print(paste0(year,"Lidar 2019"))
-    results_LIDAR <- getLIDAR_2019_stats(currentFile)
-  } else {
-    print("ERROR: CURRENT FILE YEAR ",year,"HAS NOT BEEN FED THROUGH FUNCTION")
-  }
   
+  # SECOND SET OF FUNCTIONS FOR LIDAR
+  #if statement that decides which lidar year to get
+  # if (as.numeric(year)>= 90 | as.numeric(year) <= 14 ) {
+  #   print(paste0(year," Lidar 2014"))
+  #   results_LIDAR <- getLIDAR_2014_stats(currentFile)
+  # } else if (as.numeric(year) <= 16) {
+  #   print(paste0(year,"Lidar 2016"))
+  #   results_LIDAR <- getLIDAR_2016_stats(currentFile)
+  # } else if (as.numeric(year) <= 17) {
+  #   print(paste0(year,"Lidar 2017"))
+  #   results_LIDAR <- getLIDAR_2017_stats(currentFile)
+  # } else if (as.numeric(year) <= 18) {
+  #   print(paste0(year,"Lidar 2018"))
+  #   results_LIDAR <- getLIDAR_2018_stats(currentFile)
+  # } else if (as.numeric(year) <= 19) {
+  #   print(paste0(year,"Lidar 2019"))
+  #   results_LIDAR <- getLIDAR_2019_stats(currentFile)
+  # } else {
+  #   print("ERROR: CURRENT FILE YEAR ",year,"HAS NOT BEEN FED THROUGH FUNCTION")
+  # }
+  # 
+  
+  
+  # THIRD FUNCTION FOR TCT FILES
   #if statement to decide which TCT file to get
   results_TCT <- getTCTStats(currentFile)
   
+  
+  #MERGE RESULTS
   #get results all together
-  results <- merge(merge(merge(results_MGP_C,results_MGP_D,by=c("year","decDay")),results_LIDAR,by=c("year","decDay")),results_TCT,by=c("year","decDay"))
+  #results <- merge(merge(merge(results_MGP_C,results_MGP_D,by=c("year","decDay")),results_LIDAR,by=c("year","decDay")),results_TCT,by=c("year","decDay"))
   
   #add new results to the master results file
 
@@ -89,12 +97,9 @@ for (currentFile in temp) {
 
 
 #master <- df()
-currentFile <- "FFP.hr.lines.03.8.csv"
-year <- substr(currentFile,14,15)
+# currentFile <- "FFP.hr.lines.03.8.csv"
+# year <- substr(currentFile,14,15)
 
-
-
-  
 
 
 

@@ -20,12 +20,13 @@ getTCTStats <- function(FFP_file) {
     
     # NEED TO DO THIS
     #find out most recent landsat image
+    TCT_image <- getRightDataDate(FFP_file,decDay)
         # based on the decDay and year of the FFP, find the raster tif file that is most recent
     
     # TCT_brightness, TCT_greenness, TCT_wetness
   
     setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    TCTimage <- stack("test.tif")
+    #TCTimage <- stack("test.tif")
     
     #print the year and decDay of FFP, and print the year and DecDay of raster tif file
     #print(TCTimage)
@@ -76,6 +77,69 @@ getTCTStats <- function(FFP_file) {
   return(results)
   
 } 
+
+
+
+getRightDataDate <- function(FFP_file,decDay) {
+  
+  require(lubridate)
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+  temp = list.files(pattern="*.tif")
+  
+  #create blank dataframe for all the dates of TCT files
+  TCT_dates <- data.frame(year=NA,julianDay=NA,month=NA,day=NA,fileName=NA)
+  
+  #load in all the files all their dates
+  for (currentFile in temp) {
+    year <- substr(currentFile,13,16)
+    month <- substr(currentFile,17,18)
+    day <- substr(currentFile,19,20)
+    julianDay <- yday(as.Date(paste0(year,"-",month,"-",day)))
+    #print(paste0(year," ",month," ",day," ",julianDay))
+    
+    new_row <- c(year,julianDay,month,day,currentFile)
+    TCT_dates <- rbind(TCT_dates,new_row)
+  }
+  
+  print(TCT_dates)
+  
+  
+  #get current FFP file and metrics
+  currentFile <- FFP_file
+  FFPyear <- as.numeric(substr(FFP_file,14,15))
+  FFPdecDay <- decDay
+  
+  #filter for the most recent file
+  matches <- TCT_dates %>%
+    mutate(yearDiff=FFPyear-as.numeric(substr(year,3,4)))%>%
+    filter(yearDiff>=0)
+  
+  minYearDiff <- min(matches$yearDiff)
+  
+  matches <- matches %>%
+    filter(yearDiff == minYearDiff) %>%
+    mutate(DayDiff = as.numeric(FFPdecDay)-as.numeric(julianDay)) %>%
+    filter(DayDiff >= 0) %>%
+    filter(rank(DayDiff) == 1)
+  
+  print(dim(matches))
+  if(nrow(matches) == 0) {
+    print("NO MATCHES")
+    return(NULL)
+  } else {
+    file <- matches$fileName
+    print(file)
+    return(file)
+  }
+  
+  
+}
+
+  
+
+
+
+
 
 
 
