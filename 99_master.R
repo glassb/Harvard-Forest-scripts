@@ -1,10 +1,15 @@
+# Benjamin Glass
+# Last Update: July 2, 2021
 
+# Script Overview: this master script iterates over all FFP output files
+  # and extracts spatial statistics for each decimal Day in each year of
+  # FFP output data. The spatial input data includes Megaplot proportions,
+  # Lidar, and TCT landsat 8 imagery.
 
 library(tidyverse)
 library(rgdal)
 
-#read in all the fpp lines
-#create dataframe 
+#read in source files
 setwd("/Users/benjaminglass/HF21-Scripts")
 source("10_getMGP_stats.R")
 setwd("/Users/benjaminglass/HF21-Scripts")
@@ -14,9 +19,10 @@ source("13_getTCT_stats.R")
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
 
+#get all FFP output files for EMS tower
 temp = list.files(pattern="*.csv")
 
-#create a master results file
+#create master results file (which will be our final product)
 masterResults <- data.frame(year=NA,
                             decDay=NA,
                             MGP_C_mean = NA,
@@ -31,14 +37,20 @@ masterResults <- data.frame(year=NA,
                             TCTg_std=NA,
                             TCTw_mean=NA,
                             TCTw_std=NA)
+
+#variable to count files completed for debugging
 iter <- 0
+
+#looping over all files in temp
 for (currentFile in temp) {
   iter <- iter+1
   
+  #printing
   print("============================================================")
   print(paste0("FFP FILE ",iter," OF ",length(temp),": ",currentFile))
   print("============================================================")
   
+  #get year of FFP file
   year <- substr(currentFile,14,15)
   
   #currentFile <- "FFP.hr.lines.00.3.csv"
@@ -78,14 +90,13 @@ for (currentFile in temp) {
   }
 
   
-  
   # THIRD FUNCTION FOR TCT FILES
   #if statement to decide which TCT file to get
   print("--------------------------------------TCT")
   results_TCT <- getTCTStats(currentFile)
   
   #MERGE RESULTS
-  #get results all together
+  #get results all together. This is a not-so-elegant way of doing this, but it does work (for now)
   results <- merge(merge(merge(results_MGP_C,results_MGP_D,by=c("year","decDay")),results_LIDAR,by=c("year","decDay")),results_TCT,by=c("year","decDay"))
   
   #add new results to the master results file
@@ -95,44 +106,16 @@ for (currentFile in temp) {
 }
 
 
-
-
-#myfiles = lapply(temp, read.delim)
-
-# results_MGP_C <- getMGP_C_stats("FFP.hr.lines.10.12.csv")
-# results_MGP_D <- getMGP_D_stats("FFP.hr.lines.10.12.csv")
-# 
-# results_LIDAR_2014 <- getLIDAR_2014_stats("FFP.hr.lines.10.12.csv")
-# results_LIDAR_2016 <- getLIDAR_2016_stats("FFP.hr.lines.10.12.csv")
-# results_LIDAR_2017 <- getLIDAR_2017_stats("FFP.hr.lines.10.12.csv")
-# results_LIDAR_2018 <- getLIDAR_2018_stats("FFP.hr.lines.10.12.csv")
-# results_LIDAR_2019 <- getLIDAR_2019_stats("FFP.hr.lines.10.12.csv")
-
-
+# ======= SCRIPT IN PSEUDOCODE ============
 
 #loop over the first ffp line file
     # feed the ffp file into megaplot function with specified megaplot (returns stats about that megaplot)
     # feed polygon into different megaplot function returning stats
     # feed polygon into all other fucntions
 
-    #you'll then have a shit ton of dataframes with (year,decDay,mean,std)
+    #you'll then have a ton of dataframes with (year,decDay,mean,std)
     #from this merge all the stats into a single dataframe with (year, DecDay,mean_megaplot1,std_megaplot1,etc.)
     #add this to the master dataframe created before the for loop
-
-
-#master <- df()
-# currentFile <- "FFP.hr.lines.03.8.csv"
-# year <- substr(currentFile,14,15)
-
-
-
-
-# results_MGP_C <- getMGP_C_stats(currentFile)
-# results_MGP_D <- getMGP_D_stats(currentFile)
-# results_LIDAR_2014 <- getLIDAR_2014_stats(currentFile)
-# results_TCT <- getTCTStats(currentFile)
-
-
 
 
 
