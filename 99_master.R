@@ -14,66 +14,81 @@ setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
 temp = list.files(pattern="*.csv")
 
 #create a master results file
-  #masterResults <- df()
+masterResults <- data.frame(year=NA,
+                            decDay=NA,
+                            MGP_C_mean = NA,
+                            MGP_C_std = NA,
+                            MGP_D_mean = NA,
+                            MGP_D_std = NA,
+                            L_mean = NA,
+                            L_std = NA,
+                            TCTb_mean=NA,
+                            TCTb_std=NA,
+                            TCTg_mean=NA,
+                            TCTg_std=NA,
+                            TCTw_mean=NA,
+                            TCTw_std=NA)
 
 for (currentFile in temp) {
-  print(currentFile)
+  print(paste0("Current FFP_line_csv. file: ",currentFile))
   year <- substr(currentFile,14,15)
   
   # FIRST SET OF FUNCTIONS FOR MEGAPLOT
-  #results_MGP_C <- getMGP_C_stats(currentFile)
-  #results_MGP_D <- getMGP_D_stats(currentFile)
+  print("--------------------------------------MGPC")
+  results_MGP_C <- getMGP_C_stats(currentFile)
   
+  print("--------------------------------------MGPD")
+  results_MGP_D <- getMGP_D_stats(currentFile)
   
-  # SECOND SET OF FUNCTIONS FOR LIDAR
+  #SECOND SET OF FUNCTIONS FOR LIDAR
   #if statement that decides which lidar year to get
-  # if (as.numeric(year)>= 90 | as.numeric(year) <= 14 ) {
-  #   print(paste0(year," Lidar 2014"))
-  #   results_LIDAR <- getLIDAR_2014_stats(currentFile)
-  # } else if (as.numeric(year) <= 16) {
-  #   print(paste0(year,"Lidar 2016"))
-  #   results_LIDAR <- getLIDAR_2016_stats(currentFile)
-  # } else if (as.numeric(year) <= 17) {
-  #   print(paste0(year,"Lidar 2017"))
-  #   results_LIDAR <- getLIDAR_2017_stats(currentFile)
-  # } else if (as.numeric(year) <= 18) {
-  #   print(paste0(year,"Lidar 2018"))
-  #   results_LIDAR <- getLIDAR_2018_stats(currentFile)
-  # } else if (as.numeric(year) <= 19) {
-  #   print(paste0(year,"Lidar 2019"))
-  #   results_LIDAR <- getLIDAR_2019_stats(currentFile)
-  # } else {
-  #   print("ERROR: CURRENT FILE YEAR ",year,"HAS NOT BEEN FED THROUGH FUNCTION")
-  # }
-  # 
+  print("--------------------------------------LIDAR")
+  if (as.numeric(year)>= 80 | as.numeric(year) <= 14 ) {
+    print(paste0("ERROR: CURRENT FILE YEAR ",year," DOES NOT HAVE APPROP. LIDAR DATA"))
+    print("USING 2014 LIDAR DATA")
+    results_LIDAR <- getLIDAR_2014_stats(currentFile)
+  } else if (as.numeric(year) < 16) {
+    print(paste0(year,"Lidar 2014"))
+    results_LIDAR <- getLIDAR_2014_stats(currentFile)
+  } else if (as.numeric(year) < 17) {
+    print(paste0(year,"Lidar 2016"))
+    results_LIDAR <- getLIDAR_2016_stats(currentFile)
+  } else if (as.numeric(year) < 18) {
+    print(paste0(year,"Lidar 2017"))
+    results_LIDAR <- getLIDAR_2017_stats(currentFile)
+  } else if (as.numeric(year) < 19) {
+    print(paste0(year,"Lidar 2018"))
+    results_LIDAR <- getLIDAR_2018_stats(currentFile)
+  } else if (as.numeric(year) < 20) {
+    print(paste0(year,"Lidar 2019"))
+    results_LIDAR <- getLIDAR_2019_stats(currentFile)
+  } else {
+    print("ERROR")
+    print(year)
+    results_LIDAR <- getLIDAR_2014_stats(currentFile)
+  }
+
   
   
   # THIRD FUNCTION FOR TCT FILES
   #if statement to decide which TCT file to get
+  print("--------------------------------------TCT")
   results_TCT <- getTCTStats(currentFile)
-  
   
   #MERGE RESULTS
   #get results all together
-  #results <- merge(merge(merge(results_MGP_C,results_MGP_D,by=c("year","decDay")),results_LIDAR,by=c("year","decDay")),results_TCT,by=c("year","decDay"))
+  results <- merge(merge(merge(results_MGP_C,results_MGP_D,by=c("year","decDay")),results_LIDAR,by=c("year","decDay")),results_TCT,by=c("year","decDay"))
   
   #add new results to the master results file
-
-
-  # results_LIDAR_2016 <- getLIDAR_2016_stats(currentFile)
-  # results_LIDAR_2017 <- getLIDAR_2017_stats(currentFile)
-  # results_LIDAR_2018 <- getLIDAR_2018_stats(currentFile)
-  # results_LIDAR_2019 <- getLIDAR_2019_stats(currentFile)
-
+  print(paste0(currentFile,":----------------------------------------------------------------------------DONE"))
+  masterResults <- rbind(masterResults,results)
 
 }
 
 
+
+
 #myfiles = lapply(temp, read.delim)
-
-
-
-
 
 # results_MGP_C <- getMGP_C_stats("FFP.hr.lines.10.12.csv")
 # results_MGP_D <- getMGP_D_stats("FFP.hr.lines.10.12.csv")

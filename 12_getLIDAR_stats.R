@@ -11,7 +11,7 @@ getLIDAR_2014_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
-  results <- data.frame(year=NA,decDay=NA,L14_mean=NA,L14_std=NA)
+  results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
   
@@ -28,7 +28,7 @@ getLIDAR_2014_stats <- function(FFP_file)  {
     #print(stats[2])
     new_row <- c(year,decDay,stats[1],stats[2])
     results <- rbind(results,new_row)
-    print(results)
+    #print(results)
     
     
     # FFP_prime <- FFP %>%
@@ -46,7 +46,7 @@ getLIDAR_2016_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
-  results <- data.frame(year=NA,decDay=NA,L15_mean=NA,L15_std=NA)
+  results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
   
@@ -82,7 +82,7 @@ getLIDAR_2017_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
-  results <- data.frame(year=NA,decDay=NA,L17_mean=NA,L17_std=NA)
+  results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
   
@@ -118,7 +118,7 @@ getLIDAR_2018_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
-  results <- data.frame(year=NA,decDay=NA,L18_mean=NA,L18_std=NA)
+  results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
   
@@ -154,7 +154,7 @@ getLIDAR_2019_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
-  results <- data.frame(year=NA,decDay=NA,L19_mean=NA,L19_std=NA)
+  results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
   

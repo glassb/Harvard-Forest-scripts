@@ -23,10 +23,24 @@ getTCTStats <- function(FFP_file) {
     TCT_image <- getRightDataDate(FFP_file,decDay)
         # based on the decDay and year of the FFP, find the raster tif file that is most recent
     
+    if (is.null(TCT_image)) {
+      print("NO APPROPRIATE SPECTRAL IMAGES")
+      
+      new_row <- c(year,decDay,NA,NA,NA,NA,NA,NA)
+      results <- rbind(results,new_row)
+      print(results)
+    
+    } else {
+      
+      
+      print("TCT IMAGE IS A GO")
+      print(TCT_image)
+    
+    
     # TCT_brightness, TCT_greenness, TCT_wetness
   
     setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    #TCTimage <- stack("test.tif")
+    TCTimage <- stack(TCT_image)
     
     #print the year and decDay of FFP, and print the year and DecDay of raster tif file
     #print(TCTimage)
@@ -72,6 +86,7 @@ getTCTStats <- function(FFP_file) {
     #          std = stats[2])
     
     
+    }
   }
   
   return(results)
@@ -101,10 +116,12 @@ getRightDataDate <- function(FFP_file,decDay) {
     TCT_dates <- rbind(TCT_dates,new_row)
   }
   
-  print(TCT_dates)
+  #print(TCT_dates)
   
   
   #get current FFP file and metrics
+  
+  #FFP_file <- "FFP.hr.lines.20.5"
   currentFile <- FFP_file
   FFPyear <- as.numeric(substr(FFP_file,14,15))
   FFPdecDay <- decDay
@@ -114,29 +131,33 @@ getRightDataDate <- function(FFP_file,decDay) {
     mutate(yearDiff=FFPyear-as.numeric(substr(year,3,4)))%>%
     filter(yearDiff>=0)
   
+  #print(matches)
   minYearDiff <- min(matches$yearDiff)
   
   matches <- matches %>%
     filter(yearDiff == minYearDiff) %>%
     mutate(DayDiff = as.numeric(FFPdecDay)-as.numeric(julianDay)) %>%
-    filter(DayDiff >= 0) %>%
-    filter(rank(DayDiff) == 1)
+    filter(DayDiff >= 0)
+  
+  minDayDiff <- min(matches$DayDiff)
+  
+  matches <- matches %>%
+    filter(DayDiff == minDayDiff)
+  
+  print(matches)
   
   print(dim(matches))
   if(nrow(matches) == 0) {
     print("NO MATCHES")
     return(NULL)
   } else {
-    file <- matches$fileName
+    file <- head(matches,1)$fileName
     print(file)
     return(file)
   }
   
   
 }
-
-  
-
 
 
 
