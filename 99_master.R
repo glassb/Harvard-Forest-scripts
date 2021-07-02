@@ -1,12 +1,15 @@
 
 
 library(tidyverse)
+library(rgdal)
 
 #read in all the fpp lines
 #create dataframe 
 setwd("/Users/benjaminglass/HF21-Scripts")
 source("10_getMGP_stats.R")
+setwd("/Users/benjaminglass/HF21-Scripts")
 source("12_getLIDAR_stats.R")
+setwd("/Users/benjaminglass/HF21-Scripts")
 source("13_getTCT_stats.R")
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
@@ -28,11 +31,17 @@ masterResults <- data.frame(year=NA,
                             TCTg_std=NA,
                             TCTw_mean=NA,
                             TCTw_std=NA)
-
+iter <- 0
 for (currentFile in temp) {
-  print(paste0("Current FFP_line_csv. file: ",currentFile))
+  iter <- iter+1
+  
+  print("============================================================")
+  print(paste0("FFP FILE ",iter," OF ",length(temp),": ",currentFile))
+  print("============================================================")
+  
   year <- substr(currentFile,14,15)
   
+  #currentFile <- "FFP.hr.lines.00.3.csv"
   # FIRST SET OF FUNCTIONS FOR MEGAPLOT
   print("--------------------------------------MGPC")
   results_MGP_C <- getMGP_C_stats(currentFile)

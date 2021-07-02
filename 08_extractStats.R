@@ -16,6 +16,7 @@ setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/misc")
 # inputs: raster tif, FFP_output file, dayVar, and rVar, raster and raster path
 extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   
+  #print(FFP_file)
   # go to FFP outputs file (EMS tower FFP output files)
   #setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_outputs")
   
@@ -31,10 +32,15 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
            dec.day == dayVar) %>%
     mutate(easting = xr+732275,
            northing=yr+4713368)
-  #print("FFP output FILTERED.")
+  #print("FFP output FILTERED."
+  if (nrow(FFP_filtered)==0) {
+    print("NULL")
+    return(c(NA,NA))
+  } else {
   
   #define coords as coordinates of all the vector points in FFP filtered
   coords = cbind(FFP_filtered[5],FFP_filtered[6])
+  #print(coords)
   
   #create spatial polygon with all FFP filtered vector points (vector points -> polygon)
   p = Polygon(coords)
@@ -71,7 +77,7 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
    return(c(cellStats(raster, stat='mean', na.rm=TRUE),
         cellStats(raster, stat='sd', na.rm=TRUE)))
 
-  
+  }
   
   # print(c(extract(rast,sps,method='simple',buffer=NULL,fun=mean,na.rm=TRUE),
   #         (extract(rast,sps,method='simple',buffer=NULL,fun=sd,na.rm=TRUE))))

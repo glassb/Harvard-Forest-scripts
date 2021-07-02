@@ -22,6 +22,7 @@ getMGP_D_stats <- function(FFP_file)  {
     
     #create a variable that has just the decDay that is being looped over right now
     FFP <- file[file$dec.day == decDay, ]
+    FFP <- FFP[complete.cases(FFP), ]
     
     #get stats for the DecProp.tif
     
@@ -58,6 +59,8 @@ getMGP_C_stats <- function(FFP_file)  {
     
     #create a variable that has just the decDay that is being looped over right now
     FFP <- file[file$dec.day == decDay, ]
+    FFP <- FFP[complete.cases(FFP), ]
+    #print(FFP)
     
     #get stats for the DecProp.tif
     

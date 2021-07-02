@@ -20,6 +20,7 @@ getLIDAR_2014_stats <- function(FFP_file)  {
     
     #create a variable that has just the decDay that is being looped over right now
     FFP <- file[file$dec.day == decDay, ]
+    FFP <- FFP[complete.cases(FFP), ]
     
     #get stats for the DecProp.tif
     
@@ -56,6 +57,7 @@ getLIDAR_2016_stats <- function(FFP_file)  {
     
     #create a variable that has just the decDay that is being looped over right now
     FFP <- file[file$dec.day == decDay, ]
+    FFP <- FFP[complete.cases(FFP), ]
     
     #get stats for the DecProp.tif
     
@@ -92,6 +94,7 @@ getLIDAR_2017_stats <- function(FFP_file)  {
     
     #create a variable that has just the decDay that is being looped over right now
     FFP <- file[file$dec.day == decDay, ]
+    FFP <- FFP[complete.cases(FFP), ]
     
     #get stats for the DecProp.tif
     
@@ -128,6 +131,7 @@ getLIDAR_2018_stats <- function(FFP_file)  {
     
     #create a variable that has just the decDay that is being looped over right now
     FFP <- file[file$dec.day == decDay, ]
+    FFP <- FFP[complete.cases(FFP), ]
     
     #get stats for the DecProp.tif
     
@@ -164,6 +168,7 @@ getLIDAR_2019_stats <- function(FFP_file)  {
     
     #create a variable that has just the decDay that is being looped over right now
     FFP <- file[file$dec.day == decDay, ]
+    FFP <- FFP[complete.cases(FFP), ]
     
     #get stats for the DecProp.tif
     

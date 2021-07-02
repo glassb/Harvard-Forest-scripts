@@ -16,6 +16,7 @@ getTCTStats <- function(FFP_file) {
     
     #create a variable that has just the decDay that is being looped over right now
     FFP <- file[file$dec.day == decDay, ]
+    FFP <- FFP[complete.cases(FFP), ]
     
     
     # NEED TO DO THIS
