@@ -8,7 +8,7 @@ library(raster)
 # inputs: raster tif, FFP_output file, dayVar, and rVar
 getTCTStats <- function(FFP_file) {
 
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
   
   #read in FFP file
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
@@ -37,12 +37,12 @@ getTCTStats <- function(FFP_file) {
       
       new_row <- c(year,decDay,NA,NA,NA,NA,NA,NA)
       results <- rbind(results,new_row)
-      print(results)
+      #print(results)
     
     # otherwise, proceed as normal
     } else {
 
-      print("TCT IMAGE IS A GO")
+      #print("TCT IMAGE IS A GO")
       print(TCT_image)
     
   
@@ -58,9 +58,9 @@ getTCTStats <- function(FFP_file) {
     greennessRast <- projectRaster(green, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
     wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
     
-    stats_brightness <- extractStats_TCT(FFP,decDay,.75,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    stats_greenness <- extractStats_TCT(FFP,decDay,.75,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    stats_wetness <- extractStats_TCT(FFP,decDay,.75,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+    stats_brightness <- extractStats_TCT(FFP,decDay,.25,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+    stats_greenness <- extractStats_TCT(FFP,decDay,.25,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+    stats_wetness <- extractStats_TCT(FFP,decDay,.25,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
     
     new_row <- c(year,decDay,stats_brightness[1],
                               stats_brightness[2],
@@ -71,7 +71,7 @@ getTCTStats <- function(FFP_file) {
                  )
     
     results <- rbind(results,new_row)
-    print(results)
+    #print(results)
     
     }
   }
@@ -130,15 +130,15 @@ getRightDataDate <- function(FFP_file,decDay) {
   matches <- matches %>%
     filter(DayDiff == minDayDiff)
   
-  print(matches)
+  #print(matches)
   
-  print(dim(matches))
+  #print(dim(matches))
   if(nrow(matches) == 0) {
     print("NO MATCHES")
     return(NULL)
   } else {
     file <- head(matches,1)$fileName
-    print(file)
+    #print(file)
     return(file)
   }
   

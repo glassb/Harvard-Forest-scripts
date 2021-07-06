@@ -54,16 +54,74 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   
   #create raster stack from landsat8 imagery
   rast <- raster(rasterImage)
-
+  
+  #print(rast)
+  
   #mask landsat imagery by FFP spatial polygon
   masked <- mask(rast,sps)
+  #plot(masked)
+  
+  #print(masked)
+  #print(min(values(masked)))
+  #print(all.equal(rast,masked))
+  
+  if (all(is.na(values(masked)))) {
+    print("NO OVERLAP BETWEEN SPS AND RASTER")
+    return(c(NA,NA))
+  } else {
   
   #crop masked raster by the outline of the polygon
   raster <- crop(masked,sps)
+  #plot(raster)
   
-  #return mean and std statistics about the cropped raster
-   return(c(cellStats(raster, stat='mean', na.rm=TRUE),
-            cellStats(raster, stat='sd', na.rm=TRUE)))
+  #plot(masked)
+
+  
+  
+  # NEED TO DEVELOP THIS
+  #these calculate if the polygon shape covers at least 80% of the raster so that we are not getting
+    # raster summary statistics for insignificant portions of the raster (i.e. only a few tiles). This
+    # code will calculate this for all raster masks, but it is mainly for megaplot data.
+  #Tpixels <- cellStats(raster,stat='count',na.rm=FALSE)
+  
+  #ValuePixels <- freq(raster, value=NA)
+  #print(Vpixels)
+  
+  #testR <- raster(ncol=50, nrow=70, xmn=-730000, xmx=735000, ymn=-4720000, ymx=4725000,proj4string = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+  #res(testR) <- 10
+  
+  
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables")
+  dummyRaster <- raster("dummyRaster.tif")
+  dummyCrop <- crop(mask(dummyRaster,sps),sps)
+  dummyTotal <- ncell(dummyCrop)
+  
+  #plot(dummyCrop)
+  
+  #spsTotal<- ncell(rasterize(sps,rast))
+  total <- ncell(raster)
+  
+  
+  #plot(dummyCrop)
+  
+  
+  #print(NAPixels)
+  percentValuePixels <- total/dummyTotal
+  
+  #print(percentValuePixels)
+  
+  #print(raster)
+  
+  #print(paste0(dummyTotal," ",total,"  PVP: ",percentValuePixels))
+  
+  if (percentValuePixels <= .5 ) {
+    print("FFP NOT SIGNIF. COVERING RASTER")
+    return(c(NA,NA))
+  } else {
+    #return mean and std statistics about the cropped raster
+    return(c(cellStats(raster, stat='mean', na.rm=TRUE),
+             cellStats(raster, stat='sd', na.rm=TRUE)))
+  }
 
   }
   
@@ -80,6 +138,7 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   # )
   # )
   # 
+  }
 } 
 
 # returns spatial stats for a single FFP decDay (for TCT files specifically)
@@ -91,6 +150,16 @@ extractStats_TCT <- function(FFP_file,dayVar,rVar,rasterImage,path) {
            dec.day == dayVar) %>%
     mutate(easting = xr+732275,
            northing=yr+4713368)
+  
+  # check to see if the resulting filtered data frame actually has rows in it
+  if (nrow(FFP_filtered)==0) {
+    
+    #if the df is empty, that means there is no coordinate data to create a polygon from, and thus we just return Na,Na to the parent script
+    print("NULL")
+    return(c(NA,NA))
+    
+    # if there is data, then we move forward
+  } else {
   
   #define coords as coordinates of all the vector points in FFP filtered
   coords = cbind(FFP_filtered[5],FFP_filtered[6])
@@ -125,6 +194,7 @@ extractStats_TCT <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   # )
   # )
   # 
+  }
 } 
 
 

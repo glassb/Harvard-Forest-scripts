@@ -15,7 +15,7 @@ source("08_extractStats.R")
 # this function returns dataframe of spatial stats
 getMGP_D_stats <- function(FFP_file)  {
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   
   #create dataframe
@@ -32,7 +32,7 @@ getMGP_D_stats <- function(FFP_file)  {
     FFP <- FFP[complete.cases(FFP), ]
     
     #get stats for the DecProp.tif
-    stats <- extractStats(FFP,decDay,.75,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
+    stats <- extractStats(FFP,decDay,.25,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
    
     new_row <- c(year,decDay,stats[1],stats[2])
     results <- rbind(results,new_row)
@@ -47,7 +47,7 @@ getMGP_D_stats <- function(FFP_file)  {
 # see above
 getMGP_C_stats <- function(FFP_file)  {
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,MGP_C_mean=NA,MGP_C_std=NA)
   #for each unique day in the FFP data file
@@ -62,7 +62,7 @@ getMGP_C_stats <- function(FFP_file)  {
     #print(FFP)
     
     #get stats for the ConProp.tif
-    stats <- extractStats(FFP,decDay,.75,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
+    stats <- extractStats(FFP,decDay,.25,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
   
     new_row <- c(year,decDay,stats[1],stats[2])
     results <- rbind(results,new_row)

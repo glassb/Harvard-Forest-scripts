@@ -8,7 +8,7 @@ source("08_extractStats.R")
 #these functions all do the same spatial stats, but just for different years of LIDAR
 getLIDAR_2014_stats <- function(FFP_file)  {
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   year <- substr(FFP_file,14,15)
@@ -21,7 +21,7 @@ getLIDAR_2014_stats <- function(FFP_file)  {
     FFP <- FFP[complete.cases(FFP), ]
     
     #get stats for the lidar raster image
-    stats <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2014.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2014.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     new_row <- c(year,decDay,stats[1],stats[2])
     results <- rbind(results,new_row)
@@ -34,7 +34,7 @@ getLIDAR_2014_stats <- function(FFP_file)  {
 
 getLIDAR_2016_stats <- function(FFP_file)  {
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
@@ -50,7 +50,7 @@ getLIDAR_2016_stats <- function(FFP_file)  {
     
     #get stats for the DecProp.tif
     
-    stats <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2016.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2016.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     #print(stats[2])
     new_row <- c(year,decDay,stats[1],stats[2])
@@ -71,7 +71,7 @@ getLIDAR_2016_stats <- function(FFP_file)  {
 
 getLIDAR_2017_stats <- function(FFP_file)  {
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
@@ -87,7 +87,7 @@ getLIDAR_2017_stats <- function(FFP_file)  {
     
     #get stats for the DecProp.tif
     
-    stats <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2017.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2017.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     #print(stats[2])
     new_row <- c(year,decDay,stats[1],stats[2])
@@ -108,7 +108,7 @@ getLIDAR_2017_stats <- function(FFP_file)  {
 
 getLIDAR_2018_stats <- function(FFP_file)  {
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
@@ -124,7 +124,7 @@ getLIDAR_2018_stats <- function(FFP_file)  {
     
     #get stats for the DecProp.tif
     
-    stats <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2018.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2018.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     #print(stats[2])
     new_row <- c(year,decDay,stats[1],stats[2])
@@ -145,7 +145,7 @@ getLIDAR_2018_stats <- function(FFP_file)  {
 
 getLIDAR_2019_stats <- function(FFP_file)  {
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
@@ -161,7 +161,7 @@ getLIDAR_2019_stats <- function(FFP_file)  {
     
     #get stats for the DecProp.tif
     
-    stats <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2019.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2019.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     #print(stats[2])
     new_row <- c(year,decDay,stats[1],stats[2])

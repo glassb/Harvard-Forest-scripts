@@ -17,7 +17,7 @@ source("12_getLIDAR_stats.R")
 setwd("/Users/benjaminglass/HF21-Scripts")
 source("13_getTCT_stats.R")
 
-setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines")
+setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
 
 #get all FFP output files for EMS tower
 temp = list.files(pattern="*.csv")
@@ -37,6 +37,8 @@ masterResults <- data.frame(year=NA,
                             TCTg_std=NA,
                             TCTw_mean=NA,
                             TCTw_std=NA)
+
+doneFiles <- data.frame(file=NA)
 
 #variable to count files completed for debugging
 iter <- 0
@@ -102,6 +104,9 @@ for (currentFile in temp) {
   #add new results to the master results file
   print(paste0(currentFile,":----------------------------------------------------------------------------DONE"))
   masterResults <- rbind(masterResults,results)
+  
+  doneFile <- (currentFile)
+  doneFiles <- rbind(doneFiles,doneFile)
 
 }
 
@@ -116,6 +121,22 @@ for (currentFile in temp) {
     #you'll then have a ton of dataframes with (year,decDay,mean,std)
     #from this merge all the stats into a single dataframe with (year, DecDay,mean_megaplot1,std_megaplot1,etc.)
     #add this to the master dataframe created before the for loop
+
+
+
+
+
+# TO DO LIST:
+
+  # debug until all files run
+  # figure out what spectral images to use for years 92-2017
+  # figure out how to merge the the new information with hf master
+
+  #ask about using 2014 lidar data for spatial statistics for files < 2014
+  
+
+
+
 
 
 
