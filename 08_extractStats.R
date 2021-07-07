@@ -91,22 +91,17 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   #res(testR) <- 10
   
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables")
-  dummyRaster <- raster("dummyRaster.tif")
-  dummyCrop <- crop(mask(dummyRaster,sps),sps)
-  dummyTotal <- ncell(dummyCrop)
+  #NEED TO DO THIS
   
-  #plot(dummyCrop)
-  
-  #spsTotal<- ncell(rasterize(sps,rast))
-  total <- ncell(raster)
-  
-  
-  #plot(dummyCrop)
+  # setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables")
+  # dummyRaster <- raster("dummyRaster.tif")
+  # dummyCrop <- crop(mask(dummyRaster,sps),sps)
+  # dummyTotal <- ncell(dummyCrop)
+  # total <- ncell(raster)
+  # percentValuePixels <- total/dummyTotal
   
   
-  #print(NAPixels)
-  percentValuePixels <- total/dummyTotal
+  
   
   #print(percentValuePixels)
   
@@ -114,7 +109,7 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   
   #print(paste0(dummyTotal," ",total,"  PVP: ",percentValuePixels))
   
-  if (percentValuePixels <= .5 ) {
+  if (percentValuePixels <= 0 ) {
     print("FFP NOT SIGNIF. COVERING RASTER")
     return(c(NA,NA))
   } else {
