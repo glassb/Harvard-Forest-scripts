@@ -23,7 +23,7 @@ setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-1
 temp = list.files(pattern="*.csv")
 
 #create master results file (which will be our final product)
-masterResults <- data.frame(year=NA,
+masterResults_all <- data.frame(year=NA,
                             decDay=NA,
                             MGP_C_mean = NA,
                             MGP_C_std = NA,
@@ -42,6 +42,9 @@ doneFiles <- data.frame(file=NA)
 
 #variable to count files completed for debugging
 iter <- 0
+
+
+#===================== FOR LOOP ==========================
 
 #looping over all files in temp
 for (currentFile in temp) {
@@ -65,6 +68,7 @@ for (currentFile in temp) {
   
   #SECOND SET OF FUNCTIONS FOR LIDAR
   #if statement that decides which lidar year to get
+  
   print("--------------------------------------LIDAR")
   if (as.numeric(year)>= 80 | as.numeric(year) <= 14 ) {
     print(paste0("ERROR: CURRENT FILE YEAR ",year," DOES NOT HAVE APPROP. LIDAR DATA"))
@@ -94,22 +98,31 @@ for (currentFile in temp) {
   
   # THIRD FUNCTION FOR TCT FILES
   #if statement to decide which TCT file to get
+  
   print("--------------------------------------TCT")
   results_TCT <- getTCTStats(currentFile)
-  
+
   #MERGE RESULTS
   #get results all together. This is a not-so-elegant way of doing this, but it does work (for now)
   results <- merge(merge(merge(results_MGP_C,results_MGP_D,by=c("year","decDay")),results_LIDAR,by=c("year","decDay")),results_TCT,by=c("year","decDay"))
-  
+
   #add new results to the master results file
+  
+  #just mgp
+  #results <- merge(results_MGP_C,results_MGP_D,by=c("year","decDay"))
+  
+  
   print(paste0(currentFile,":----------------------------------------------------------------------------DONE"))
-  masterResults <- rbind(masterResults,results)
+  masterResults_all <- rbind(masterResults_all,results)
   
   doneFile <- (currentFile)
   doneFiles <- rbind(doneFiles,doneFile)
 
 }
 
+
+
+write.csv(masterResults_MGP,"/Users/benjaminglass/Desktop/HF21/00_Datasets/all_results_0708_weightedmean.csv", row.names = FALSE)
 
 # ======= SCRIPT IN PSEUDOCODE ============
 

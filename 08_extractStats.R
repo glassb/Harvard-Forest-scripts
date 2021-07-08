@@ -29,7 +29,7 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   if (nrow(FFP_filtered)==0) {
     
     #if the df is empty, that means there is no coordinate data to create a polygon from, and thus we just return Na,Na to the parent script
-    print("NULL")
+    print(paste0("ERROR: NO DATA FOR ",rVar," AND ",dayVar," IN FFP FILE."))
     return(c(NA,NA))
     
   # if there is data, then we move forward
@@ -66,7 +66,7 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   #print(all.equal(rast,masked))
   
   if (all(is.na(values(masked)))) {
-    print("NO OVERLAP BETWEEN SPS AND RASTER")
+    print(paste0("ERROR: NO SPATIAL OVERLAP BETWEEN FFP FILE AND ",rasterImage,"."))
     return(c(NA,NA))
   } else {
   
@@ -78,39 +78,31 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
 
   
   
-  # NEED TO DEVELOP THIS
-  #these calculate if the polygon shape covers at least 80% of the raster so that we are not getting
-    # raster summary statistics for insignificant portions of the raster (i.e. only a few tiles). This
-    # code will calculate this for all raster masks, but it is mainly for megaplot data.
-  #Tpixels <- cellStats(raster,stat='count',na.rm=FALSE)
+  # ========= DUMMY RASTER TEST =============
+  # this uses a blank "dummy" raster that is much larger than the megaplot raster layer to 
+  # test whether the FFP polygon adequetely covers the megaplot raster layer. This calculates
+  # the pixels in the dummy raster that has been masked by the FFP polygon (representing the
+  # full amount of pixels in the FFP under normal conditions). Then we compare this to the
+  # amount of pixels in the megaplot raster masked by FFP (which may have fewer pixels if the
+  # footprint is off to the side). If this "percentValuePixels" is below a certain threshold value
+  # then we discard the results.
   
-  #ValuePixels <- freq(raster, value=NA)
-  #print(Vpixels)
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables")
+  dummyRaster <- raster("dummyRaster.tif")
+  dummyCrop <- crop(mask(dummyRaster,sps),sps)
+  dummyTotal <- ncell(dummyCrop)
+  total <- ncell(raster)
+  percentValuePixels <- total/dummyTotal
   
-  #testR <- raster(ncol=50, nrow=70, xmn=-730000, xmx=735000, ymn=-4720000, ymx=4725000,proj4string = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-  #res(testR) <- 10
-  
-  
-  #NEED TO DO THIS
-  
-  # setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables")
-  # dummyRaster <- raster("dummyRaster.tif")
-  # dummyCrop <- crop(mask(dummyRaster,sps),sps)
-  # dummyTotal <- ncell(dummyCrop)
-  # total <- ncell(raster)
-  # percentValuePixels <- total/dummyTotal
-  
-  
-  
-  
-  #print(percentValuePixels)
-  
-  #print(raster)
-  
+  #plot(masked)
+  #plot(dummyCrop)
   #print(paste0(dummyTotal," ",total,"  PVP: ",percentValuePixels))
   
-  if (percentValuePixels <= 0 ) {
-    print("FFP NOT SIGNIF. COVERING RASTER")
+  threshold <- .8
+  
+  if (percentValuePixels <= threshold ) {
+    print(paste0("ERROR: SPATIAL OVERLAP WITH ",rasterImage," IS ",percentValuePixels,"."))
+    print(paste0("THRESHOLD VALUE IS ",threshold,"."))
     return(c(NA,NA))
   } else {
     #return mean and std statistics about the cropped raster
