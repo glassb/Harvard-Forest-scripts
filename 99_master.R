@@ -122,7 +122,7 @@ for (currentFile in temp) {
 
 
 
-write.csv(masterResults_MGP,"/Users/benjaminglass/Desktop/HF21/00_Datasets/all_results_0708_weightedmean.csv", row.names = FALSE)
+write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/all_results_0708_weightedmean.csv", row.names = FALSE)
 
 # ======= SCRIPT IN PSEUDOCODE ============
 
@@ -143,10 +143,6 @@ write.csv(masterResults_MGP,"/Users/benjaminglass/Desktop/HF21/00_Datasets/all_r
 
   # debug until all files run
   # figure out what spectral images to use for years 92-2017
-  # figure out how to merge the the new information with hf master
-
-  #ask about using 2014 lidar data for spatial statistics for files < 2014
-  
 
 
 
