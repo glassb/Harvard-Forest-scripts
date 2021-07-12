@@ -68,6 +68,7 @@ ggplot(data = L_TCT_results, aes(x = TCTg_mean,y=obs.FCO2.e.6mol.m2.s)) +
 
 daytime17 <- L_TCT_results %>%
   filter(Year.Year == 2017,
+         #month.Month %>% (5:9),
          PAR.28m.e.6mol.m2.s > 50)
 
 daytime18 <- L_TCT_results %>%
@@ -92,18 +93,24 @@ ggplot(data = daytime17, aes(x = TCTb_mean,y=obs.FCO2.e.6mol.m2.s)) +
   scale_y_continuous() +
   geom_smooth()
 
-ggplot(data = daytime18, aes(x = L_mean,y=obs.FCO2.e.6mol.m2.s)) +
+ggplot(data = daytime19, aes(x = TCTw_mean,y=obs.FCO2.e.6mol.m2.s)) +
   geom_point(shape=20,alpha=.5) +
   ggtitle("FCO2 vs. Canopy Height for 2018 daytime measurements") +
-  scale_x_continuous(limits=c(19,26)) +
+  scale_x_continuous() +
   scale_y_continuous() +
   geom_smooth()
+
+print(daytime19$TCTw_mean)
+
+
+
 
 ggplot(data = daytime19, aes(x = L_mean,y=obs.FCO2.e.6mol.m2.s)) +
   geom_point(shape=20,alpha=.5) +
   ggtitle("FCO2 vs. Canopy Height for 2019 daytime measurements") +
-  scale_x_continuous(limits=c(19,26)) +
+  scale_x_continuous() +
   scale_y_continuous() +
   geom_smooth()
 
 
+summary(daytime19)

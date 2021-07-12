@@ -15,7 +15,7 @@ source("08_extractStats.R")
 # this function returns dataframe of spatial stats
 getMGP_D_stats <- function(FFP_file)  {
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   
   #create dataframe
@@ -32,32 +32,32 @@ getMGP_D_stats <- function(FFP_file)  {
     FFP <- FFP[complete.cases(FFP), ]
     
     #get stats for the DecProp.tif
-    stats25 <- extractStats(FFP,decDay,.25,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
+    #stats25 <- extractStats(FFP,decDay,.25,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
     stats50 <- extractStats(FFP,decDay,.5,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-    stats75 <- extractStats(FFP,decDay,.75,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
+    #stats75 <- extractStats(FFP,decDay,.75,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
     
-    if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
-      new_row <- c(year,decDay,NA,NA)
+    # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
+    #   new_row <- c(year,decDay,NA,NA)
+    #   results <- rbind(results,new_row)
+    # } else {
+    #   
+    #   weighted_mean <- (stats25[1]*.6)+(stats50[1]*.3)+(stats75[1]*.1)
+    #   weighted_std <- (stats25[2]*.6)+(stats50[2]*.3)+(stats75[2]*.1)
+    #   
+    #   new_row <- c(year,decDay,weighted_mean,weighted_std)
+      
+      new_row <- c(year,decDay,stats50[1],stats50[2])
       results <- rbind(results,new_row)
-    } else {
       
-      weighted_mean <- (stats25[1]*.6)+(stats50[1]*.3)+(stats75[1]*.1)
-      weighted_std <- (stats25[2]*.6)+(stats50[2]*.3)+(stats75[2]*.1)
-      
-      new_row <- c(year,decDay,weighted_mean,weighted_std)
-      results <- rbind(results,new_row)
-      
-    }
   }
-  
   return(results)
-  
 }
+
 
 # see above
 getMGP_C_stats <- function(FFP_file)  {
   
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,MGP_C_mean=NA,MGP_C_std=NA)
   #for each unique day in the FFP data file
@@ -72,26 +72,26 @@ getMGP_C_stats <- function(FFP_file)  {
     #print(FFP)
     
     #get stats for the ConProp.tif
-    stats25 <- extractStats(FFP,decDay,.25,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
+    #stats25 <- extractStats(FFP,decDay,.25,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
     stats50 <- extractStats(FFP,decDay,.50,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-    stats75 <- extractStats(FFP,decDay,.75,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
+    #stats75 <- extractStats(FFP,decDay,.75,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
     
-    if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
-      new_row <- c(year,decDay,NA,NA)
-      results <- rbind(results,new_row)
-    } else {
-      
-      weighted_mean <- (stats25[1]*.6)+(stats50[1]*.3)+(stats75[1]*.1)
-      weighted_std <- (stats25[2]*.6)+(stats50[2]*.3)+(stats75[2]*.1)
-      
-      new_row <- c(year,decDay,weighted_mean,weighted_std)
+    # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
+    #   new_row <- c(year,decDay,NA,NA)
+    #   results <- rbind(results,new_row)
+    # } else {
+    #   
+    #   weighted_mean <- (stats25[1]*.6)+(stats50[1]*.3)+(stats75[1]*.1)
+    #   weighted_std <- (stats25[2]*.6)+(stats50[2]*.3)+(stats75[2]*.1)
+    #   
+    #   new_row <- c(year,decDay,weighted_mean,weighted_std)
       #print(new_row)
+    
+      new_row <- c(year,decDay,stats50[1],stats50[2])
       results <- rbind(results,new_row)
       
-    }
   }
-  
   return(results)
-  
-}
+  }
+
 

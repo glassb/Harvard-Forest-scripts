@@ -17,7 +17,7 @@ source("12_getLIDAR_stats.R")
 setwd("/Users/benjaminglass/HF21-Scripts")
 source("13_getTCT_stats.R")
 
-setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-19")
+setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
 
 #get all FFP output files for EMS tower
 temp = list.files(pattern="*.csv")

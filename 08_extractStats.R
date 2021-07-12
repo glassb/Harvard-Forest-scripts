@@ -102,7 +102,7 @@ extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   
   if (percentValuePixels <= threshold ) {
     print(paste0("ERROR: SPATIAL OVERLAP WITH ",rasterImage," IS ",percentValuePixels,"."))
-    print(paste0("THRESHOLD VALUE IS ",threshold,"."))
+    #print(paste0("THRESHOLD VALUE IS ",threshold,"."))
     return(c(NA,NA))
   } else {
     #return mean and std statistics about the cropped raster

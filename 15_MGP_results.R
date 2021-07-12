@@ -20,20 +20,24 @@ MGP_25_mutated <- MGP_25 %>%
 
 MGP_analysis <- merge(hfm,MGP_25_mutated,by=c("Year.Year","time_days"))
 
+#MAY UNTIL SEPTEMBER
 #2017 daytime
 MGP_2017 <- MGP_analysis %>%
   filter(Year.Year == 2017,
+         month.Month %in% (5:9),
          PAR.28m.e.6mol.m2.s > 50)
 
 #2018 daytime
 MGP_2018 <- MGP_analysis %>%
   filter(Year.Year == 2018,
+         month.Month %in% (5:9),
          PAR.28m.e.6mol.m2.s > 50)
 
 
 #2019 daytime
 MGP_2019 <- MGP_analysis %>%
   filter(Year.Year == 2019,
+         month.Month %in% (5:9),
          PAR.28m.e.6mol.m2.s > 50)
 
 
