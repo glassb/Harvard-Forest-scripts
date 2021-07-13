@@ -31,23 +31,47 @@ L_TCT_results_1819 <- merge(hfm,r1819_mutated,by=c("Year.Year","time_days"))
 
 L_TCT_results <- rbind(L_TCT_results_17,L_TCT_results_1819)
 
+results_total <- L_TCT_results %>%
+  filter(month.Month %in% c(5:9)) %>%
+  mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"Day","Night"))
 
+
+# ================ AGGREGATE
 #lidar aggregate
-ggplot(data = L_TCT_results, aes(x = L_mean,y=obs.FCO2.e.6mol.m2.s)) +
+ggplot(data = results_total, aes(x = L_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  facet_wrap(~ month.Month) +
   geom_point(shape=20,alpha=.5) +
-  ggtitle("FCO2 vs. Canopy Height for 2017-2019 measurements") +
+  ggtitle("FCO2 vs. Canopy Height for measurements May-Sept") +
   scale_x_continuous(limits=c(19,26)) +
-  scale_y_continuous() +
-  geom_smooth()
+  scale_y_continuous()
+
+
+ggplot(data = results_total) +
+  #facet_wrap(~ month.Month) +
+  geom_point(aes(x=TCTw_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD),shape=20,alpha=.5) +
+  facet_wrap(~ month.Month) +
+  #geom_point(aes(x=time_days,y=TCTg_mean),shape=20,alpha=.5,color="green") +
+  #geom_point(aes(x=time_days,y=TCTw_mean),shape=20,alpha=.5,color="blue") +
+  ggtitle("FCO2 vs. TCTb for measurements May-Sept") +
+  scale_x_continuous() +
+  scale_y_continuous()
+
 
 
 #TCT brightness aggregate
-ggplot(data = L_TCT_results, aes(x = TCTb_mean,y=obs.FCO2.e.6mol.m2.s)) +
+ggplot(data = results_total, aes(x = TCTg_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  #facet_wrap(~ month.Month) +
   geom_point(shape=20,alpha=.5) +
-  ggtitle("FCO2 vs. TCTb for 2017-2019 measurements") +
-  scale_x_continuous(limits=c(0,.5)) +
-  scale_y_continuous() +
-  geom_smooth()
+  ggtitle("FCO2 vs. TCTg for measurements May-Sept") +
+  scale_x_continuous(limits=c(0.1,0.4)) +
+  scale_y_continuous()
+
+ggplot(data = results_total, aes(x = TCTw_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  facet_wrap(~ month.Month) +
+  geom_point(shape=20,alpha=.5) +
+  ggtitle("FCO2 vs. TCTw for measurements May-Sept") +
+  scale_x_continuous() +
+  scale_y_continuous()
 
 #TCT wetness aggregate
 ggplot(data = L_TCT_results, aes(x = TCTw_mean,y=obs.FCO2.e.6mol.m2.s)) +
@@ -81,13 +105,15 @@ daytime19 <- L_TCT_results %>%
 
 ggplot(data = daytime17, aes(x = L_mean,y=obs.FCO2.e.6mol.m2.s)) +
   geom_point(shape=20,alpha=.5) +
+  facet_wrap(~ month.Month)
   ggtitle("FCO2 vs. Canopy Height for 2017 daytime measurements") +
   scale_x_continuous(limits=c(19,26)) +
   scale_y_continuous() +
   geom_smooth()
 
-ggplot(data = daytime17, aes(x = TCTb_mean,y=obs.FCO2.e.6mol.m2.s)) +
+ggplot(data = daytime17, aes(x = TCTg_mean,y=obs.FCO2.e.6mol.m2.s)) +
   geom_point(shape=20,alpha=.5) +
+  facet_wrap(~ month.Month)
   ggtitle("FCO2 vs. TCT greenness for 2017 daytime measurements") +
   scale_x_continuous() +
   scale_y_continuous() +
