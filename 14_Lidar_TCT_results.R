@@ -49,7 +49,7 @@ ggplot(data = results_total, aes(x = L_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
 ggplot(data = results_total) +
   #facet_wrap(~ month.Month) +
   geom_point(aes(x=TCTw_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD),shape=20,alpha=.5) +
-  facet_wrap(~ month.Month) +
+  #facet_wrap(~ month.Month) +
   #geom_point(aes(x=time_days,y=TCTg_mean),shape=20,alpha=.5,color="green") +
   #geom_point(aes(x=time_days,y=TCTw_mean),shape=20,alpha=.5,color="blue") +
   ggtitle("FCO2 vs. TCTb for measurements May-Sept") +
