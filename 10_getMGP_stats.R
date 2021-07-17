@@ -1,9 +1,9 @@
 # Benjamin Glass
-# Last Update: July 2, 2021
+# Last Update: July 17, 2021
 
-# Script Overview: this master script gets statistics based on
+# Script Overview: this master script extracts spatial statistics based on
   # megaplot data inputs (percent coniferous and percent 
-  # decidious)
+  # decidious) for EMS and NEON towers
 
 library(tidyverse)
 
@@ -12,8 +12,10 @@ setwd("/Users/benjaminglass/HF21-Scripts")
 source("08_extractStats.R")
 
 
-# this function returns dataframe of spatial stats
-getMGP_D_stats <- function(FFP_file)  {
+# ======== EMS TOWER FUNCTIONS
+
+# returns spatial stats on deciduous percentage for EMS tower data
+EMS_getMGP_D_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
@@ -23,6 +25,7 @@ getMGP_D_stats <- function(FFP_file)  {
   year <- substr(FFP_file,14,15)
   month <- substr(FFP_file,17,18)
   
+  #make sure month is correct
   if (substr(month,2,2) == ".") {
     month <- substr(month,1,1)
   } else {
@@ -51,24 +54,12 @@ getMGP_D_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
     
-    
-    #get stats for the DecProp.tif
-    #stats25 <- extractStats(FFP,decDay,.25,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-    stats50 <- extractStats_wm(FFP,decDay,.5,"DecidiousProportionMegaPlot.tif",
-                                          "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",
-                                          FFP_f)
-    #stats75 <- extractStats(FFP,decDay,.75,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-    
-    # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
-    #   new_row <- c(year,decDay,NA,NA)
-    #   results <- rbind(results,new_row)
-    # } else {
-    #   
-    #   weighted_mean <- (stats25[1]*.6)+(stats50[1]*.3)+(stats75[1]*.1)
-    #   weighted_std <- (stats25[2]*.6)+(stats50[2]*.3)+(stats75[2]*.1)
-    #   
-    #   new_row <- c(year,decDay,weighted_mean,weighted_std)
-      
+      #xtract stats
+      stats50 <- extractStats_wm(FFP,decDay,.5,
+                                  "DecidiousProportionMegaPlot.tif",
+                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",
+                                  FFP_f)
+   
       new_row <- c(year,decDay,stats50[1],stats50[2])
       results <- rbind(results,new_row)
     }
@@ -77,8 +68,8 @@ getMGP_D_stats <- function(FFP_file)  {
   return(results)
 }
 
-# see above
-getMGP_C_stats <- function(FFP_file)  {
+# returns spatial stats on coniferous percentage for EMS tower data
+EMS_getMGP_C_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
@@ -115,21 +106,11 @@ getMGP_C_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
     
-    #get stats for the ConProp.tif
-    #stats25 <- extractStats(FFP,decDay,.25,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-    stats50 <- extractStats_wm(FFP,decDay,.50,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",FFP_f)
-    #stats75 <- extractStats(FFP,decDay,.75,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-    
-    # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
-    #   new_row <- c(year,decDay,NA,NA)
-    #   results <- rbind(results,new_row)
-    # } else {
-    #   
-    #   weighted_mean <- (stats25[1]*.6)+(stats50[1]*.3)+(stats75[1]*.1)
-    #   weighted_std <- (stats25[2]*.6)+(stats50[2]*.3)+(stats75[2]*.1)
-    #   
-    #   new_row <- c(year,decDay,weighted_mean,weighted_std)
-      #print(new_row)
+      stats50 <- extractStats_wm(FFP,decDay,
+                                 .50,
+                                 "ConiferProportionMegaPlot.tif",
+                                 "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",
+                                 FFP_f)
     
       new_row <- c(year,decDay,stats50[1],stats50[2])
       #print(new_row)
@@ -138,12 +119,14 @@ getMGP_C_stats <- function(FFP_file)  {
     }
   }
   return(results)
-  }
+}
 
 
 
 
-# this function returns dataframe of spatial stats
+# ========= NEON TOWER FUNCTIONS
+
+# returns spatial stats on deciduous percentage for NEON tower data
 NEON_getMGP_D_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/NEON_FFP_data/NEON_FFP_lines_17-20")
@@ -162,8 +145,7 @@ NEON_getMGP_D_stats <- function(FFP_file)  {
     month <- month
   }
   
-  print(month)
-  
+  #print(month)
   
   #get weighted mean file
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/NEON_FFP_data/NEON_FFP_f_17-20")
@@ -186,23 +168,12 @@ NEON_getMGP_D_stats <- function(FFP_file)  {
     } else {
       
       
-      #get stats for the DecProp.tif
-      #stats25 <- extractStats(FFP,decDay,.25,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-      stats50 <- extractStats_wm(FFP,decDay,.5,"DecidiousProportionMegaPlot.tif",
+      stats50 <- extractStats_wm(FFP,decDay,
+                                 .5,
+                                 "DecidiousProportionMegaPlot.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",
                                  FFP_f)
-      #stats75 <- extractStats(FFP,decDay,.75,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-      
-      # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
-      #   new_row <- c(year,decDay,NA,NA)
-      #   results <- rbind(results,new_row)
-      # } else {
-      #   
-      #   weighted_mean <- (stats25[1]*.6)+(stats50[1]*.3)+(stats75[1]*.1)
-      #   weighted_std <- (stats25[2]*.6)+(stats50[2]*.3)+(stats75[2]*.1)
-      #   
-      #   new_row <- c(year,decDay,weighted_mean,weighted_std)
-      
+     
       new_row <- c(year,decDay,stats50[1],stats50[2])
       results <- rbind(results,new_row)
     }
@@ -211,7 +182,7 @@ NEON_getMGP_D_stats <- function(FFP_file)  {
   return(results)
 }
 
-# see above
+# returns spatial stats on coniferous percentage for NEON tower data
 NEON_getMGP_C_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/NEON_FFP_data/NEON_FFP_lines_17-20")
@@ -230,7 +201,7 @@ NEON_getMGP_C_stats <- function(FFP_file)  {
     month <- month
   }
   
-  print(month)
+  #print(month)
   
   #get weighted mean file
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/NEON_FFP_data/NEON_FFP_f_17-20")
@@ -252,21 +223,12 @@ NEON_getMGP_C_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
       
-      #get stats for the ConProp.tif
-      #stats25 <- extractStats(FFP,decDay,.25,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-      stats50 <- extractStats_wm(FFP,decDay,.50,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",FFP_f)
-      #stats75 <- extractStats(FFP,decDay,.75,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-      
-      # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
-      #   new_row <- c(year,decDay,NA,NA)
-      #   results <- rbind(results,new_row)
-      # } else {
-      #   
-      #   weighted_mean <- (stats25[1]*.6)+(stats50[1]*.3)+(stats75[1]*.1)
-      #   weighted_std <- (stats25[2]*.6)+(stats50[2]*.3)+(stats75[2]*.1)
-      #   
-      #   new_row <- c(year,decDay,weighted_mean,weighted_std)
-      #print(new_row)
+     
+      stats50 <- extractStats_wm(FFP,decDay,
+                                 .50,
+                                 "ConiferProportionMegaPlot.tif",
+                                 "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",
+                                 FFP_f)
       
       new_row <- c(year,decDay,stats50[1],stats50[2])
       #print(new_row)
