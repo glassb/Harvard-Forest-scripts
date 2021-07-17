@@ -2,9 +2,9 @@
 # Last Update: July 2, 2021
 
 # Script Overview: this master script iterates over all FFP output files
-  # and extracts spatial statistics for each decimal Day in each year of
-  # FFP output data. The spatial input data includes Megaplot proportions,
-  # Lidar, and TCT landsat 8 imagery.
+# and extracts spatial statistics for each decimal Day in each year of
+# FFP output data. The spatial input data includes Megaplot proportions,
+# Lidar, and TCT landsat 8 imagery.
 
 library(tidyverse)
 library(rgdal)
@@ -17,26 +17,26 @@ source("12_getLIDAR_stats.R")
 setwd("/Users/benjaminglass/HF21-Scripts")
 source("13_getTCT_stats.R")
 
-setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
+setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/NEON_FFP_data/NEON_FFP_lines_17-20")
 
 #get all FFP output files for EMS tower
 temp = list.files(pattern="*.csv")
 
 #create master results file (which will be our final product)
 masterResults_all <- data.frame(year=NA,
-                            decDay=NA,
-                            MGP_C_mean = NA,
-                            MGP_C_std = NA,
-                            MGP_D_mean = NA,
-                            MGP_D_std = NA,
-                            L_mean = NA,
-                            L_std = NA,
-                            TCTb_mean=NA,
-                            TCTb_std=NA,
-                            TCTg_mean=NA,
-                            TCTg_std=NA,
-                            TCTw_mean=NA,
-                            TCTw_std=NA)
+                                decDay=NA,
+                                MGP_C_mean = NA,
+                                MGP_C_std = NA,
+                                MGP_D_mean = NA,
+                                MGP_D_std = NA,
+                                L_mean = NA,
+                                L_std = NA,
+                                TCTb_mean=NA,
+                                TCTb_std=NA,
+                                TCTg_mean=NA,
+                                TCTg_std=NA,
+                                TCTw_mean=NA,
+                                TCTw_std=NA)
 
 doneFiles <- data.frame(file=NA)
 
@@ -52,63 +52,64 @@ for (currentFile in temp) {
   
   #printing
   print("============================================================")
-  print(paste0("FFP FILE ",iter," OF ",length(temp),": ",currentFile))
+  print(paste0("NEON FFP FILE ",iter," OF ",length(temp),": ",currentFile))
   print("============================================================")
   
   #get year of FFP file
-  year <- substr(currentFile,14,15)
+  year <- substr(currentFile,19,20)
+  #print(year)
   
   #currentFile <- "FFP.hr.lines.17.10.csv"
   # FIRST SET OF FUNCTIONS FOR MEGAPLOT
   
   print("--------------------------------------MGPD")
-  results_MGP_D <- getMGP_D_stats(currentFile)
-
+  results_MGP_D <- NEON_getMGP_D_stats(currentFile)
+  
   print("--------------------------------------MGPC")
-  results_MGP_C <- getMGP_C_stats(currentFile)
-
-
-
+  results_MGP_C <- NEON_getMGP_C_stats(currentFile)
+  
+  
+  
   #SECOND SET OF FUNCTIONS FOR LIDAR
   #if statement that decides which lidar year to get
-
+  
   print("--------------------------------------LIDAR")
   if (as.numeric(year)>= 80 | as.numeric(year) <= 14 ) {
     print(paste0("ERROR: CURRENT FILE YEAR ",year," DOES NOT HAVE APPROP. LIDAR DATA"))
     print("USING 2014 LIDAR DATA")
-    results_LIDAR <- getLIDAR_2014_stats(currentFile)
+    results_LIDAR <- NEON_getLIDAR_2014_stats(currentFile)
   } else if (as.numeric(year) < 16) {
     print(paste0(year," Lidar 2014"))
-    results_LIDAR <- getLIDAR_2014_stats(currentFile)
+    results_LIDAR <- NEON_getLIDAR_2014_stats(currentFile)
   } else if (as.numeric(year) < 17) {
     print(paste0(year," Lidar 2016"))
-    results_LIDAR <- getLIDAR_2016_stats(currentFile)
+    results_LIDAR <- NEON_getLIDAR_2016_stats(currentFile)
   } else if (as.numeric(year) < 18) {
     print(paste0(year," Lidar 2017"))
-    results_LIDAR <- getLIDAR_2017_stats(currentFile)
+    results_LIDAR <- NEON_getLIDAR_2017_stats(currentFile)
   } else if (as.numeric(year) < 19) {
     print(paste0(year," Lidar 2018"))
-    results_LIDAR <- getLIDAR_2018_stats(currentFile)
+    results_LIDAR <- NEON_getLIDAR_2018_stats(currentFile)
   } else if (as.numeric(year) < 20) {
     print(paste0(year," Lidar 2019"))
-    results_LIDAR <- getLIDAR_2019_stats(currentFile)
+    results_LIDAR <- NEON_getLIDAR_2019_stats(currentFile)
   } else {
     print("ERROR")
     print(year)
-    results_LIDAR <- getLIDAR_2014_stats(currentFile)
+    results_LIDAR <- NEON_getLIDAR_2014_stats(currentFile)
   }
-
+  
   
   # THIRD FUNCTION FOR TCT FILES
   #if statement to decide which TCT file to get
   
   print("--------------------------------------TCT")
-  results_TCT <- getTCTStats(currentFile)
-
+  results_TCT <- NEON_getTCTStats(currentFile)
+  
   #MERGE RESULTS
   #get results all together. This is a not-so-elegant way of doing this, but it does work (for now)
   results <- merge(merge(merge(results_MGP_C,results_MGP_D,by=c("year","decDay")),results_LIDAR,by=c("year","decDay")),results_TCT,by=c("year","decDay"))
-
+  
   #add new results to the master results file
   
   #just mgp
@@ -116,27 +117,28 @@ for (currentFile in temp) {
   
   
   print(paste0(currentFile,":----------------------------------------------------------------------------DONE"))
+  print(results)
   masterResults_all <- rbind(masterResults_all,results)
   
   doneFile <- (currentFile)
   doneFiles <- rbind(doneFiles,doneFile)
-
+  
 }
 
 
 
-write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/all_results_0712_weightedmean.csv", row.names = FALSE)
+write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/NEON_all_results_0717_weightedmean.csv", row.names = FALSE)
 
 # ======= SCRIPT IN PSEUDOCODE ============
 
 #loop over the first ffp line file
-    # feed the ffp file into megaplot function with specified megaplot (returns stats about that megaplot)
-    # feed polygon into different megaplot function returning stats
-    # feed polygon into all other fucntions
+# feed the ffp file into megaplot function with specified megaplot (returns stats about that megaplot)
+# feed polygon into different megaplot function returning stats
+# feed polygon into all other fucntions
 
-    #you'll then have a ton of dataframes with (year,decDay,mean,std)
-    #from this merge all the stats into a single dataframe with (year, DecDay,mean_megaplot1,std_megaplot1,etc.)
-    #add this to the master dataframe created before the for loop
+#you'll then have a ton of dataframes with (year,decDay,mean,std)
+#from this merge all the stats into a single dataframe with (year, DecDay,mean_megaplot1,std_megaplot1,etc.)
+#add this to the master dataframe created before the for loop
 
 
 
@@ -144,8 +146,8 @@ write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/all_r
 
 # TO DO LIST:
 
-  # debug until all files run
-  # figure out what spectral images to use for years 92-2017
+# debug until all files run
+# figure out what spectral images to use for years 92-2017
 
 
 

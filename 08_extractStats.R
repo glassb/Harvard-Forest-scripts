@@ -283,8 +283,6 @@ extractStats_TCT_wm <- function(FFP_file,dayVar,rVar,rasterImage,path,fwm_file) 
 
 
 
-
-
 # returns spatial stats for a single FFP decDay 
 extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {
   
