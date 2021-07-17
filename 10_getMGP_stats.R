@@ -40,6 +40,12 @@ getMGP_D_stats <- function(FFP_file)  {
     FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
     FFP_f <- FFP_f[complete.cases(FFP_f), ]
     
+    if (nrow(FFP_f)==0) {
+      new_row <- c(year,decDay,NA,NA)
+      results <- rbind(results,new_row)
+    } else {
+    
+    
     #get stats for the DecProp.tif
     #stats25 <- extractStats(FFP,decDay,.25,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
     stats50 <- extractStats_wm(FFP,decDay,.5,"DecidiousProportionMegaPlot.tif",
@@ -58,8 +64,8 @@ getMGP_D_stats <- function(FFP_file)  {
     #   new_row <- c(year,decDay,weighted_mean,weighted_std)
       
       new_row <- c(year,decDay,stats50[1],stats50[2])
-      print(new_row)
       results <- rbind(results,new_row)
+    }
       
   }
   return(results)
@@ -92,6 +98,11 @@ getMGP_C_stats <- function(FFP_file)  {
     FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
     FFP_f <- FFP_f[complete.cases(FFP_f), ]
     
+    if (nrow(FFP_f)==0) {
+      new_row <- c(year,decDay,NA,NA)
+      results <- rbind(results,new_row)
+    } else {
+    
     #get stats for the ConProp.tif
     #stats25 <- extractStats(FFP,decDay,.25,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
     stats50 <- extractStats_wm(FFP,decDay,.50,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",FFP_f)
@@ -109,9 +120,10 @@ getMGP_C_stats <- function(FFP_file)  {
       #print(new_row)
     
       new_row <- c(year,decDay,stats50[1],stats50[2])
-      print(new_row)
+      #print(new_row)
       results <- rbind(results,new_row)
       
+    }
   }
   return(results)
   }

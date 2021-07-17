@@ -34,6 +34,13 @@ getTCTStats <- function(FFP_file) {
     FFP <- file[file$dec.day == decDay, ]
     FFP <- FFP[complete.cases(FFP), ]
     
+    FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
+    FFP_f <- FFP_f[complete.cases(FFP_f), ]
+    
+    if (nrow(FFP_f)==0) {
+      new_row <- c(year,decDay,NA,NA)
+      results <- rbind(results,new_row)
+    } else {
     
     # ===== GETS THE MOST RECENT LANDSAT IMAGE
     TCT_image <- getRightDataDate(FFP_file,decDay)
@@ -50,7 +57,7 @@ getTCTStats <- function(FFP_file) {
     } else {
 
       #print("TCT IMAGE IS A GO")
-      print(TCT_image)
+      #print(TCT_image)
     
   
     setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
@@ -123,6 +130,7 @@ getTCTStats <- function(FFP_file) {
     results <- rbind(results,new_row)
     #print(results)
     
+    }
     }
   }
     

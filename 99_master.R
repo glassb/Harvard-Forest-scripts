@@ -58,39 +58,39 @@ for (currentFile in temp) {
   #get year of FFP file
   year <- substr(currentFile,14,15)
   
-  #currentFile <- "FFP.hr.lines.00.3.csv"
+  #currentFile <- "FFP.hr.lines.17.10.csv"
   # FIRST SET OF FUNCTIONS FOR MEGAPLOT
   
   print("--------------------------------------MGPD")
   results_MGP_D <- getMGP_D_stats(currentFile)
-  
+
   print("--------------------------------------MGPC")
   results_MGP_C <- getMGP_C_stats(currentFile)
-  
-  
-  
+
+
+
   #SECOND SET OF FUNCTIONS FOR LIDAR
   #if statement that decides which lidar year to get
-  
+
   print("--------------------------------------LIDAR")
   if (as.numeric(year)>= 80 | as.numeric(year) <= 14 ) {
     print(paste0("ERROR: CURRENT FILE YEAR ",year," DOES NOT HAVE APPROP. LIDAR DATA"))
     print("USING 2014 LIDAR DATA")
     results_LIDAR <- getLIDAR_2014_stats(currentFile)
   } else if (as.numeric(year) < 16) {
-    print(paste0(year,"Lidar 2014"))
+    print(paste0(year," Lidar 2014"))
     results_LIDAR <- getLIDAR_2014_stats(currentFile)
   } else if (as.numeric(year) < 17) {
-    print(paste0(year,"Lidar 2016"))
+    print(paste0(year," Lidar 2016"))
     results_LIDAR <- getLIDAR_2016_stats(currentFile)
   } else if (as.numeric(year) < 18) {
-    print(paste0(year,"Lidar 2017"))
+    print(paste0(year," Lidar 2017"))
     results_LIDAR <- getLIDAR_2017_stats(currentFile)
   } else if (as.numeric(year) < 19) {
-    print(paste0(year,"Lidar 2018"))
+    print(paste0(year," Lidar 2018"))
     results_LIDAR <- getLIDAR_2018_stats(currentFile)
   } else if (as.numeric(year) < 20) {
-    print(paste0(year,"Lidar 2019"))
+    print(paste0(year," Lidar 2019"))
     results_LIDAR <- getLIDAR_2019_stats(currentFile)
   } else {
     print("ERROR")

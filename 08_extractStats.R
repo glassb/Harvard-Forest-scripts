@@ -139,10 +139,12 @@ extractStats_wm <- function(FFP_file,dayVar,rVar,rasterImage,path,fwm_file) {
         
         #crs(fwm_raster) <- "+proj=utm +zone=18 +datum=WGS84 +units=m +no_defs"
         
-        par(mfrow=c(2,2))
         
-        plot(fwm_raster)
-        plot(raster)
+        
+        # par(mfrow=c(2,2))
+        # 
+        # plot(fwm_raster)
+        # plot(raster)
         
         
         
@@ -159,12 +161,15 @@ extractStats_wm <- function(FFP_file,dayVar,rVar,rasterImage,path,fwm_file) {
         
         
         raster_value_sums <- cellStats(fwm_raster, stat='sum', na.rm=TRUE)
-        print(raster_value_sums)
+        #print(raster_value_sums)
         #weighted mean
         
         raster_wm <- (raster*fwm_raster)/raster_value_sums
         
         #raster_wm <- raster
+        
+        print(c(cellStats(raster_wm, stat='sum', na.rm=TRUE),
+                cellStats(raster, stat='sd', na.rm=TRUE)))
         
         #return mean and std statistics about the cropped raster
         return(c(cellStats(raster_wm, stat='sum', na.rm=TRUE),
@@ -235,6 +240,7 @@ extractStats_TCT_wm <- function(FFP_file,dayVar,rVar,rasterImage,path,fwm_file) 
     
     # crop by sps
     raster <- crop(masked,sps)
+    #print(raster)
     
     fwm_raster <- raster()
     extent(fwm_raster) <- extent(raster)
@@ -248,10 +254,13 @@ extractStats_TCT_wm <- function(FFP_file,dayVar,rVar,rasterImage,path,fwm_file) 
                            fun=mean)
     
     raster_value_sums <- cellStats(fwm_raster, stat='sum', na.rm=TRUE)
-    #print(raster_value_sums)
+    print(raster_value_sums)
     #weighted mean
     
     raster_wm <- (raster*fwm_raster)/raster_value_sums
+    
+    print(c(cellStats(raster_wm, stat='sum', na.rm=TRUE),
+            cellStats(raster, stat='sd', na.rm=TRUE)))
     
     #return stats
     return(c(cellStats(raster_wm, stat='sum', na.rm=TRUE),

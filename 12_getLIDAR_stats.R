@@ -30,6 +30,11 @@ getLIDAR_2014_stats <- function(FFP_file)  {
     FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
     FFP_f <- FFP_f[complete.cases(FFP_f), ]
     
+    if (nrow(FFP_f)==0) {
+      new_row <- c(year,decDay,NA,NA)
+      results <- rbind(results,new_row)
+    } else {
+    
     #get stats for the lidar raster image
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2014.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2014.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
@@ -46,7 +51,7 @@ getLIDAR_2014_stats <- function(FFP_file)  {
     #   new_row <- c(year,decDay,weighted_mean,weighted_std)
       new_row <- c(year,decDay,stats50[1],stats50[2])
       results <- rbind(results,new_row)
-      
+    }
   }
   return(results)
   }
@@ -79,6 +84,11 @@ getLIDAR_2016_stats <- function(FFP_file)  {
     
     #get stats for the DecProp.tif
     
+    if (nrow(FFP_f)==0) {
+      new_row <- c(year,decDay,NA,NA)
+      results <- rbind(results,new_row)
+    } else {
+      
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2016.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2016.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2016.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
@@ -94,6 +104,7 @@ getLIDAR_2016_stats <- function(FFP_file)  {
     #   new_row <- c(year,decDay,weighted_mean,weighted_std)
       new_row <- c(year,decDay,stats50[1],stats50[2])
       results <- rbind(results,new_row)
+    }
       
     }
     # FFP_prime <- FFP %>%
@@ -131,6 +142,11 @@ getLIDAR_2017_stats <- function(FFP_file)  {
     
     #get stats for the DecProp.tif
     
+    if (nrow(FFP_f)==0) {
+      new_row <- c(year,decDay,NA,NA)
+      results <- rbind(results,new_row)
+    } else {
+    
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2017.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2017.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2017.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
@@ -146,6 +162,8 @@ getLIDAR_2017_stats <- function(FFP_file)  {
     #   new_row <- c(year,decDay,weighted_mean,weighted_std)
     new_row <- c(year,decDay,stats50[1],stats50[2])
     results <- rbind(results,new_row)
+    
+    }
       
     }
     # FFP_prime <- FFP %>%
@@ -183,6 +201,11 @@ getLIDAR_2018_stats <- function(FFP_file)  {
     
     #get stats for the DecProp.tif
     
+    if (nrow(FFP_f)==0) {
+      new_row <- c(year,decDay,NA,NA)
+      results <- rbind(results,new_row)
+    } else {
+    
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2018.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2018.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2018.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
@@ -198,7 +221,8 @@ getLIDAR_2018_stats <- function(FFP_file)  {
     #   new_row <- c(year,decDay,weighted_mean,weighted_std)
     new_row <- c(year,decDay,stats50[1],stats50[2])
       results <- rbind(results,new_row)
-      
+    
+    }
     }
     # FFP_prime <- FFP %>%
     #   mutate(mean = stats[1],
@@ -235,6 +259,11 @@ getLIDAR_2019_stats <- function(FFP_file)  {
     
     #get stats for the DecProp.tif
     
+    if (nrow(FFP_f)==0) {
+      new_row <- c(year,decDay,NA,NA)
+      results <- rbind(results,new_row)
+    } else {
+    
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2019.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2019.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2019.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
@@ -252,6 +281,7 @@ getLIDAR_2019_stats <- function(FFP_file)  {
     results <- rbind(results,new_row)
     
     }
+  }
     #print(results)
     
     
