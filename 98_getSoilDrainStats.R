@@ -1,72 +1,9 @@
-# Benjamin Glass
-# Last Update: July 2, 2021
-
-# Script Overview: this master script iterates over all FFP output files
-# and extracts spatial statistics for each decimal Day in each year of
-# FFP output data. The spatial input data includes Megaplot proportions,
-# Lidar, and TCT landsat 8 imagery.
-
 library(tidyverse)
+library(sp)
+library(raster)
 library(rgdal)
-
-#read in source files
-setwd("/Users/benjaminglass/HF21-Scripts")
-source("10_getMGP_stats.R")
-setwd("/Users/benjaminglass/HF21-Scripts")
-source("12_getLIDAR_stats.R")
-setwd("/Users/benjaminglass/HF21-Scripts")
-source("13_getTCT_stats.R")
-
-setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
-
-#get all FFP output files for EMS tower
-temp = list.files(pattern="*.csv")
-
-#create master results file (which will be our final product)
-masterResults_all <- data.frame(year=NA,
-                                decDay=NA,
-                                SD_mean = NA,
-                                SD_std = NA)
-
-doneFiles <- data.frame(file=NA)
-
-#variable to count files completed for debugging
-iter <- 0
-
-
-#===================== FOR LOOP ==========================
-
-#looping over all files in temp
-for (currentFile in temp) {
-  iter <- iter+1
-  
-  #printing
-  print("============================================================")
-  print(paste0("FFP FILE ",iter," OF ",length(temp),": ",currentFile))
-  print("============================================================")
-  
-  #get year of FFP file
-  year <- substr(currentFile,14,15)
-  
-  #currentFile <- "FFP.hr.lines.00.3.csv"
-  # FIRST SET OF FUNCTIONS FOR MEGAPLOT
-  print("--------------------------------------Soil Drainage")
-  results <- getSD_Stats(currentFile)
-  
-  print(paste0(currentFile,":----------------------------------------------------------------------------DONE"))
-  masterResults_all <- rbind(masterResults_all,results)
-  
-  doneFile <- (currentFile)
-  doneFiles <- rbind(doneFiles,doneFile)
-  
-}
-
-
-
-write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/all_results_0714_soildrainage.csv", row.names = FALSE)
-
-
-library(tidyverse)
+library(rgeos)
+library(rgdal)
 
 
 getSD_Stats <- function(FFP_file) {
@@ -81,7 +18,7 @@ getSD_Stats <- function(FFP_file) {
   
   
   for (decDay in unique(file$dec.day)) { 
-    #print(decDay)
+    print(decDay)
     
     #create a variable that has just the decDay that is being looped over right now
     FFP <- file[file$dec.day == decDay, ]
@@ -89,7 +26,7 @@ getSD_Stats <- function(FFP_file) {
     
     #get stats for the DecProp.tif
     #stats25 <- extractStats(FFP,decDay,.25,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-    stats50 <- extractStats_SD(FFP,decDay,.5,"SoilDrainage(0-ND)_utm.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/SoilDrainage_rasters")
+    stats50 <- extractStats_SD(FFP,decDay,.5,"HARV_dtmCrop.tif","/Users/benjaminglass/Desktop")
     #stats75 <- extractStats(FFP,decDay,.75,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
     
     # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
@@ -101,7 +38,7 @@ getSD_Stats <- function(FFP_file) {
     #   weighted_std <- (stats25[2]*.6)+(stats50[2]*.3)+(stats75[2]*.1)
     #   
     #   new_row <- c(year,decDay,weighted_mean,weighted_std)
-    print(stats50)
+    #print(stats50)
     new_row <- c(year,decDay,stats50[1],stats50[2])
     results <- rbind(results,new_row)
     
@@ -111,23 +48,7 @@ getSD_Stats <- function(FFP_file) {
   
 }
 
-
-# Benjamin Glass
-# Last Edits: July 2, 2021
-
-# Script overview: this script actually does the spatial analysis of
-# create tabular data into spatial polygons, and extracting the
-# raster data from the polygon data when they are overlaid on 
-# eachother.
-
-library(tidyverse)
-library(sp)
-library(raster)
-library(rgdal)
-library(rgeos)
-
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/misc")
-
 
 # returns spatial stats for a single FFP decDay 
 extractStats_SD <- function(FFP_file,dayVar,rVar,rasterImage,path) {
@@ -182,7 +103,7 @@ extractStats_SD <- function(FFP_file,dayVar,rVar,rasterImage,path) {
     #print(all.equal(rast,masked))
     
     if (all(is.na(values(masked)))) {
-      print(paste0("ERROR: NO SPATIAL OVERLAP BETWEEN FFP FILE AND ",rasterImage,"."))
+      #print(paste0("ERROR: NO SPATIAL OVERLAP BETWEEN FFP FILE AND ",rasterImage,"."))
       return(c(NA,NA))
     } else {
       
@@ -245,6 +166,64 @@ extractStats_SD <- function(FFP_file,dayVar,rVar,rasterImage,path) {
     # 
   }
 } 
+
+
+#read in source files
+setwd("/Users/benjaminglass/HF21-Scripts")
+source("10_getMGP_stats.R")
+setwd("/Users/benjaminglass/HF21-Scripts")
+source("12_getLIDAR_stats.R")
+setwd("/Users/benjaminglass/HF21-Scripts")
+source("13_getTCT_stats.R")
+
+setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
+
+#get all FFP output files for EMS tower
+temp = list.files(pattern="*.csv")
+
+#create master results file (which will be our final product)
+masterResults_all <- data.frame(year=NA,
+                                decDay=NA,
+                                SD_mean = NA,
+                                SD_std = NA)
+
+doneFiles <- data.frame(file=NA)
+
+#variable to count files completed for debugging
+iter <- 0
+
+
+#===================== FOR LOOP ==========================
+
+#looping over all files in temp
+for (currentFile in temp) {
+  iter <- iter+1
+  
+  #printing
+  print("============================================================")
+  print(paste0("FFP FILE ",iter," OF ",length(temp),": ",currentFile))
+  print("============================================================")
+  
+  #get year of FFP file
+  year <- substr(currentFile,14,15)
+  
+  #currentFile <- "FFP.hr.lines.00.3.csv"
+  # FIRST SET OF FUNCTIONS FOR MEGAPLOT
+  print("--------------------------------------DTM")
+  results <- getSD_Stats(currentFile)
+  
+  print(paste0(currentFile,":----------------------------------------------------------------------------DONE"))
+  masterResults_all <- rbind(masterResults_all,results)
+  
+  doneFile <- (currentFile)
+  doneFiles <- rbind(doneFiles,doneFile)
+  
+}
+
+
+
+write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/all_results_0714_dtm_results.csv", row.names = FALSE)
+
 
 
 

@@ -5,49 +5,92 @@ hfm <- readRDS("hfmaster_0713.RDS")
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets")
 results0712 <- as.data.frame(read.csv("all_results_0712_weightedmean.csv"))
 
+soildrainage_results <- as.data.frame(read.csv("all_results_0714_soildrainage.csv"))
+print(soildrainge_results)
+
+results0712 <- merge(results0712,soildrainage_results,by=c("year","decDay"))
+
+DTM_results <- as.data.frame(read.csv("all_results_0714_dtm_results.csv"))
+
+DTM_results <- DTM_results %>%
+  mutate(DTM_mean = SD_mean,
+         DTM_std = SD_std)
+
+print(DTM_results)
+results0712 <- merge(results0712,DTM_results,by=c("year","decDay"))
+
+print(results0712)
+
 results_mutated <- results0712 %>%
   mutate(Year.Year = paste0("20",year),
          time_days = decDay)
 
 results <- merge(hfm,results_mutated,by=c("Year.Year","time_days"))
 
+
+#=============== CANOPY HEIGHT BY MONTH =====================
+results_prime <- results %>%
+  filter(month.Month %in% (1:12),
+         PAR.28m.e.6mol.m2.s > 50) %>%
+  mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
+
+ggplot(data = results_prime, aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  facet_wrap(~ month.Month,ncol=4) +
+  geom_point(shape=20,cex=.5,alpha=.5,color="deepskyblue3") +
+  scale_x_continuous(limits=c(15,25)) +
+  scale_y_continuous() +
+  theme_classic() +
+  labs(title = "Daytime CO2 Flux vs. Canopy Height",
+       x = "Canopy Height Model (m)")
+
+
+
+#=================== TCTb by month
+results_prime <- results %>%
+  filter(month.Month %in% (1:12),
+         PAR.28m.e.6mol.m2.s > 50) %>%
+  mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
+
+ggplot(data = results_prime, aes(x=TCTb_mean,y=obs.FCO2.e.6mol.m2.s)) +
+  facet_wrap(~ month.Month) +
+  geom_point(shape=20,alpha=.5,color="coral1") +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic() +
+  labs(title = "Daytime CO2 Flux vs. TCT brightness index",
+       x = "TCT brightness index)")
+
+
+
+#===================== TCTg by month
+
+ggplot(data = results_prime, aes(x=TCTg_mean,y=obs.FCO2.e.6mol.m2.s)) +
+  facet_wrap(~ month.Month) +
+  geom_point(shape=20,alpha=.5,color="aquamarine4") +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic() +
+  labs(title = "Daytime CO2 Flux vs. TCT greenness index",
+       x = "TCT greenness index)")
+
+
+
+#===================== TCTw by month
+
+ggplot(data = results_prime, aes(x=TCTw_mean,y=obs.FCO2.e.6mol.m2.s)) +
+  facet_wrap(~ month.Month) +
+  geom_point(shape=20,alpha=.5,color="deepskyblue4") +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic() +
+  labs(title = "Daytime CO2 Flux vs. TCT wetness index",
+       x = "TCT wetness index)")
+
+
+# ========== TCT by time =================
 results_prime <- results %>%
   filter(month.Month %in% (1:12)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
-
-
-# BY YEAR
-ggplot(data = results_prime, aes(x=TCTg_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
-  facet_wrap(~ Year.Year) +
-  geom_point(shape=20,alpha=.5) +
-  scale_x_continuous() +
-  scale_y_continuous()
-
-# BY MONTH
-ggplot(data = results_prime, aes(x=TCTb_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
-  #facet_wrap(~ month.Month) +
-  geom_point(shape=20,alpha=.5) +
-  scale_x_continuous() +
-  scale_y_continuous() +
-  theme_classic()
-
-results_prime <- results %>%
-  filter(month.Month %in% (1:12)) %>%
-         #PAR.28m.e.6mol.m2.s > 50) %>%
-  mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"),
-         MGP_highP = ifelse(MGP_D_mean >.75,1,0))
-
-ggplot(data = results_prime) +
-  #facet_wrap(~ month.Month) +
-  geom_point(aes(y=obs.FCO2.e.6mol.m2.s,x=L_mean,color=as.factor(ToD)),shape=20,alpha=.5) +
-  #geom_point(aes(y=obs.FCO2.e.6mol.m2.s,x=TCTg_mean),shape=20,alpha=.3,color="aquamarine3") +
-  #geom_point(aes(y=obs.FCO2.e.6mol.m2.s,x=TCTw_mean),shape=20,alpha=.3,color="deepskyblue") +
-  scale_x_continuous() +
-  scale_y_continuous() +
-  theme_classic()
-
-
-
 
 ggplot(data = results_prime) +
   #facet_wrap(~ month.Month) +
@@ -60,10 +103,8 @@ ggplot(data = results_prime) +
   theme_classic()
 
 
-# library(akima)
-# akima::interp(x=results_prime$TCTb_mean,
-#                 y=results_prime$TCTw_mean,
-#                 z=results_prime$TCTw_mean)
+
+#================ 3D plot ====================
 
 library(scatterplot3d)
 colors <- c("#999999")
@@ -76,14 +117,11 @@ colors <- c("#999999")
                                main="3D scatter plot",
                                color="Red",
                                col.axis="blue",
-                               pch=21,
+                               pch=1,
+                               cex.symbols = .1,
                                #box=FALSE,
-                               angle=30)
+                               angle=10)
 
-  
-  
-  
-  
   
 library(car)
 library(rgl)
@@ -98,3 +136,45 @@ install.packages("/Users/benjaminglass/Downloads/rgl_0.106.8.tgz", repos=NULL, t
 
 
 
+# =================== Megaplot Decid =====================
+results_prime <- results %>%
+  filter(month.Month %in% (1:12)) %>%
+  mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
+
+ggplot(data = results_prime, aes(x=MGP_D_mean,y=obs.FCO2.e.6mol.m2.s)) +
+  facet_wrap(~ month.Month) +
+  geom_point(shape=20,alpha=.5,color="orange") +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic() +
+  labs(title = "Daytime CO2 Flux vs. Megaplot decidious proportion",
+       x = "% Decidious")
+
+
+# =================== Conifer Decid =====================
+results_prime <- results %>%
+  filter(month.Month %in% (1:12)) %>%
+  mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
+
+ggplot(data = results_prime, aes(x=MGP_C_mean,y=obs.FCO2.e.6mol.m2.s)) +
+  facet_wrap(~ month.Month) +
+  geom_point(shape=20,alpha=.5,color="aquamarine4") +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic() +
+  labs(title = "Daytime CO2 Flux vs. Megaplot conifer proportion",
+       x = "% conifer")
+
+
+#============== DTM
+results_prime <- results %>%
+  filter(month.Month %in% (1:12)) %>%
+  mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
+
+ggplot(data = results_prime, aes(x=DTM_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  facet_wrap(~ month.Month) +
+  geom_point(shape=20,cex=.5,alpha=.3) +
+  scale_y_continuous() +
+  geom_smooth() +
+  scale_x_continuous(limits=c(335,345)) +
+  theme_classic()

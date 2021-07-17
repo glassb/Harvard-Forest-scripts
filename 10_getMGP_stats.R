@@ -21,8 +21,13 @@ getMGP_D_stats <- function(FFP_file)  {
   #create dataframe
   results <- data.frame(year=NA,decDay=NA,MGP_D_mean=NA,MGP_D_std=NA)
   year <- substr(FFP_file,14,15)
+  month <- substr(FFP_file,17,17)
   #print(year)
+  #print(month)
   
+  #get weighted mean file
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_f_17-20")
+  fwm_file <- read.csv(paste0("FFP.hr.",year,".",month,".csv"))
   
   for (decDay in unique(file$dec.day)) { 
     #print(decDay)
@@ -31,9 +36,15 @@ getMGP_D_stats <- function(FFP_file)  {
     FFP <- file[file$dec.day == decDay, ]
     FFP <- FFP[complete.cases(FFP), ]
     
+    #create f weighted mean file with just decDay specified
+    FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
+    FFP_f <- FFP_f[complete.cases(FFP_f), ]
+    
     #get stats for the DecProp.tif
     #stats25 <- extractStats(FFP,decDay,.25,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-    stats50 <- extractStats(FFP,decDay,.5,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
+    stats50 <- extractStats_wm(FFP,decDay,.5,"DecidiousProportionMegaPlot.tif",
+                                          "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",
+                                          FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"DecidiousProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
     
     # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
@@ -47,12 +58,12 @@ getMGP_D_stats <- function(FFP_file)  {
     #   new_row <- c(year,decDay,weighted_mean,weighted_std)
       
       new_row <- c(year,decDay,stats50[1],stats50[2])
+      print(new_row)
       results <- rbind(results,new_row)
       
   }
   return(results)
 }
-
 
 # see above
 getMGP_C_stats <- function(FFP_file)  {
@@ -62,6 +73,13 @@ getMGP_C_stats <- function(FFP_file)  {
   results <- data.frame(year=NA,decDay=NA,MGP_C_mean=NA,MGP_C_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
+  month <- substr(FFP_file,17,17)
+  #print(year)
+  #print(month)
+  
+  #get weighted mean file
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_f_17-20")
+  fwm_file <- read.csv(paste0("FFP.hr.",year,".",month,".csv"))
   
   for (decDay in unique(file$dec.day)) { 
     #print(decDay)
@@ -71,9 +89,12 @@ getMGP_C_stats <- function(FFP_file)  {
     FFP <- FFP[complete.cases(FFP), ]
     #print(FFP)
     
+    FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
+    FFP_f <- FFP_f[complete.cases(FFP_f), ]
+    
     #get stats for the ConProp.tif
     #stats25 <- extractStats(FFP,decDay,.25,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
-    stats50 <- extractStats(FFP,decDay,.50,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
+    stats50 <- extractStats_wm(FFP,decDay,.50,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"ConiferProportionMegaPlot.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters")
     
     # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
@@ -88,6 +109,7 @@ getMGP_C_stats <- function(FFP_file)  {
       #print(new_row)
     
       new_row <- c(year,decDay,stats50[1],stats50[2])
+      print(new_row)
       results <- rbind(results,new_row)
       
   }

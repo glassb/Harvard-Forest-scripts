@@ -18,6 +18,13 @@ getTCTStats <- function(FFP_file) {
   
   #get year from given FFP file name
   year <- substr(FFP_file,14,15)
+  month <- substr(FFP_file,17,17)
+  #print(year)
+  #print(month)
+  
+  #get weighted mean file
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_f_17-20")
+  fwm_file <- read.csv(paste0("FFP.hr.",year,".",month,".csv"))
   
   #loop over each decDay in FFP file
   for (decDay in unique(file$dec.day)) { 
@@ -59,7 +66,7 @@ getTCTStats <- function(FFP_file) {
     wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
     
     #stats_brightness25 <- extractStats_TCT(FFP,decDay,.25,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    stats_brightness50 <- extractStats_TCT(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+    stats_brightness50 <- extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
     #stats_brightness75 <- extractStats_TCT(FFP,decDay,.75,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
     
     # if (is.null(stats_brightness25[1]) || is.null(stats_brightness50[1] || is.null(stats_brightness75[1]))) {
@@ -71,7 +78,7 @@ getTCTStats <- function(FFP_file) {
     # }
       
     #stats_greenness25 <- extractStats_TCT(FFP,decDay,.25,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    stats_greenness50 <- extractStats_TCT(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+    stats_greenness50 <- extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
     #stats_greenness75 <- extractStats_TCT(FFP,decDay,.75,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
     
     # if (is.null(stats_greenness25[1]) || is.null(stats_greenness50[1] || is.null(stats_greenness75[1]))) {
@@ -84,7 +91,7 @@ getTCTStats <- function(FFP_file) {
     
     
     #stats_wetness25 <- extractStats_TCT(FFP,decDay,.25,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    stats_wetness50 <- extractStats_TCT(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+    stats_wetness50 <- extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
     #stats_wetness75 <- extractStats_TCT(FFP,decDay,.75,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
     
     # if (is.null(stats_wetness25[1]) || is.null(stats_wetness50[1] || is.null(stats_wetness75[1]))) {

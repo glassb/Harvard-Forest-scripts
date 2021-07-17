@@ -12,6 +12,13 @@ getLIDAR_2014_stats <- function(FFP_file)  {
   file <- read.csv(FFP_file,stringsAsFactors=FALSE)
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   year <- substr(FFP_file,14,15)
+  month <- substr(FFP_file,17,17)
+  #print(year)
+  #print(month)
+  
+  #get weighted mean file
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_f_17-20")
+  fwm_file <- read.csv(paste0("FFP.hr.",year,".",month,".csv"))
   
   for (decDay in unique(file$dec.day)) { 
     #print(decDay)
@@ -20,9 +27,12 @@ getLIDAR_2014_stats <- function(FFP_file)  {
     FFP <- file[file$dec.day == decDay, ]
     FFP <- FFP[complete.cases(FFP), ]
     
+    FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
+    FFP_f <- FFP_f[complete.cases(FFP_f), ]
+    
     #get stats for the lidar raster image
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2014.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
-    stats50 <- extractStats(FFP,decDay,.50,"LIDAR_CHM_2014.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2014.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2014.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
@@ -48,6 +58,13 @@ getLIDAR_2016_stats <- function(FFP_file)  {
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
+  month <- substr(FFP_file,17,17)
+  #print(year)
+  #print(month)
+  
+  #get weighted mean file
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_f_17-20")
+  fwm_file <- read.csv(paste0("FFP.hr.",year,".",month,".csv"))
   
   
   for (decDay in unique(file$dec.day)) { 
@@ -57,10 +74,13 @@ getLIDAR_2016_stats <- function(FFP_file)  {
     FFP <- file[file$dec.day == decDay, ]
     FFP <- FFP[complete.cases(FFP), ]
     
+    FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
+    FFP_f <- FFP_f[complete.cases(FFP_f), ]
+    
     #get stats for the DecProp.tif
     
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2016.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
-    stats50 <- extractStats(FFP,decDay,.50,"LIDAR_CHM_2016.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2016.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2016.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
@@ -90,6 +110,13 @@ getLIDAR_2017_stats <- function(FFP_file)  {
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
+  month <- substr(FFP_file,17,17)
+  #print(year)
+  #print(month)
+  
+  #get weighted mean file
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_f_17-20")
+  fwm_file <- read.csv(paste0("FFP.hr.",year,".",month,".csv"))
   
   
   for (decDay in unique(file$dec.day)) { 
@@ -99,10 +126,13 @@ getLIDAR_2017_stats <- function(FFP_file)  {
     FFP <- file[file$dec.day == decDay, ]
     FFP <- FFP[complete.cases(FFP), ]
     
+    FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
+    FFP_f <- FFP_f[complete.cases(FFP_f), ]
+    
     #get stats for the DecProp.tif
     
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2017.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
-    stats50 <- extractStats(FFP,decDay,.50,"LIDAR_CHM_2017.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2017.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2017.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
@@ -132,6 +162,13 @@ getLIDAR_2018_stats <- function(FFP_file)  {
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
+  month <- substr(FFP_file,17,17)
+  #print(year)
+  #print(month)
+  
+  #get weighted mean file
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_f_17-20")
+  fwm_file <- read.csv(paste0("FFP.hr.",year,".",month,".csv"))
   
   
   for (decDay in unique(file$dec.day)) { 
@@ -141,10 +178,13 @@ getLIDAR_2018_stats <- function(FFP_file)  {
     FFP <- file[file$dec.day == decDay, ]
     FFP <- FFP[complete.cases(FFP), ]
     
+    FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
+    FFP_f <- FFP_f[complete.cases(FFP_f), ]
+    
     #get stats for the DecProp.tif
     
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2018.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
-    stats50 <- extractStats(FFP,decDay,.50,"LIDAR_CHM_2018.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2018.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2018.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {
@@ -167,7 +207,6 @@ getLIDAR_2018_stats <- function(FFP_file)  {
     return(results)
   }
   
-
 getLIDAR_2019_stats <- function(FFP_file)  {
   
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
@@ -175,6 +214,13 @@ getLIDAR_2019_stats <- function(FFP_file)  {
   results <- data.frame(year=NA,decDay=NA,L_mean=NA,L_std=NA)
   #for each unique day in the FFP data file
   year <- substr(FFP_file,14,15)
+  month <- substr(FFP_file,17,17)
+  #print(year)
+  #print(month)
+  
+  #get weighted mean file
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_f_17-20")
+  fwm_file <- read.csv(paste0("FFP.hr.",year,".",month,".csv"))
   
   
   for (decDay in unique(file$dec.day)) { 
@@ -184,10 +230,13 @@ getLIDAR_2019_stats <- function(FFP_file)  {
     FFP <- file[file$dec.day == decDay, ]
     FFP <- FFP[complete.cases(FFP), ]
     
+    FFP_f <- fwm_file[fwm_file$dec.day == decDay, ]
+    FFP_f <- FFP_f[complete.cases(FFP_f), ]
+    
     #get stats for the DecProp.tif
     
     #stats25 <- extractStats(FFP,decDay,.25,"LIDAR_CHM_2019.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
-    stats50 <- extractStats(FFP,decDay,.50,"LIDAR_CHM_2019.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
+    stats50 <- extractStats_wm(FFP,decDay,.50,"LIDAR_CHM_2019.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",FFP_f)
     #stats75 <- extractStats(FFP,decDay,.75,"LIDAR_CHM_2019.tif","/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters")
     
     # if (is.null(stats25[1]) || is.null(stats50[1] || is.null(stats75[1]))) {

@@ -60,11 +60,14 @@ for (currentFile in temp) {
   
   #currentFile <- "FFP.hr.lines.00.3.csv"
   # FIRST SET OF FUNCTIONS FOR MEGAPLOT
-  print("--------------------------------------MGPC")
-  results_MGP_C <- getMGP_C_stats(currentFile)
   
   print("--------------------------------------MGPD")
   results_MGP_D <- getMGP_D_stats(currentFile)
+  
+  print("--------------------------------------MGPC")
+  results_MGP_C <- getMGP_C_stats(currentFile)
+  
+  
   
   #SECOND SET OF FUNCTIONS FOR LIDAR
   #if statement that decides which lidar year to get
