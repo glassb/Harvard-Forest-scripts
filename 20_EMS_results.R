@@ -89,14 +89,22 @@ ggplot(data = results_prime, aes(x=TCTw_mean,y=obs.FCO2.e.6mol.m2.s)) +
 
 # ========== TCT by time =================
 results_prime <- results %>%
-  filter(month.Month %in% (1:12)) %>%
+  filter(month.Month %in% (1:12),
+         !is.na(TCTb_std),
+         !is.na(TCTg_std),
+         !is.na(TCTw_std)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
+setwd("/Users/benjaminglass/HF21-Scripts")
+source("07_getTCT_image_dates.R")
+TCT_images <- as.data.frame(get_LS8_image_dates())
+
 ggplot(data = results_prime) +
-  #facet_wrap(~ month.Month) +
-  geom_point(aes(x=time_days,y=TCTb_mean),shape=20,alpha=.3,color="coral1") +
-  geom_point(aes(x=time_days,y=TCTg_mean),shape=20,alpha=.3,color="aquamarine3") +
-  geom_point(aes(x=time_days,y=TCTw_mean),shape=20,alpha=.3,color="deepskyblue") +
+  #facet_wrap(~ Year.Year) +
+  geom_vline(data=TCT_images,aes(xintercept=seq_day.90.Day.90),size=.1) +
+  geom_point(aes(x=seq_day.90.Day.90,y=TCTb_mean),shape=20,alpha=.8,color="coral1") +
+  geom_point(aes(x=seq_day.90.Day.90,y=TCTg_mean),shape=20,alpha=.8,color="aquamarine3") +
+  geom_point(aes(x=seq_day.90.Day.90,y=TCTw_mean),shape=20,alpha=.8,color="deepskyblue") +
   scale_x_continuous() +
   scale_y_continuous() +
   ylab("TCT components") +

@@ -14,6 +14,11 @@ results_mutated <- results0712 %>%
 results <- merge(hfm,results_mutated,by=c("Year.Year","time_days"))
 
 
+
+
+
+
+
 #=============== CANOPY HEIGHT BY MONTH =====================
 results_prime <- results %>%
   filter(month.Month %in% (1:12)) %>%
@@ -74,18 +79,33 @@ ggplot(data = results_prime, aes(x=TCTw_mean,y=obs.FCO2.e.6mol.m2.s)) +
 
 # ========== TCT by time =================
 results_prime <- results %>%
-  filter(month.Month %in% (1:12)) %>%
+  filter(month.Month %in% (1:12),
+         !is.na(TCTb_std),
+         !is.na(TCTg_std),
+         !is.na(TCTw_std)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
+setwd("/Users/benjaminglass/HF21-Scripts")
+source("07_getTCT_image_dates.R")
+TCT_images <- as.data.frame(get_LS8_image_dates())
+
+#summary(TCT_images$DoY.Day)
+
 ggplot(data = results_prime) +
-  #facet_wrap(~ month.Month) +
-  geom_point(aes(x=time_days,y=TCTb_mean),shape=20,alpha=.3,color="coral1") +
-  geom_point(aes(x=time_days,y=TCTg_mean),shape=20,alpha=.3,color="aquamarine3") +
-  geom_point(aes(x=time_days,y=TCTw_mean),shape=20,alpha=.3,color="deepskyblue") +
+  #facet_wrap(~ Year.Year) +
+  geom_point(aes(x=seq_time.90.Decimal_Day,y=TCTb_mean),shape=20,alpha=.8,color="coral1") +
+  geom_point(aes(x=seq_time.90.Decimal_Day,y=TCTg_mean),shape=20,alpha=.8,color="aquamarine3") +
+  geom_point(aes(x=seq_time.90.Decimal_Day,y=TCTw_mean),shape=20,alpha=.8,color="deepskyblue") +
+  geom_vline(data=TCT_images,
+             aes(xintercept=seq_day.90.Day.90),size=.1) +
   scale_x_continuous() +
   scale_y_continuous() +
   ylab("TCT components") +
+  labs(title="NEON Tower TCT Components over a calendar year") +
   theme_classic()
+
+ggplot() +
+  
 
 
 
