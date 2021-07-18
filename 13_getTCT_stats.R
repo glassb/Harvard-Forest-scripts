@@ -1,12 +1,15 @@
 # Benjamin Glass
-# Last Update: July 2, 2021
+# Last Update: July 17, 2021
 
 # Script Overview: getting spatial stats on TCT Landsat 8 imagery
 library(raster)
 
 
+
+# ======== EMS TOWER FUNCTIONS
+
 # inputs: raster tif, FFP_output file, dayVar, and rVar
-getTCTStats <- function(FFP_file) {
+EMS_getTCTStats <- function(FFP_file) {
 
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/FFP_data/EMS_FFP_lines_17-20")
   
@@ -49,7 +52,7 @@ getTCTStats <- function(FFP_file) {
     } else {
     
     # ===== GETS THE MOST RECENT LANDSAT IMAGE
-    TCT_image <- getRightDataDate(FFP_file,decDay)
+    TCT_image <- EMS_getRightDataDate(FFP_file,decDay)
     
     # if there is no viable TCT image, then return a blank data frame row
     if (is.null(TCT_image)) {
@@ -61,80 +64,34 @@ getTCTStats <- function(FFP_file) {
     
     # otherwise, proceed as normal
     } else {
-
-      #print("TCT IMAGE IS A GO")
-      #print(TCT_image)
     
   
-    setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    TCTimage <- stack(TCT_image)
-    
-    # the following lines extract spatial stats based on tctb,tctg,tctw
-    bright <- subset(TCTimage,1)
-    green <- subset(TCTimage,2)
-    wet <- subset(TCTimage,3)
-    
-    brightnessRast <- projectRaster(bright, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-    greennessRast <- projectRaster(green, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-    wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-    
-    #stats_brightness25 <- extractStats_TCT(FFP,decDay,.25,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    stats_brightness50 <- extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-    #stats_brightness75 <- extractStats_TCT(FFP,decDay,.75,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    
-    # if (is.null(stats_brightness25[1]) || is.null(stats_brightness50[1] || is.null(stats_brightness75[1]))) {
-    #   weighted_mean_b <- NA
-    #   weighted_std_b <- NA
-    # } else {
-    #   weighted_mean_b <- (stats_brightness25[1]*.6)+(stats_brightness50[1]*.3)+(stats_brightness75[1]*.1)
-    #   weighted_std_b <- (stats_brightness25[2]*.6)+(stats_brightness50[2]*.3)+(stats_brightness75[2]*.1)
-    # }
+      setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+      TCTimage <- stack(TCT_image)
       
-    #stats_greenness25 <- extractStats_TCT(FFP,decDay,.25,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    stats_greenness50 <- extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-    #stats_greenness75 <- extractStats_TCT(FFP,decDay,.75,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    
-    # if (is.null(stats_greenness25[1]) || is.null(stats_greenness50[1] || is.null(stats_greenness75[1]))) {
-    #   weighted_mean_g <- NA
-    #   weighted_std_g <- NA
-    # } else {
-    #   weighted_mean_g <- (stats_greenness25[1]*.6)+(stats_greenness50[1]*.3)+(stats_greenness75[1]*.1)
-    #   weighted_std_g <- (stats_greenness25[2]*.6)+(stats_greenness50[2]*.3)+(stats_greenness75[2]*.1)
-    # }
-    
-    
-    #stats_wetness25 <- extractStats_TCT(FFP,decDay,.25,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    stats_wetness50 <- extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-    #stats_wetness75 <- extractStats_TCT(FFP,decDay,.75,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-    
-    # if (is.null(stats_wetness25[1]) || is.null(stats_wetness50[1] || is.null(stats_wetness75[1]))) {
-    #   weighted_mean_w <- NA
-    #   weighted_std_w <- NA
-    # } else {
-    #   weighted_mean_w <- (stats_wetness25[1]*.6)+(stats_wetness50[1]*.3)+(stats_wetness75[1]*.1)
-    #   weighted_std_w <- (stats_wetness25[2]*.6)+(stats_wetness50[2]*.3)+(stats_wetness75[2]*.1)
-    # }
-    # 
-    
-    
-    # new_row <- c(year,decDay,stats_brightness[1],
-    #                           stats_brightness[2],
-    #                           stats_greenness[1],
-    #                           stats_greenness[2],
-    #                           stats_wetness[1],
-    #                           stats_wetness[2]
-    #              )
-    
-    new_row <- c(year,decDay,
-                 stats_brightness50[1],
-                 stats_brightness50[2],
-                 stats_greenness50[1],
-                 stats_greenness50[2],
-                 stats_wetness50[1],
-                 stats_wetness50[2])
-    
-    results <- rbind(results,new_row)
-    #print(results)
+      # the following lines extract spatial stats based on tctb,tctg,tctw
+      bright <- subset(TCTimage,1)
+      green <- subset(TCTimage,2)
+      wet <- subset(TCTimage,3)
+      
+      brightnessRast <- projectRaster(bright, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+      greennessRast <- projectRaster(green, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+      wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+      
+      stats_brightness50 <- extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+      stats_greenness50 <- extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+      stats_wetness50 <- extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+   
+      new_row <- c(year,decDay,
+                   stats_brightness50[1],
+                   stats_brightness50[2],
+                   stats_greenness50[1],
+                   stats_greenness50[2],
+                   stats_wetness50[1],
+                   stats_wetness50[2])
+      
+      results <- rbind(results,new_row)
+      #print(results)
     
     }
     }
@@ -144,7 +101,7 @@ getTCTStats <- function(FFP_file) {
   }
 
 # function to return the most recent L8 image based on the decDay of a given FFP_file
-getRightDataDate <- function(FFP_file,decDay) {
+EMS_getRightDataDate <- function(FFP_file,decDay) {
   
   require(lubridate)
   setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
@@ -211,6 +168,8 @@ getRightDataDate <- function(FFP_file,decDay) {
 
 
 
+# ======== NEON TOWER FUNCTIONS
+
 # inputs: raster tif, FFP_output file, dayVar, and rVar
 NEON_getTCTStats <- function(FFP_file) {
   
@@ -266,80 +225,34 @@ NEON_getTCTStats <- function(FFP_file) {
         
         # otherwise, proceed as normal
       } else {
-        
-        #print("TCT IMAGE IS A GO")
-        #print(TCT_image)
-        
-        
-        setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-        TCTimage <- stack(TCT_image)
-        
-        # the following lines extract spatial stats based on tctb,tctg,tctw
-        bright <- subset(TCTimage,1)
-        green <- subset(TCTimage,2)
-        wet <- subset(TCTimage,3)
-        
-        brightnessRast <- projectRaster(bright, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-        greennessRast <- projectRaster(green, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-        wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
-        
-        #stats_brightness25 <- extractStats_TCT(FFP,decDay,.25,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-        stats_brightness50 <- extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-        #stats_brightness75 <- extractStats_TCT(FFP,decDay,.75,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-        
-        # if (is.null(stats_brightness25[1]) || is.null(stats_brightness50[1] || is.null(stats_brightness75[1]))) {
-        #   weighted_mean_b <- NA
-        #   weighted_std_b <- NA
-        # } else {
-        #   weighted_mean_b <- (stats_brightness25[1]*.6)+(stats_brightness50[1]*.3)+(stats_brightness75[1]*.1)
-        #   weighted_std_b <- (stats_brightness25[2]*.6)+(stats_brightness50[2]*.3)+(stats_brightness75[2]*.1)
-        # }
-        
-        #stats_greenness25 <- extractStats_TCT(FFP,decDay,.25,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-        stats_greenness50 <- extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-        #stats_greenness75 <- extractStats_TCT(FFP,decDay,.75,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-        
-        # if (is.null(stats_greenness25[1]) || is.null(stats_greenness50[1] || is.null(stats_greenness75[1]))) {
-        #   weighted_mean_g <- NA
-        #   weighted_std_g <- NA
-        # } else {
-        #   weighted_mean_g <- (stats_greenness25[1]*.6)+(stats_greenness50[1]*.3)+(stats_greenness75[1]*.1)
-        #   weighted_std_g <- (stats_greenness25[2]*.6)+(stats_greenness50[2]*.3)+(stats_greenness75[2]*.1)
-        # }
-        
-        
-        #stats_wetness25 <- extractStats_TCT(FFP,decDay,.25,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-        stats_wetness50 <- extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-        #stats_wetness75 <- extractStats_TCT(FFP,decDay,.75,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
-        
-        # if (is.null(stats_wetness25[1]) || is.null(stats_wetness50[1] || is.null(stats_wetness75[1]))) {
-        #   weighted_mean_w <- NA
-        #   weighted_std_w <- NA
-        # } else {
-        #   weighted_mean_w <- (stats_wetness25[1]*.6)+(stats_wetness50[1]*.3)+(stats_wetness75[1]*.1)
-        #   weighted_std_w <- (stats_wetness25[2]*.6)+(stats_wetness50[2]*.3)+(stats_wetness75[2]*.1)
-        # }
-        # 
-        
-        
-        # new_row <- c(year,decDay,stats_brightness[1],
-        #                           stats_brightness[2],
-        #                           stats_greenness[1],
-        #                           stats_greenness[2],
-        #                           stats_wetness[1],
-        #                           stats_wetness[2]
-        #              )
-        
-        new_row <- c(year,decDay,
-                     stats_brightness50[1],
-                     stats_brightness50[2],
-                     stats_greenness50[1],
-                     stats_greenness50[2],
-                     stats_wetness50[1],
-                     stats_wetness50[2])
-        
-        results <- rbind(results,new_row)
-        #print(results)
+          
+          setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+          TCTimage <- stack(TCT_image)
+          
+          # the following lines extract spatial stats based on tctb,tctg,tctw
+          bright <- subset(TCTimage,1)
+          green <- subset(TCTimage,2)
+          wet <- subset(TCTimage,3)
+          
+          brightnessRast <- projectRaster(bright, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+          greennessRast <- projectRaster(green, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+          wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+          
+          
+          stats_brightness50 <- extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+          stats_greenness50 <- extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+          stats_wetness50 <- extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+          
+          new_row <- c(year,decDay,
+                       stats_brightness50[1],
+                       stats_brightness50[2],
+                       stats_greenness50[1],
+                       stats_greenness50[2],
+                       stats_wetness50[1],
+                       stats_wetness50[2])
+          
+          results <- rbind(results,new_row)
+          #print(results)
         
       }
     }
@@ -412,11 +325,5 @@ NEON_getRightDataDate <- function(FFP_file,decDay) {
   
   
 }
-
-
-
-
-
-
 
 

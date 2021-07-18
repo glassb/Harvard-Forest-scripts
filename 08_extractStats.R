@@ -1,5 +1,5 @@
 # Benjamin Glass
-# Last Edits: July 2, 2021
+# Last Edits: July 17, 2021
 
 # Script overview: this script actually does the spatial analysis of
   # create tabular data into spatial polygons, and extracting the
@@ -14,6 +14,8 @@ library(rgeos)
 library(terra)
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/misc")
+
+# ========= WEIGHTED-MEAN EXTRACT STATS FUNCTIONS
 
 # returns spatial stats for a single FFP decDay 
 extractStats_wm <- function(FFP_file,dayVar,rVar,rasterImage,path,fwm_file) {
@@ -281,7 +283,7 @@ extractStats_TCT_wm <- function(FFP_file,dayVar,rVar,rasterImage,path,fwm_file) 
 
 
 
-
+# ========= NON WEIGHTED-MEAN EXTRACT STATS FUNCTIONS
 
 # returns spatial stats for a single FFP decDay 
 extractStats <- function(FFP_file,dayVar,rVar,rasterImage,path) {

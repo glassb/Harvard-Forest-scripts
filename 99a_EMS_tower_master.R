@@ -1,7 +1,7 @@
 # Benjamin Glass
-# Last Update: July 2, 2021
+# Last Update: July 17, 2021
 
-# Script Overview: this master script iterates over all FFP output files
+# Script Overview: this master script iterates over all EMS FFP output files
   # and extracts spatial statistics for each decimal Day in each year of
   # FFP output data. The spatial input data includes Megaplot proportions,
   # Lidar, and TCT landsat 8 imagery.
@@ -62,10 +62,10 @@ for (currentFile in temp) {
   # FIRST SET OF FUNCTIONS FOR MEGAPLOT
   
   print("--------------------------------------MGPD")
-  results_MGP_D <- getMGP_D_stats(currentFile)
+  results_MGP_D <- EMS_getMGP_D_stats(currentFile)
 
   print("--------------------------------------MGPC")
-  results_MGP_C <- getMGP_C_stats(currentFile)
+  results_MGP_C <- EMS_getMGP_C_stats(currentFile)
 
 
 
@@ -76,26 +76,26 @@ for (currentFile in temp) {
   if (as.numeric(year)>= 80 | as.numeric(year) <= 14 ) {
     print(paste0("ERROR: CURRENT FILE YEAR ",year," DOES NOT HAVE APPROP. LIDAR DATA"))
     print("USING 2014 LIDAR DATA")
-    results_LIDAR <- getLIDAR_2014_stats(currentFile)
+    results_LIDAR <- EMS_getLIDAR_2014_stats(currentFile)
   } else if (as.numeric(year) < 16) {
     print(paste0(year," Lidar 2014"))
-    results_LIDAR <- getLIDAR_2014_stats(currentFile)
+    results_LIDAR <- EMS_getLIDAR_2014_stats(currentFile)
   } else if (as.numeric(year) < 17) {
     print(paste0(year," Lidar 2016"))
-    results_LIDAR <- getLIDAR_2016_stats(currentFile)
+    results_LIDAR <- EMS_getLIDAR_2016_stats(currentFile)
   } else if (as.numeric(year) < 18) {
     print(paste0(year," Lidar 2017"))
-    results_LIDAR <- getLIDAR_2017_stats(currentFile)
+    results_LIDAR <- EMS_getLIDAR_2017_stats(currentFile)
   } else if (as.numeric(year) < 19) {
     print(paste0(year," Lidar 2018"))
-    results_LIDAR <- getLIDAR_2018_stats(currentFile)
+    results_LIDAR <- EMS_getLIDAR_2018_stats(currentFile)
   } else if (as.numeric(year) < 20) {
     print(paste0(year," Lidar 2019"))
-    results_LIDAR <- getLIDAR_2019_stats(currentFile)
+    results_LIDAR <- EMS_getLIDAR_2019_stats(currentFile)
   } else {
     print("ERROR")
     print(year)
-    results_LIDAR <- getLIDAR_2014_stats(currentFile)
+    results_LIDAR <- EMS_getLIDAR_2014_stats(currentFile)
   }
 
   
@@ -103,7 +103,7 @@ for (currentFile in temp) {
   #if statement to decide which TCT file to get
   
   print("--------------------------------------TCT")
-  results_TCT <- getTCTStats(currentFile)
+  results_TCT <- EMS_getTCTStats(currentFile)
 
   #MERGE RESULTS
   #get results all together. This is a not-so-elegant way of doing this, but it does work (for now)
@@ -137,15 +137,6 @@ write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/all_r
     #you'll then have a ton of dataframes with (year,decDay,mean,std)
     #from this merge all the stats into a single dataframe with (year, DecDay,mean_megaplot1,std_megaplot1,etc.)
     #add this to the master dataframe created before the for loop
-
-
-
-
-
-# TO DO LIST:
-
-  # debug until all files run
-  # figure out what spectral images to use for years 92-2017
 
 
 

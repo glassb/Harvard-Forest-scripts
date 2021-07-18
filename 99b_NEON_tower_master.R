@@ -1,7 +1,7 @@
 # Benjamin Glass
-# Last Update: July 2, 2021
+# Last Update: July 17, 2021
 
-# Script Overview: this master script iterates over all FFP output files
+# Script Overview: this master script iterates over all NEON FFP output files
 # and extracts spatial statistics for each decimal Day in each year of
 # FFP output data. The spatial input data includes Megaplot proportions,
 # Lidar, and TCT landsat 8 imagery.
@@ -139,15 +139,6 @@ write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/NEON_
 #you'll then have a ton of dataframes with (year,decDay,mean,std)
 #from this merge all the stats into a single dataframe with (year, DecDay,mean_megaplot1,std_megaplot1,etc.)
 #add this to the master dataframe created before the for loop
-
-
-
-
-
-# TO DO LIST:
-
-# debug until all files run
-# figure out what spectral images to use for years 92-2017
 
 
 
