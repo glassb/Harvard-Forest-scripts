@@ -55,7 +55,7 @@ EMS_getMGP_D_stats <- function(FFP_file)  {
     } else {
     
       #xtract stats
-      stats50 <- extractStats_wm(FFP,decDay,.5,
+      stats50 <- EMS_extractStats_wm(FFP,decDay,.5,
                                   "DecidiousProportionMegaPlot.tif",
                                   "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",
                                   FFP_f)
@@ -106,7 +106,7 @@ EMS_getMGP_C_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
     
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- EMS_extractStats_wm(FFP,decDay,
                                  .50,
                                  "ConiferProportionMegaPlot.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",
@@ -168,7 +168,7 @@ NEON_getMGP_D_stats <- function(FFP_file)  {
     } else {
       
       
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- NEON_extractStats_wm(FFP,decDay,
                                  .5,
                                  "DecidiousProportionMegaPlot.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",
@@ -224,7 +224,7 @@ NEON_getMGP_C_stats <- function(FFP_file)  {
     } else {
       
      
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- NEON_extractStats_wm(FFP,decDay,
                                  .50,
                                  "ConiferProportionMegaPlot.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/Megaplot_rasters",

@@ -44,7 +44,7 @@ EMS_getLIDAR_2014_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
     
-    stats50 <- extractStats_wm(FFP,decDay,
+    stats50 <- EMS_extractStats_wm(FFP,decDay,
                                .50,
                                "LIDAR_CHM_2014.tif",
                                "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",
@@ -96,7 +96,7 @@ EMS_getLIDAR_2016_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
   
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- EMS_extractStats_wm(FFP,decDay,
                                  .50,
                                  "LIDAR_CHM_2016.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",
@@ -153,7 +153,7 @@ EMS_getLIDAR_2017_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
 
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- EMS_extractStats_wm(FFP,decDay,
                                  .50,
                                  "LIDAR_CHM_2017.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",
@@ -212,7 +212,7 @@ EMS_getLIDAR_2018_stats <- function(FFP_file)  {
     } else {
     
     
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- EMS_extractStats_wm(FFP,decDay,
                                  .50,
                                  "LIDAR_CHM_2018.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",
@@ -270,7 +270,7 @@ EMS_getLIDAR_2019_stats <- function(FFP_file)  {
     } else {
     
    
-    stats50 <- extractStats_wm(FFP,decDay,
+    stats50 <- EMS_extractStats_wm(FFP,decDay,
                                .50,
                                "LIDAR_CHM_2019.tif",
                                "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",
@@ -326,7 +326,7 @@ NEON_getLIDAR_2014_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
       
-        stats50 <- extractStats_wm(FFP,decDay,
+        stats50 <- NEON_extractStats_wm(FFP,decDay,
                                    .50,
                                    "LIDAR_CHM_2014.tif",
                                    "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",
@@ -377,7 +377,7 @@ NEON_getLIDAR_2016_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
       
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- NEON_extractStats_wm(FFP,decDay,
                                  .50,
                                  "LIDAR_CHM_2016.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",
@@ -430,7 +430,7 @@ NEON_getLIDAR_2017_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
       
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- NEON_extractStats_wm(FFP,decDay,
                                  .50,
                                  "LIDAR_CHM_2017.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",
@@ -485,7 +485,7 @@ NEON_getLIDAR_2018_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
       
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- NEON_extractStats_wm(FFP,decDay,
                                  .50,
                                  "LIDAR_CHM_2018.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",
@@ -538,7 +538,7 @@ NEON_getLIDAR_2019_stats <- function(FFP_file)  {
       results <- rbind(results,new_row)
     } else {
       
-      stats50 <- extractStats_wm(FFP,decDay,
+      stats50 <- NEON_extractStats_wm(FFP,decDay,
                                  .50,
                                  "LIDAR_CHM_2019.tif",
                                  "/Users/benjaminglass/Desktop/HF21/00_Datasets/00-spatial-deliverables/LIDAR_CHM_rasters",

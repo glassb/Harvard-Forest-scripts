@@ -78,9 +78,9 @@ EMS_getTCTStats <- function(FFP_file) {
       greennessRast <- projectRaster(green, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
       wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
       
-      stats_brightness50 <- extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-      stats_greenness50 <- extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-      stats_wetness50 <- extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+      stats_brightness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+      stats_greenness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+      stats_wetness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
    
       new_row <- c(year,decDay,
                    stats_brightness50[1],
@@ -239,9 +239,9 @@ NEON_getTCTStats <- function(FFP_file) {
           wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
           
           
-          stats_brightness50 <- extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-          stats_greenness50 <- extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-          stats_wetness50 <- extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+          stats_brightness50 <- NEON_extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+          stats_greenness50 <- NEON_extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+          stats_wetness50 <- NEON_extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
           
           new_row <- c(year,decDay,
                        stats_brightness50[1],

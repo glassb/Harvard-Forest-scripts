@@ -3,23 +3,8 @@ setwd("/Users/benjaminglass/Downloads")
 hfm <- readRDS("hfmaster_0713.RDS")
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets")
-results0712 <- as.data.frame(read.csv("all_results_0712_weightedmean.csv"))
+results0712 <- as.data.frame(read.csv("all_results_0717_weightedmean.csv"))
 
-soildrainage_results <- as.data.frame(read.csv("all_results_0714_soildrainage.csv"))
-print(soildrainge_results)
-
-results0712 <- merge(results0712,soildrainage_results,by=c("year","decDay"))
-
-DTM_results <- as.data.frame(read.csv("all_results_0714_dtm_results.csv"))
-
-DTM_results <- DTM_results %>%
-  mutate(DTM_mean = SD_mean,
-         DTM_std = SD_std)
-
-print(DTM_results)
-results0712 <- merge(results0712,DTM_results,by=c("year","decDay"))
-
-print(results0712)
 
 results_mutated <- results0712 %>%
   mutate(Year.Year = paste0("20",year),
@@ -30,13 +15,12 @@ results <- merge(hfm,results_mutated,by=c("Year.Year","time_days"))
 
 #=============== CANOPY HEIGHT BY MONTH =====================
 results_prime <- results %>%
-  filter(month.Month %in% (1:12),
-         PAR.28m.e.6mol.m2.s > 50) %>%
+  filter(month.Month %in% (1:12)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
 ggplot(data = results_prime, aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
   facet_wrap(~ month.Month,ncol=4) +
-  geom_point(shape=20,cex=.5,alpha=.5,color="deepskyblue3") +
+  geom_point(shape=20,cex=.5,alpha=.5) +
   scale_x_continuous(limits=c(15,25)) +
   scale_y_continuous() +
   theme_classic() +
@@ -48,7 +32,8 @@ ggplot(data = results_prime, aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
 #=================== TCTb by month
 results_prime <- results %>%
   filter(month.Month %in% (1:12),
-         PAR.28m.e.6mol.m2.s > 50) %>%
+         #PAR.28m.e.6mol.m2.s > 50,
+         !is.na(TCTb_std)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
 ggplot(data = results_prime, aes(x=TCTb_mean,y=obs.FCO2.e.6mol.m2.s)) +
@@ -61,6 +46,18 @@ ggplot(data = results_prime, aes(x=TCTb_mean,y=obs.FCO2.e.6mol.m2.s)) +
        x = "TCT brightness index)")
 
 
+ggplot(data = results_prime, aes(x=TCTb_mean,y=TCTw_mean,color=as.factor(month.Month))) +
+  facet_wrap(~ month.Month) +
+  geom_point(shape=20,alpha=.8) +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic()
+
+
+  
+  
+  
+  
 
 #===================== TCTg by month
 
@@ -102,9 +99,24 @@ TCT_images <- as.data.frame(get_LS8_image_dates())
 ggplot(data = results_prime) +
   #facet_wrap(~ Year.Year) +
   geom_vline(data=TCT_images,aes(xintercept=seq_day.90.Day.90),size=.1) +
-  geom_point(aes(x=seq_day.90.Day.90,y=TCTb_mean),shape=20,alpha=.8,color="coral1") +
-  geom_point(aes(x=seq_day.90.Day.90,y=TCTg_mean),shape=20,alpha=.8,color="aquamarine3") +
-  geom_point(aes(x=seq_day.90.Day.90,y=TCTw_mean),shape=20,alpha=.8,color="deepskyblue") +
+  geom_smooth(aes(x=seq_day.90.Day.90,y=TCTb_mean),shape=20,alpha=.8,color="coral1") +
+  geom_smooth(aes(x=seq_day.90.Day.90,y=TCTg_mean),shape=20,alpha=.8,color="aquamarine3") +
+  geom_smooth(aes(x=seq_day.90.Day.90,y=TCTw_mean),shape=20,alpha=.8,color="deepskyblue") +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  ylab("TCT components") +
+  theme_classic()
+
+#time days
+ggplot(data = results_prime) +
+  #facet_wrap(~ Year.Year) +
+  #geom_vline(data=TCT_images,aes(xintercept=seq_day.90.Day.90),size=.1) +
+  geom_point(aes(x=time_days,y=TCTb_mean),shape=20,alpha=.2,color="coral1") +
+  geom_point(aes(x=time_days,y=TCTg_mean),shape=20,alpha=.2,color="aquamarine3") +
+  geom_point(aes(x=time_days,y=TCTw_mean),shape=20,alpha=.2,color="deepskyblue") +
+  geom_smooth(aes(x=time_days,y=TCTb_mean),shape=20,alpha=.8,color="coral1") +
+  geom_smooth(aes(x=time_days,y=TCTg_mean),shape=20,alpha=.8,color="aquamarine3") +
+  geom_smooth(aes(x=time_days,y=TCTw_mean),shape=20,alpha=.8,color="deepskyblue") +
   scale_x_continuous() +
   scale_y_continuous() +
   ylab("TCT components") +
@@ -149,9 +161,9 @@ results_prime <- results %>%
   filter(month.Month %in% (1:12)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
-ggplot(data = results_prime, aes(x=MGP_D_mean,y=obs.FCO2.e.6mol.m2.s)) +
+ggplot(data = results_prime, aes(x=MGP_D_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
   facet_wrap(~ month.Month) +
-  geom_point(shape=20,alpha=.5,color="orange") +
+  geom_point(shape=20,alpha=.5) +
   scale_x_continuous() +
   scale_y_continuous() +
   theme_classic() +
@@ -164,9 +176,9 @@ results_prime <- results %>%
   filter(month.Month %in% (1:12)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
-ggplot(data = results_prime, aes(x=MGP_C_mean,y=obs.FCO2.e.6mol.m2.s)) +
+ggplot(data = results_prime, aes(x=MGP_C_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
   facet_wrap(~ month.Month) +
-  geom_point(shape=20,alpha=.5,color="aquamarine4") +
+  geom_point(shape=20,alpha=.5) +
   scale_x_continuous() +
   scale_y_continuous() +
   theme_classic() +
