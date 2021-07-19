@@ -127,7 +127,7 @@ for (currentFile in temp) {
 
 
 
-write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/NEON_all_results_0717_weightedmean.csv", row.names = FALSE)
+write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/NEON_results_0720_weightedmean.csv", row.names = FALSE)
 
 # ======= SCRIPT IN PSEUDOCODE ============
 

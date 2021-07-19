@@ -3,8 +3,7 @@ library(tidyverse)
 NEON_file <- ""
 EMS_file <- ""
 
-setwd("/Users/benjaminglass/Downloads")
-hfm <- readRDS("hfmaster_0713.RDS")
+
 
 #import EMS data
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets")
@@ -15,17 +14,37 @@ resultsEMS <- resultsEMS %>%
   mutate(Year.Year = paste0("20",year),
          time_days = decDay)
 
+#read in hfm
+setwd("/Users/benjaminglass/Downloads")
+hfm <- readRDS("hfmaster_0713.RDS")
+
+#merge EMS data and hfm
+EMS_results_merged <- merge(hfm,resultsEMS,by=c("Year.Year","time_days"))
+
+
+
+
+
 #import NEON data
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets")
 resultsNEON <- as.data.frame(read.csv(NEON_file))
 
-#mutate resultsEMS
+#mutate resultsNEON
 resultsNEON <- resultsNEON %>%
   mutate(Year.Year = paste0("20",year),
          time_days = decDay)
 
-#merge all three together
-results_merged <- merge(merge(hfm,resultsEMS,by=c("Year.Year","time_days")),resultsNEON,by=c("Year.Year","time_days"))
+#read in ameriflux dataset
+setwd("/Users/benjaminglass/Downloads")
+amf <- as.data.frame(read.csv(file="AMF_US-xHA_BASE_HH_4-5.csv",header=TRUE,skip=2,stringsAsFactors=FALSE))
+
+#merge NEON data and amf
+NEON_results_merged <- merge(amf,resultsNEON,by=c("Year.Year","time_days"))
+
+
+#merge NEONresults and EMSresults based on same time stamps, and include the CO2 flux data points for hfm and amf datasets
+results_merged <- ()
+
 
 #create empty column
 results_merged <- results_merged %>%
