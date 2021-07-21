@@ -15,11 +15,11 @@ results <- merge(hfm,results_mutated,by=c("Year.Year","time_days"))
 
 #=============== CANOPY HEIGHT BY MONTH =====================
 results_prime <- results %>%
-  filter(month.Month %in% (1:12)) %>%
+  filter(month.Month %in% (5:9)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
 ggplot(data = results_prime, aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
-  facet_wrap(~ month.Month,ncol=4) +
+  #facet_wrap(~ month.Month,ncol=2) +
   geom_point(shape=20,cex=.5,alpha=.5) +
   scale_x_continuous(limits=c(15,25)) +
   scale_y_continuous() +
@@ -31,14 +31,14 @@ ggplot(data = results_prime, aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
 
 #=================== TCTb by month
 results_prime <- results %>%
-  filter(month.Month %in% (1:12),
+  filter(month.Month %in% (5:9),
          #PAR.28m.e.6mol.m2.s > 50,
          !is.na(TCTb_std)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
-ggplot(data = results_prime, aes(x=TCTb_mean,y=obs.FCO2.e.6mol.m2.s)) +
-  facet_wrap(~ month.Month) +
-  geom_point(shape=20,alpha=.5,color="coral1") +
+ggplot(data = results_prime, aes(x=TCTb_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  #facet_wrap(~ month.Month) +
+  geom_point(shape=20,alpha=.5) +
   scale_x_continuous() +
   scale_y_continuous() +
   theme_classic() +
@@ -47,7 +47,7 @@ ggplot(data = results_prime, aes(x=TCTb_mean,y=obs.FCO2.e.6mol.m2.s)) +
 
 
 ggplot(data = results_prime, aes(x=TCTb_mean,y=TCTw_mean,color=as.factor(month.Month))) +
-  facet_wrap(~ month.Month) +
+  #facet_wrap(~ month.Month) +
   geom_point(shape=20,alpha=.8) +
   scale_x_continuous() +
   scale_y_continuous() +
@@ -158,11 +158,11 @@ install.packages("/Users/benjaminglass/Downloads/rgl_0.106.8.tgz", repos=NULL, t
 
 # =================== Megaplot Decid =====================
 results_prime <- results %>%
-  filter(month.Month %in% (1:12)) %>%
+  filter(month.Month %in% (5:9)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
 ggplot(data = results_prime, aes(x=MGP_D_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
-  facet_wrap(~ month.Month) +
+  #facet_wrap(~ month.Month) +
   geom_point(shape=20,alpha=.5) +
   scale_x_continuous() +
   scale_y_continuous() +
@@ -173,11 +173,11 @@ ggplot(data = results_prime, aes(x=MGP_D_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD))
 
 # =================== Conifer Decid =====================
 results_prime <- results %>%
-  filter(month.Month %in% (1:12)) %>%
+  filter(month.Month %in% (5:9)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
 ggplot(data = results_prime, aes(x=MGP_C_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
-  facet_wrap(~ month.Month) +
+  #facet_wrap(~ month.Month) +
   geom_point(shape=20,alpha=.5) +
   scale_x_continuous() +
   scale_y_continuous() +

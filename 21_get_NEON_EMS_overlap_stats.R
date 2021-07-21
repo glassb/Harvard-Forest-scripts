@@ -91,6 +91,12 @@ for(i in 1:nrow(results_mutated)) {
   # } else if (year == "18" & as.numeric(month) <= 9) {
   #   percentOverlap <- NA
   
+  } else if (year == "20" & as.numeric(month) >= 11) {
+    percentOverlap <- NA
+  } else if (year == "20" & month == "4") {
+    percentOverlap <- NA
+  } else if (year == "20" & month == "5") {
+    percentOverlap <- NA
   } else {
   
   #make sure month is correct
@@ -201,7 +207,7 @@ for(i in 1:nrow(results_mutated)) {
           #print(class(rasterIntersect))
           
           if(class(rasterIntersect) == "try-error") {
-              print("******** NO OVERLAP")
+              print("======== NO OVERLAP")
               percentOverlap <- 0
               
           } else {
@@ -215,9 +221,13 @@ for(i in 1:nrow(results_mutated)) {
               #intersect_total_cells = ncell(rasterIntersect)
               # 
               #calculate their percent overlap
-              print(paste0("******** ",EMS_total_cells," ",NEON_total_cells," ",intersect_total_cells))
+              print("=")
+              print("=")
+              print("=")
+              #print(paste0("******** ",EMS_total_cells," ",NEON_total_cells," ",intersect_total_cells))
               percentOverlap <- 2*intersect_total_cells/(EMS_total_cells+NEON_total_cells)
-              print(paste0("******** percent overlap: ",percentOverlap))
+              print(paste0("**************************************** percent overlap: ",percentOverlap))
+              print("=")
           }
           
           # par(mfrow=c(2,2))
@@ -245,13 +255,13 @@ for(i in 1:nrow(results_mutated)) {
 #
 results_prime <- results_mutated %>%
   dplyr::select(1:8)
-  #filter(SpatOverlapPC>0) %>%
+  filter(SpatOverlapPC>0) %>%
   #mutate(Flux_diff = obs.FCO2.e.6mol.m2.s-FC)
 
 summary(results_mutated)
 
 
-ggplot(data = results_prime, aes(x=SpatOverlapPC,y=Flux_diff)) +
+ggplot(data = results_mutated, aes(x=SpatOverlapPC,y=Flux_diff)) +
   #facet_wrap(~ month.Month,ncol=4) +
   geom_point(shape=20,cex=1,alpha=.5) +
   scale_x_continuous() +
