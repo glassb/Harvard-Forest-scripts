@@ -4,20 +4,27 @@ library(tidyverse)
 
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets")
-results <- as.data.frame(read.csv("overlapScript_0720.csv"))
+results <- as.data.frame(read.csv("overlapScript_0721.csv"))
 
 results_prime <- results %>%
   filter(SpatOverlapPC > 0) %>%
-  mutate(flux_diff_abs = abs(obs.FCO2.e.6mol.m2.s-FC))
+  mutate(flux_diff_perc = ((obs.FCO2.e.6mol.m2.s-FC)/obs.FCO2.e.6mol.m2.s))
+         
+         #/obs.FCO2.e.6mol.m2.s*100)
 
 
-ggplot(data = results_prime, aes(x=SpatOverlapPC,y=flux_diff_abs)) +
+
+ggplot(data = results_prime, aes(x=SpatOverlapPC,y=flux_diff_perc)) +
   #facet_wrap(~ month.Month,ncol=4) +
   geom_point(shape=20,cex=1,alpha=.8) +
-  scale_x_continuous(limits=c(0,.4)) +
-  scale_y_continuous() +
+  scale_x_continuous(limits=c(0,)) +
+  scale_y_continuous(limits=c(-10,10)) +
   theme_classic() +
   labs(title="abs Difference in CO2 Flux (NEON and EMS towers) vs. spatial FFP overlap")
+
+hist(results_prime$SpatOverlapPC)
+summary(results_prime$SpatOverlapPC)
+hist(results_prime$flux_diff_perc,breaks=100)
 
 
 

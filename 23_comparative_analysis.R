@@ -14,7 +14,8 @@ results0712 <- as.data.frame(read.csv("EMS_results_0719_weightedmean.csv"))
 
 results_mutated <- results0712 %>%
   mutate(Year.Year = paste0("20",year),
-         time_days = decDay)
+         time_days = decDay,
+         tower = "EMS")
 
 results_EMS <- merge(hfm,results_mutated,by=c("Year.Year","time_days"))
 
@@ -30,7 +31,8 @@ NEONmaster <- as.data.frame(read.csv(file="neon_hr.csv",header=TRUE,stringsAsFac
 NEONmaster_mutated <- NEONmaster %>%
   mutate(Year.Year = year,
          month.Month = mon,
-         time_days = dec.day)
+         time_days = dec.day,
+         tower = "NEON")
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets")
 results0712 <- as.data.frame(read.csv("NEON_results_0720_weightedmean.csv"))
@@ -47,6 +49,7 @@ results_NEON <- merge(NEONmaster_mutated,results_mutated,by=c("Year.Year","time_
 
 
 summary(results_EMS)
+summary(results_NEON)
 
 
 ########## ===================== DECIDIOUS 
@@ -60,10 +63,13 @@ results_prime <- results_EMS %>%
 EMS_D <- ggplot(data = results_prime, aes(x=MGP_D_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
   #facet_wrap(~ month.Month,ncol=4) +
   #geom_smooth() +
-  geom_point(shape=20,cex=1,alpha=.6) +
+  geom_point(shape=20,cex=1,alpha=.5) +
   scale_x_continuous(limits=c(0,1)) +
   scale_y_continuous() +
-  theme_classic()
+  theme_classic() +
+  theme(legend.position = "none")
+
+EMS_D
 
 
 results_prime_NEON <- results_NEON %>%
@@ -73,18 +79,20 @@ results_prime_NEON <- results_NEON %>%
 
 NEON_D <- ggplot(data = results_prime_NEON, aes(x=MGP_D_mean,y=FC,color=ToD)) +
   #facet_wrap(~ month.Month) +
-  geom_point(shape=20,alpha=.5) +
+  geom_point(shape=20,cex=1,alpha=.5) +
   scale_x_continuous() +
   scale_y_continuous() +
-  theme_classic() 
+  theme_classic()
+
+NEON_D
 
 
 figure <- ggarrange(EMS_D, NEON_D,
-                    labels = c("EMS Tower","NEON Tower"),
+                    #labels = c("EMS Tower","NEON Tower"),
                     ncol = 2, nrow = 1)
 
 annotate_figure(figure,
-                top = text_grob("CO2 Flux vs Decidious % of FFP during Maturity (May-Sept)",face="bold",size=16))
+                top = text_grob("CO2 Flux vs Decidious % of FFP during Maturity (May-Sept)",face="bold",size=12))
 
 
 
@@ -92,8 +100,6 @@ annotate_figure(figure,
 
 
 ########## ===================== CONIFER
-
-
 
 
 results_prime <- results_EMS %>%
@@ -143,7 +149,7 @@ results_prime <- results_EMS %>%
   filter(month.Month %in% (5:9)) %>%
   mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
-EMS_C <- ggplot(data = results_prime, aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+EMS_L <- ggplot(data = results_prime, aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
   #facet_wrap(~ month.Month,ncol=4) +
   #geom_smooth() +
   geom_point(shape=20,cex=1,alpha=.5) +
@@ -157,7 +163,7 @@ results_prime_NEON <- results_NEON %>%
   mutate(ToD = ifelse(PPFD_IN_1_1_1 > 50,"day","night"))
 
 
-NEON_C <- ggplot(data = results_prime_NEON, aes(x=L_mean,y=FC,color=ToD)) +
+NEON_L <- ggplot(data = results_prime_NEON, aes(x=L_mean,y=FC,color=ToD)) +
   #facet_wrap(~ month.Month) +
   geom_point(shape=20,cex=1,alpha=.5) +
   scale_x_continuous() +
@@ -171,6 +177,262 @@ figure <- ggarrange(EMS_C, NEON_C,
 
 annotate_figure(figure,
                 top = text_grob("CO2 Flux vs avg Canopy Height of FFP during Maturity (May-Sept)",face="bold",size=16))
+
+
+
+
+
+
+########## ===================== TCT transformations
+
+
+
+
+results_prime <- results_EMS %>%
+  filter(month.Month %in% (5:9)) %>%
+  mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
+
+EMS_TCTb <- ggplot(data = results_prime, aes(x=TCTb_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  #facet_wrap(~ month.Month,ncol=4) +
+  #geom_smooth() +
+  geom_point(shape=20,cex=1,alpha=.5) +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic()
+
+EMS_TCTg <- ggplot(data = results_prime, aes(x=TCTg_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  #facet_wrap(~ month.Month,ncol=4) +
+  #geom_smooth() +
+  geom_point(shape=20,cex=1,alpha=.5) +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic()
+
+EMS_TCTw <- ggplot(data = results_prime, aes(x=TCTw_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  #facet_wrap(~ month.Month,ncol=4) +
+  #geom_smooth() +
+  geom_point(shape=20,cex=1,alpha=.5) +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic()
+
+
+
+results_prime_NEON <- results_NEON %>%
+  filter(month.Month %in% (5:9)) %>%
+  mutate(ToD = ifelse(PPFD_IN_1_1_1 > 50,"day","night"))
+
+
+NEON_TCTb <- ggplot(data = results_prime_NEON, aes(x=TCTb_mean,y=FC,color=ToD)) +
+  #facet_wrap(~ month.Month) +
+  geom_point(shape=20,cex=1,alpha=.5) +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic() 
+
+NEON_TCTg <- ggplot(data = results_prime_NEON, aes(x=TCTg_mean,y=FC,color=ToD)) +
+  #facet_wrap(~ month.Month) +
+  geom_point(shape=20,cex=1,alpha=.5) +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic() 
+
+NEON_TCTw <- ggplot(data = results_prime_NEON, aes(x=TCTw_mean,y=FC,color=ToD)) +
+  #facet_wrap(~ month.Month) +
+  geom_point(shape=20,cex=1,alpha=.5) +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme_classic() 
+
+
+# figure <- ggarrange(EMS_D, NEON_D, 
+#                     # EMS_C,NEON_C,
+#                     # EMS_L,NEON_L,
+#                     # EMS_TCTb, NEON_TCTb, 
+#                     # EMS_TCTg, NEON_TCTg, 
+#                     # EMS_TCTw, NEON_TCTw,
+#                     labels = c("EMS Tower","NEON Tower"),
+#                     ncol = 2, nrow = 1)
+# 
+# annotate_figure(figure,
+#                 top = text_grob("CO2 Flux vs avg Canopy Height of FFP during Maturity (May-Sept)",face="bold",size=16))
+# 
+
+
+
+
+
+
+# ============ boxplot
+
+
+
+
+
+
+library(tidyr)
+master_res <- merge(results_EMS,results_NEON,by=c("Year.Year","time_days"))
+
+master_res <- master_res %>%
+                  select(
+                     c(MGP_D_mean.x,
+                     MGP_D_mean.y,
+                     MGP_C_mean.x,
+                     MGP_C_mean.y,
+                     L_mean.x,
+                     L_mean.y,
+                     TCTb_mean.x,
+                     TCTb_mean.y,
+                     TCTg_mean.x,
+                     TCTg_mean.y,
+                     TCTw_mean.x,
+                     TCTw_mean.y)
+                     ) %>%
+                  mutate(
+                     EMS_D_mean =MGP_D_mean.x,
+                     NEON_D_mean = MGP_D_mean.y,
+                     EMS_C_mean = MGP_C_mean.x,
+                     NEON_C_mean = MGP_C_mean.y,
+                     EMS_TCTb = TCTb_mean.x,
+                     NEON_TCTb = TCTb_mean.y,
+                     EMS_TCTg = TCTg_mean.x,
+                     NEON_TCTg = TCTg_mean.y,
+                     EMS_TCTw = TCTw_mean.x,
+                     NEON_TCTw = TCTw_mean.y,
+                     EMS_L_mean = L_mean.x,
+                     NEON_L_mean = L_mean.y
+                  )
+                    
+                  
+                    
+  
+
+
+boxplot_vis <- function() {
+        
+        #DECID 
+        data_long <- gather(master_res, spatial_m, perc_of_footprint, EMS_D_mean:NEON_D_mean, factor_key=TRUE)
+        
+        #summary(master_res)
+        
+        MGP_D_bp <- ggplot(data=data_long) +
+          geom_boxplot(aes(x=spatial_m,y=perc_of_footprint,fill=spatial_m),
+                       show.legend=FALSE) +
+          scale_y_continuous(limits=c(.4,.9)) +
+          labs(y="",x="Decidious %") +
+          theme_classic() +
+          theme(axis.text.x = element_blank())
+        
+        MGP_D_bp
+        
+        
+        
+        
+        #CONIFER
+        data_long <- gather(master_res, spatial_m, perc_of_footprint, EMS_C_mean:NEON_C_mean, factor_key=TRUE)
+        
+        #summary(master_res)
+        
+        MGP_C_bp <- ggplot(data=data_long) +
+          geom_boxplot(aes(x=spatial_m,y=perc_of_footprint,fill=spatial_m),
+                       show.legend=FALSE) +
+          scale_y_continuous(limits=c(.1,.5)) +
+          labs(y="",x="Coniferous %") +
+          theme_classic() +
+          theme(axis.text.x = element_blank())
+        
+        MGP_C_bp
+        
+        
+        
+        
+        #CHM
+        data_long <- gather(master_res, spatial_m, Canopy_Height_Model, EMS_L_mean:NEON_L_mean, factor_key=TRUE)
+        
+        #summary(master_res)
+        
+        CHMbp <- ggplot(data=data_long) +
+          geom_boxplot(aes(x=spatial_m,y=Canopy_Height_Model,fill=spatial_m),
+                       show.legend = FALSE,
+                       ) +
+          scale_y_continuous(limits=c(17,22)) +
+          xlab(label =c("Towers")) +
+          labs(y="",x="CHM Model") +
+          theme_classic() +
+          theme(axis.text.x = element_blank())
+        
+        CHMbp
+        
+        
+        
+        #TCTb
+        data_long <- gather(master_res, spatial_m, measurement, EMS_TCTb:NEON_TCTb, factor_key=TRUE) 
+        
+        TCT_b_bp <- ggplot(data=data_long) +
+          geom_boxplot(aes(x=spatial_m,y=measurement,fill=spatial_m),
+                       show.legend = FALSE) +
+          scale_y_continuous() +
+          labs(y="",x="TCT brightness index") +
+          theme_classic() +
+          theme(axis.text.x = element_blank())
+        
+        TCT_b_bp
+        
+        
+        #TCTg
+        data_long <- gather(master_res, spatial_m, measurement, EMS_TCTg:NEON_TCTg, factor_key=TRUE) 
+        
+        TCT_g_bp <- ggplot(data=data_long) +
+          geom_boxplot(aes(x=spatial_m,y=measurement,fill=spatial_m),
+                       show.legend = FALSE) +
+          scale_y_continuous() +
+          labs(y="",x="TCT greenness index") +
+          theme_classic() +
+          theme(axis.text.x = element_blank())
+        
+        TCT_g_bp
+        
+        
+        #TCTw
+        data_long <- gather(master_res, spatial_m, measurement, EMS_TCTw:NEON_TCTw, factor_key=TRUE) 
+        
+        TCT_w_bp <- ggplot(data=data_long) +
+          geom_boxplot(aes(x=spatial_m,y=measurement,fill=spatial_m),
+                       show.legend = FALSE) +
+          scale_y_continuous(limits=c(-.2,0)) +
+          labs(y="",x="TCT wetness index") +
+          theme_classic() +
+          theme(axis.text.x = element_blank())
+        
+        TCT_w_bp
+        
+        
+        
+        figure <- ggarrange(MGP_D_bp,MGP_C_bp,CHMbp,TCT_b_bp,TCT_g_bp,TCT_w_bp,
+                            # labels = c("% Decidious in Megaplot",
+                            #            "% Coniferous in Megaplot",
+                            #            "Canopy Height Model",
+                            #            "TCTb",
+                            #            "TCTg",
+                            #            "TCTw"),
+                            ncol = 6, nrow = 1)
+        
+        
+        
+        # figure <- ggarrange(MGPbp,CHMbp,TCTbp,
+        #                     labels = c("Megaplot","Canopy Height Model","TCT"),
+        #                     ncol = 3, nrow = 1)
+        # 
+        annotate_figure(figure, 
+                        top = text_grob("Value distribution of EMS (red) and NEON (teal) footprints for input spatial data",
+                                        face="bold",
+                                        size=12))
+
+}
+
+
+boxplot_vis()
+
 
 
 
