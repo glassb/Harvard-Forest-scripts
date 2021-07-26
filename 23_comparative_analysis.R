@@ -277,6 +277,10 @@ NEON_TCTw <- ggplot(data = results_prime_NEON, aes(x=TCTw_mean,y=FC,color=ToD)) 
 library(tidyr)
 master_res <- merge(results_EMS,results_NEON,by=c("Year.Year","time_days"))
 
+summary(master_res)
+
+master_res <- filter(master_res,PAR.28m.e.6mol.m2.s > 100)
+
 master_res <- master_res %>%
                   select(
                      c(MGP_D_mean.x,
@@ -306,6 +310,8 @@ master_res <- master_res %>%
                      EMS_L_mean = L_mean.x,
                      NEON_L_mean = L_mean.y
                   )
+
+                
                     
                   
                     
@@ -457,10 +463,13 @@ boxplot_vis()
 
 
 
+
+
+
 ##### binning examples -------
 
 
-#=========== EMS
+#=EMS
 setwd("/Users/benjaminglass/Downloads")
 hfm <- readRDS("hfmaster_0713.RDS")
 
@@ -476,7 +485,7 @@ results_mutated <- results0712 %>%
 results_EMS <- merge(hfm,results_mutated,by=c("Year.Year","time_days"))
 
 
-#============= NEON
+#= NEON
 library(tidyverse)
 
 setwd("/Users/benjaminglass/Downloads")
@@ -507,45 +516,105 @@ results_NEON <- merge(NEONmaster_mutated,results_mutated,by=c("Year.Year","time_
 bin_results_EMS <- results_EMS %>%
   mutate(tag = case_when(
     PAR.28m.e.6mol.m2.s < 0 ~ "<0",
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50 ~ "0-50",
-    PAR.28m.e.6mol.m2.s > 50 & PAR.28m.e.6mol.m2.s < 100,
-    PAR.28m.e.6mol.m2.s > 100 & PAR.28m.e.6mol.m2.s < 150,
-    PAR.28m.e.6mol.m2.s > 150 & PAR.28m.e.6mol.m2.s < 200,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 50,
-    PAR.28m.e.6mol.m2.s > 0 & PAR.28m.e.6mol.m2.s < 1000,
-    PAR.28m.e.6mol.m2.s > 1000 & PAR.28m.e.6mol.m2.s < 2000,
-    PAR.28m.e.6mol.m2.s > 2000 & PAR.28m.e.6mol.m2.s < 3000
+    PAR.28m.e.6mol.m2.s >= 0 & PAR.28m.e.6mol.m2.s < 50 ~ "0-50",
+    PAR.28m.e.6mol.m2.s >= 50 & PAR.28m.e.6mol.m2.s < 100 ~ "50-100",
+    PAR.28m.e.6mol.m2.s >= 100 & PAR.28m.e.6mol.m2.s < 150 ~ "100-150",
+    PAR.28m.e.6mol.m2.s >= 150 & PAR.28m.e.6mol.m2.s < 200 ~ "150-200",
+    PAR.28m.e.6mol.m2.s >= 200 & PAR.28m.e.6mol.m2.s < 250 ~ "200-250",
+    PAR.28m.e.6mol.m2.s >= 250 & PAR.28m.e.6mol.m2.s < 300 ~ "250-300",
+    PAR.28m.e.6mol.m2.s >= 300 & PAR.28m.e.6mol.m2.s < 350 ~ "300-350",
+    PAR.28m.e.6mol.m2.s >= 350 & PAR.28m.e.6mol.m2.s < 400 ~ "350-400",
+    PAR.28m.e.6mol.m2.s >= 400 & PAR.28m.e.6mol.m2.s < 450 ~ "400-450",
+    PAR.28m.e.6mol.m2.s >= 450 & PAR.28m.e.6mol.m2.s < 500 ~ "450-500",
+    PAR.28m.e.6mol.m2.s >= 500 & PAR.28m.e.6mol.m2.s < 550 ~ "500-550",
+    PAR.28m.e.6mol.m2.s >= 550 & PAR.28m.e.6mol.m2.s < 600 ~ "550-600",
+    PAR.28m.e.6mol.m2.s >= 600 & PAR.28m.e.6mol.m2.s < 650 ~ "600-650",
+    PAR.28m.e.6mol.m2.s >= 650 & PAR.28m.e.6mol.m2.s < 700 ~ "650-700",
+    PAR.28m.e.6mol.m2.s >= 700 & PAR.28m.e.6mol.m2.s < 750 ~ "700-750",
+    PAR.28m.e.6mol.m2.s >= 750 & PAR.28m.e.6mol.m2.s < 800 ~ "750-800",
+    PAR.28m.e.6mol.m2.s >= 800 & PAR.28m.e.6mol.m2.s < 850 ~ "800-850",
+    PAR.28m.e.6mol.m2.s >= 850 & PAR.28m.e.6mol.m2.s < 900 ~ "850-900",
+    PAR.28m.e.6mol.m2.s >= 900 & PAR.28m.e.6mol.m2.s < 950 ~ "900-950",
+    PAR.28m.e.6mol.m2.s >= 950 & PAR.28m.e.6mol.m2.s < 1000 ~ "950-1000",
+    PAR.28m.e.6mol.m2.s >= 1000 & PAR.28m.e.6mol.m2.s < 2000 ~ "1000-2000",
+    PAR.28m.e.6mol.m2.s >= 2000 & PAR.28m.e.6mol.m2.s < 3000 ~ "2000-3000"
   ))
 
 
 
-PAR_breaks <- c(-50,0,50,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,900,1000,2000,3000)
+PAR_breaks <- c("<0","0-50","50-100",
+                "100-150","150-200","200-250",
+                "250-300","300-350","350-400",
+                "400-450","450-500","500-550",
+                "550-600","600-650","650-700",
+                "700-750","750-800","800-900",
+                "900-950","1000-2000","2000-3000")
 
-group_tags <- cut(results_EMS$PAR.28m.e.6mol.m2.s, 
-                  breaks=PAR_breaks, 
-                  include.lowest=TRUE, 
-                  right=FALSE)
-# inspect bins
-summary(group_tags)
+bin_results_EMS$tag <- factor(bin_results_EMS$tag,
+                          levels=PAR_breaks,
+                          ordered=FALSE)
+
+summary(bin_results_EMS$tag)
+
+print(bin_results_EMS)
+
+# group_tags <- cut(results_EMS$PAR.28m.e.6mol.m2.s, 
+#                   breaks=PAR_breaks, 
+#                   include.lowest=TRUE, 
+#                   right=FALSE)
+# # inspect bins
+# summary(group_tags)
+
+
+#summary(bin_results_EMS$obs.FCO2.e.6mol.m2.s)
+
+EMS_norm <- bin_results_EMS %>%
+  filter(!is.na(obs.FCO2.e.6mol.m2.s)) %>%
+  group_by(tag) %>%
+  summarise(mean_FCO2 = mean(obs.FCO2.e.6mol.m2.s))
+
+summary(EMS_norm)
+
+ggplot(data=bin_results_EMS,aes(x=tag,y=obs.FCO2.e.6mol.m2.s)) +
+  geom_boxplot() +
+  theme_classic()
+
+
+ggplot(data=bin_results_EMS,
+       aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s)) +
+  facet_wrap(~ tag) +
+  geom_point(shape=20,cex=1,alpha=.5) +
+  theme_classic()
+
+
+
+colnames(results_EMS)
+
+
+results_EMS$tag <- cut(results_EMS$PAR.28m.e.6mol.m2.s, 12)
+
+ggplot(data=results_EMS,
+       aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s)) +
+  facet_wrap(~ tag) +
+  geom_point(shape=20,cex=1,alpha=.5) +
+  theme_classic()
 
 
 
 
+bin_results_EMS <- results_EMS %>%
+  mutate(tag = case_when(
+    month.Month >= 12 | month.Month < 4 ~ "winter",
+    month.Month >= 4 & month.Month < 7 ~ "spring",
+    month.Month >= 7 & month.Month < 10 ~ "summer",
+    month.Month >= 10 & month.Month < 12 ~ "fall")) %>%
+  mutate(ToD = ifelse(PAR.28m.e.6mol.m2.s > 50,"day","night"))
 
+ggplot(data=bin_results_EMS,
+       aes(x=MGP_D_mean,y=obs.FCO2.e.6mol.m2.s,color=ToD)) +
+  facet_wrap(~ tag) +
+  geom_point(shape=20,cex=1,alpha=.5) +
+  theme_classic()
 
 
 

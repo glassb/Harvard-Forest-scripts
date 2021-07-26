@@ -8,7 +8,8 @@ results <- as.data.frame(read.csv("overlapScript_0722_75influence.csv"))
 
 results_prime <- results %>%
   filter(SpatOverlapPC > 0) %>%
-  mutate(flux_diff_perc = ((obs.FCO2.e.6mol.m2.s-FC)/obs.FCO2.e.6mol.m2.s*100),
+  filter(PAR.28m.e.6mol.m2.s > 100) %>%
+  mutate(flux_diff_perc = ((obs.FCO2.e.6mol.m2.s-FC)),
          flux_diff = obs.FCO2.e.6mol.m2.s-FC,
          total_overlap = ifelse(Poverlap_NEON> .5,"true","false"),
          SpatOverlapPC_perc = SpatOverlapPC*100)
@@ -21,12 +22,12 @@ ggplot(data = results_prime, aes(x=SpatOverlapPC_perc,y=flux_diff_perc)) +
   #facet_wrap(~ month.Month,ncol=4) +
   geom_point(shape=20,cex=1,alpha=.6) +
   scale_x_continuous(limits=c(0,75)) +
-  scale_y_continuous(limits=c(-500,500),breaks=seq(-500,500,100)) +
+  scale_y_continuous(limits=c(-25,25),breaks=seq(-25,25,5)) +
   #geom_smooth() +
   xlab("Percentage Overlap (%)") +
-  ylab("Percent Difference in flux values (%)") +
+  ylab("Difference in flux values") +
   theme_classic() +
-  labs(title="Overlap % of NEON and EMS Tower footprints vs. % Difference in Flux measurement")
+  labs(title="Overlap % of NEON and EMS Tower footprints vs. % Difference in Flux Daytime measurement")
 
 
 

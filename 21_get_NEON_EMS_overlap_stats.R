@@ -66,7 +66,11 @@ results_mutated <- results_merged %>%
 results_mutated <- results_mutated %>%
   add_column(SpatOverlapPC = NA,
              Poverlap_EMS = NA,
-             Poverlap_NEON = NA) %>%
+             Poverlap_NEON = NA,
+             ncell_EMS = NA,
+             ncell_NEON = NA,
+             extent_EMS = NA,
+             extent_NEON = NA) %>%
   mutate(Flux_diff = obs.FCO2.e.6mol.m2.s-FC)
 
 
@@ -92,6 +96,10 @@ for(i in 1:nrow(results_mutated)) {
     percentOverlap <- NA
     Poverlap_EMS <- NA
     Poverlap_NEON <- NA
+    ncell_EMS <- NA
+    ncell_NEON <- NA
+    extent_NEON <- NA
+    extent_EMS <- NA
   # } else if (year == "18" & as.numeric(month) <= 9) {
   #   percentOverlap <- NA
   
@@ -99,14 +107,26 @@ for(i in 1:nrow(results_mutated)) {
     percentOverlap <- NA
     Poverlap_EMS <- NA
     Poverlap_NEON <- NA
+    ncell_EMS <- NA
+    ncell_NEON <- NA
+    extent_NEON <- NA
+    extent_EMS <- NA
   } else if (year == "20" & month == "4") {
     percentOverlap <- NA
     Poverlap_EMS <- NA
     Poverlap_NEON <- NA
+    ncell_EMS <- NA
+    ncell_NEON <- NA
+    extent_NEON <- NA
+    extent_EMS <- NA
   } else if (year == "20" & month == "5") {
     percentOverlap <- NA
     Poverlap_EMS <- NA
     Poverlap_NEON <- NA
+    ncell_EMS <- NA
+    ncell_NEON <- NA
+    extent_NEON <- NA
+    extent_EMS <- NA
   } else {
   
   #make sure month is correct
@@ -132,6 +152,10 @@ for(i in 1:nrow(results_mutated)) {
     percentOverlap <- NA
     Poverlap_EMS <- NA
     Poverlap_NEON <- NA
+    ncell_EMS <- NA
+    ncell_NEON <- NA
+    extent_NEON <- NA
+    extent_EMS <- NA
   
   } else {
   
@@ -159,6 +183,8 @@ for(i in 1:nrow(results_mutated)) {
     sps = SpatialPolygons(list(ps),proj4string = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   
     EMS_total_cells <- ncell(crop(EMS_raster,sps))
+    ncell_EMS <- EMS_total_cells
+    extent_EMS <- max(dim(crop(EMS_raster,sps))[2],dim(crop(EMS_raster,sps))[2])
     
     
     #========== get spatial object for NEON
@@ -183,6 +209,10 @@ for(i in 1:nrow(results_mutated)) {
           percentOverlap <- NA
           Poverlap_EMS <- NA
           Poverlap_NEON <- NA
+          ncell_EMS <- NA
+          ncell_NEON <- NA
+          extent_NEON <- NA
+          extent_EMS <- NA
       
       } else {
   # 
@@ -210,6 +240,8 @@ for(i in 1:nrow(results_mutated)) {
           #print(NEON_raster)
           # 
           NEON_total_cells <- ncell(crop(NEON_raster,neon_sps))
+          ncell_NEON <- NEON_total_cells
+          extent_NEON <- max(dim(crop(NEON_raster,sps))[2],dim(crop(NEON_raster,sps))[1])
           # 
           #========== CROP ONE FROM THE OTHER
           
@@ -225,11 +257,18 @@ for(i in 1:nrow(results_mutated)) {
             percentOverlap <- 0
             Poverlap_EMS <- 0
             Poverlap_NEON <- 0
+            ncell_EMS <- 0
+            ncell_NEON <- 0
+            extent_NEON <- 0
+            extent_EMS <- 0
               
           } else {
             
               #print(rasterIntersect)
               intersect_total_cells <- ncell(rasterIntersect)
+              
+              
+              #print(dim(rasterIntersect))
               
               #print(intersect(crop(EMS_raster,sps),
                               #crop(NEON_raster,neon_sps)))
@@ -260,18 +299,27 @@ for(i in 1:nrow(results_mutated)) {
   }
   #print("hello")
   #print(results_mutated$SpatOverlapPC[i])
+  
   results_mutated$SpatOverlapPC[i] <- percentOverlap
   results_mutated$Poverlap_EMS[i] <- Poverlap_EMS
   results_mutated$Poverlap_NEON[i] <- Poverlap_NEON
+  results_mutated$ncell_NEON[i] <- ncell_NEON
+  results_mutated$ncell_EMS[i] <- ncell_EMS
+  results_mutated$extent_NEON[i] <- extent_NEON
+  results_mutated$extent_EMS[i] <- extent_EMS
+  
+  #print(results_mutated[i])
   
   results_mutated <- results_mutated %>%
-    dplyr::select(1:10)
+    dplyr::select(1:14)
   #print("test")
   
-  results_print <- results_mutated %>%
-    dplyr::select(7:10)
-  print(summary(results_print))
+  # results_print <- results_mutated %>%
+  #   dplyr::select(7:10)
+  # print(summary(results_print))
   
+  #print(results_mutated[i, ])
+  summary(results_mutated)
   
 }
 
@@ -299,7 +347,7 @@ for(i in 1:nrow(results_mutated)) {
 #   theme_classic()
 
 
-write.csv(results_mutated,"/Users/benjaminglass/Desktop/HF21/00_Datasets/overlapScript_0722_75influence.csv", row.names = FALSE)
+write.csv(results_mutated,"/Users/benjaminglass/Desktop/HF21/00_Datasets/overlapScript_0727_75influence_extrastats.csv", row.names = FALSE)
 
 
 # summary(results_mutated$SpatOverlapPC)
