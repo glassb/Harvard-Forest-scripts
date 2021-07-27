@@ -276,9 +276,9 @@ for(i in 1:nrow(results_mutated)) {
               #intersect_total_cells = ncell(rasterIntersect)
               # 
               #calculate their percent overlap
-              print("=")
-              print("=")
-              print("=")
+              #print("=")
+              #print("=")
+              #print("=")
               #print(paste0("******** ",EMS_total_cells," ",NEON_total_cells," ",intersect_total_cells))
               percentOverlap <- 2*intersect_total_cells/(EMS_total_cells+NEON_total_cells)
               Poverlap_EMS <- intersect_total_cells/EMS_total_cells
@@ -286,7 +286,7 @@ for(i in 1:nrow(results_mutated)) {
               print(paste0("**************************************** percent overlap: ",percentOverlap))
               print(Poverlap_EMS)
               print(Poverlap_NEON)
-              print("=")
+              #print("=")
           }
           
           # par(mfrow=c(2,2))
@@ -319,7 +319,7 @@ for(i in 1:nrow(results_mutated)) {
   # print(summary(results_print))
   
   #print(results_mutated[i, ])
-  summary(results_mutated)
+  print(summary(results_mutated))
   
 }
 
