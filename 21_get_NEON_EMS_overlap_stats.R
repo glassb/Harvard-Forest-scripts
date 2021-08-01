@@ -184,7 +184,7 @@ for(i in 1:nrow(results_mutated)) {
   
     EMS_total_cells <- ncell(crop(EMS_raster,sps))
     ncell_EMS <- EMS_total_cells
-    extent_EMS <- max(dim(crop(EMS_raster,sps))[2],dim(crop(EMS_raster,sps))[2])
+    extent_EMS <- sqrt((abs(dim(crop(EMS_raster,sps))[2])^2) + (abs(dim(crop(EMS_raster,sps))[1])^2))
     
     
     #========== get spatial object for NEON
@@ -241,7 +241,7 @@ for(i in 1:nrow(results_mutated)) {
           # 
           NEON_total_cells <- ncell(crop(NEON_raster,neon_sps))
           ncell_NEON <- NEON_total_cells
-          extent_NEON <- max(dim(crop(NEON_raster,sps))[2],dim(crop(NEON_raster,sps))[1])
+          extent_NEON <- sqrt((abs(dim(crop(NEON_raster,sps))[2])^2) + (abs(dim(crop(NEON_raster,sps))[1])^2))
           # 
           #========== CROP ONE FROM THE OTHER
           
@@ -347,7 +347,7 @@ for(i in 1:nrow(results_mutated)) {
 #   theme_classic()
 
 
-write.csv(results_mutated,"/Users/benjaminglass/Desktop/HF21/00_Datasets/overlapScript_0727_75influence_extrastats.csv", row.names = FALSE)
+write.csv(results_mutated,"/Users/benjaminglass/Desktop/HF21/00_Datasets/overlapScript_0730_75influence_extrastats.csv", row.names = FALSE)
 
 
 # summary(results_mutated$SpatOverlapPC)

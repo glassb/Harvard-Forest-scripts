@@ -61,42 +61,42 @@ for (currentFile in temp) {
   #currentFile <- "FFP.hr.lines.17.10.csv"
   # FIRST SET OF FUNCTIONS FOR MEGAPLOT
   
-  print("--------------------------------------MGPD")
-  results_MGP_D <- EMS_getMGP_D_stats(currentFile)
-
-  print("--------------------------------------MGPC")
-  results_MGP_C <- EMS_getMGP_C_stats(currentFile)
-
-
-
-  #SECOND SET OF FUNCTIONS FOR LIDAR
-  #if statement that decides which lidar year to get
-
-  print("--------------------------------------LIDAR")
-  if (as.numeric(year)>= 80 | as.numeric(year) <= 14 ) {
-    print(paste0("ERROR: CURRENT FILE YEAR ",year," DOES NOT HAVE APPROP. LIDAR DATA"))
-    print("USING 2014 LIDAR DATA")
-    results_LIDAR <- EMS_getLIDAR_2014_stats(currentFile)
-  } else if (as.numeric(year) < 16) {
-    print(paste0(year," Lidar 2014"))
-    results_LIDAR <- EMS_getLIDAR_2014_stats(currentFile)
-  } else if (as.numeric(year) < 17) {
-    print(paste0(year," Lidar 2016"))
-    results_LIDAR <- EMS_getLIDAR_2016_stats(currentFile)
-  } else if (as.numeric(year) < 18) {
-    print(paste0(year," Lidar 2017"))
-    results_LIDAR <- EMS_getLIDAR_2017_stats(currentFile)
-  } else if (as.numeric(year) < 19) {
-    print(paste0(year," Lidar 2018"))
-    results_LIDAR <- EMS_getLIDAR_2018_stats(currentFile)
-  } else if (as.numeric(year) < 20) {
-    print(paste0(year," Lidar 2019"))
-    results_LIDAR <- EMS_getLIDAR_2019_stats(currentFile)
-  } else {
-    print("ERROR")
-    print(year)
-    results_LIDAR <- EMS_getLIDAR_2014_stats(currentFile)
-  }
+  # print("--------------------------------------MGPD")
+  # results_MGP_D <- EMS_getMGP_D_stats(currentFile)
+  # 
+  # print("--------------------------------------MGPC")
+  # results_MGP_C <- EMS_getMGP_C_stats(currentFile)
+  # 
+  # 
+  # 
+  # #SECOND SET OF FUNCTIONS FOR LIDAR
+  # #if statement that decides which lidar year to get
+  # 
+  # print("--------------------------------------LIDAR")
+  # if (as.numeric(year)>= 80 | as.numeric(year) <= 14 ) {
+  #   print(paste0("ERROR: CURRENT FILE YEAR ",year," DOES NOT HAVE APPROP. LIDAR DATA"))
+  #   print("USING 2014 LIDAR DATA")
+  #   results_LIDAR <- EMS_getLIDAR_2014_stats(currentFile)
+  # } else if (as.numeric(year) < 16) {
+  #   print(paste0(year," Lidar 2014"))
+  #   results_LIDAR <- EMS_getLIDAR_2014_stats(currentFile)
+  # } else if (as.numeric(year) < 17) {
+  #   print(paste0(year," Lidar 2016"))
+  #   results_LIDAR <- EMS_getLIDAR_2016_stats(currentFile)
+  # } else if (as.numeric(year) < 18) {
+  #   print(paste0(year," Lidar 2017"))
+  #   results_LIDAR <- EMS_getLIDAR_2017_stats(currentFile)
+  # } else if (as.numeric(year) < 19) {
+  #   print(paste0(year," Lidar 2018"))
+  #   results_LIDAR <- EMS_getLIDAR_2018_stats(currentFile)
+  # } else if (as.numeric(year) < 20) {
+  #   print(paste0(year," Lidar 2019"))
+  #   results_LIDAR <- EMS_getLIDAR_2019_stats(currentFile)
+  # } else {
+  #   print("ERROR")
+  #   print(year)
+  #   results_LIDAR <- EMS_getLIDAR_2014_stats(currentFile)
+  # }
 
   
   # THIRD FUNCTION FOR TCT FILES
@@ -125,7 +125,7 @@ for (currentFile in temp) {
 
 
 
-write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/DUMMY_all_results_0717_weightedmean.csv", row.names = FALSE)
+write.csv(masterResults_all,"/Users/benjaminglass/Desktop/HF21/00_Datasets/DUMMY_all_results_0730_weightedmean.csv", row.names = FALSE)
 
 # ======= SCRIPT IN PSEUDOCODE ============
 

@@ -369,7 +369,7 @@ boxplot_vis <- function() {
           geom_boxplot(aes(x=spatial_m,y=Canopy_Height_Model,fill=spatial_m),
                        show.legend = FALSE,
                        ) +
-          scale_y_continuous(limits=c(20,22)) +
+          scale_y_continuous(limits=c(20.75,21.5)) +
           scale_x_discrete(labels=c("EMS_L_mean" = "EMS","NEON_L_mean"="NEON")) +
           labs(y="meters",x="") +
           theme_bw()
@@ -403,7 +403,7 @@ boxplot_vis <- function() {
           facet_grid(. ~title) +
           geom_boxplot(aes(x=spatial_m,y=measurement,fill=spatial_m),
                        show.legend = FALSE) +
-          scale_y_continuous(limits=c(-.1,.4)) +
+          scale_y_continuous(limits=c(-.1,.2)) +
           scale_x_discrete(labels=c("EMS_TCTg" = "EMS","NEON_TCTg"="NEON")) +
           labs(y="Index value",x="") +
           theme_bw()
@@ -428,14 +428,14 @@ boxplot_vis <- function() {
         
         
         
-        figure <- ggarrange(MGP_D_bp,MGP_C_bp,CHMbp,TCT_b_bp,TCT_g_bp,TCT_w_bp,
+        figure <- ggarrange(MGP_D_bp,MGP_C_bp,CHMbp,TCT_g_bp,
                             # labels = c("% Decidious in Megaplot",
                             #            "% Coniferous in Megaplot",
                             #            "Canopy Height Model",
                             #            "TCTb",
                             #            "TCTg",
                             #            "TCTw"),
-                            ncol = 3, nrow = 2)
+                            ncol = 2, nrow = 2)
         
         figure
         
@@ -681,7 +681,7 @@ TEMP_bin_NEON <- function() {
   results_NEON$tag <- cut(results_NEON$TA, 20)
   
   ggplot(data=results_NEON,
-         aes(x=L_mean,y=FC)) +
+         aes(x=MGP_D_mean,y=FC)) +
     facet_wrap(~ tag) +
     geom_point(shape=20,cex=1,alpha=.5) +
     theme_classic() +
@@ -697,4 +697,201 @@ TEMP_bin_EMS()
 TEMP_bin_NEON()
 
 
+
+
+
+
+
+
+##### filtered functions -------
+filter <- function() {
+
+#=EMS
+setwd("/Users/benjaminglass/Downloads")
+hfm <- readRDS("hfmaster_0713.RDS")
+
+setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets")
+results0712 <- as.data.frame(read.csv("EMS_results_0719_weightedmean.csv"))
+
+
+results_mutated <- results0712 %>%
+  mutate(Year.Year = paste0("20",year),
+         time_days = decDay,
+         tower = "EMS")
+
+results_EMS <- merge(hfm,results_mutated,by=c("Year.Year","time_days"))
+
+
+#= NEON
+library(tidyverse)
+
+setwd("/Users/benjaminglass/Downloads")
+NEONmaster <- as.data.frame(read.csv(file="neon_hr.csv",header=TRUE,stringsAsFactors=FALSE))
+
+#mutate resultsNEON
+
+NEONmaster_mutated <- NEONmaster %>%
+  mutate(Year.Year = year,
+         month.Month = mon,
+         time_days = dec.day,
+         tower = "NEON")
+
+setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets")
+results0712 <- as.data.frame(read.csv("NEON_results_0720_weightedmean.csv"))
+
+summary(results0712)
+
+results_mutated <- results0712 %>%
+  mutate(Year.Year = paste0("20",year),
+         time_days = decDay)
+
+results_NEON <- merge(NEONmaster_mutated,results_mutated,by=c("Year.Year","time_days"))
+
+
+
+
+
+EMS_filter <- results_EMS %>%
+  filter(obs_Ta_.27m.C>12.4 & obs_Ta_.27m.C<32.1,
+         month.Month > 4 & month.Month < 10,
+         PAR.28m.e.6mol.m2.s>500)
+
+EMS_D <-  ggplot(data=EMS_filter,
+                aes(x=MGP_D_mean,y=obs.FCO2.e.6mol.m2.s)) +
+                geom_point(shape=20,cex=2,alpha=.2,color="coral1") +
+                theme_classic() +
+                scale_y_continuous(limits=c(-40,40)) +
+                scale_x_continuous(limits=c(0,1)) +
+                #labs(title="EMS Decidious %") +
+                xlab("Decidious %") +
+                theme(axis.title.y = element_blank())
+
+EMS_C <-  ggplot(data=EMS_filter,
+                 aes(x=MGP_C_mean,y=obs.FCO2.e.6mol.m2.s)) +
+                  geom_point(shape=20,cex=2,alpha=.2,color="coral1") +
+                  theme_classic() +
+                  scale_y_continuous(limits=c(-40,40)) +
+                  scale_x_continuous(limits=c(0,1)) +
+                  xlab("Conifer %") +
+                  theme(axis.title.y = element_blank())
+
+
+EMS_CHM <-  ggplot(data=EMS_filter,
+                 aes(x=L_mean,y=obs.FCO2.e.6mol.m2.s)) +
+                  geom_point(shape=20,cex=2,alpha=.2,color="coral1") +
+                theme_classic() +
+                scale_y_continuous(limits=c(-40,40)) +
+                scale_x_continuous(limits=c(18,25)) +
+                xlab("Canopy Height Model (m)") +
+                theme(axis.title.y = element_blank())
+
+# EMS_TCTb <-  ggplot(data=EMS_filter,
+#                     aes(x=TCTb_mean,y=obs.FCO2.e.6mol.m2.s)) +
+#                     geom_point(shape=20,cex=3,alpha=.2,color="coral1") +
+#                     theme_classic() +
+#                     scale_y_continuous(limits=c(-40,40)) +
+#                     scale_x_continuous(limits=c(.1,.5)) +
+#                     labs(title="EMS TCTb")
+
+EMS_TCTg <-  ggplot(data=EMS_filter,
+                   aes(x=TCTg_mean,y=obs.FCO2.e.6mol.m2.s)) +
+                  geom_point(shape=20,cex=2,alpha=.2,color="coral1") +
+                  theme_classic() +
+                  scale_y_continuous(limits=c(-40,40)) +
+                  scale_x_continuous(limits=c(.1,.5)) +
+                  xlab("TCT Greenness") +
+                  theme(axis.title.y = element_blank())
+
+# EMS_TCTw <-  ggplot(data=EMS_filter,
+#                     aes(x=TCTw_mean,y=obs.FCO2.e.6mol.m2.s)) +
+#                     geom_point(shape=20,cex=1,alpha=.5,color="coral1") +
+#                     theme_classic() +
+#                     scale_y_continuous(limits=c(-40,40)) +
+#                     scale_x_continuous(limits=c(-.5,0)) +
+#                     labs(title="EMS TCTw")
+
+NEON_filter <- results_NEON %>%
+  filter(TA_1_1_1>12.4 & TA_1_1_1<32.1,
+         month.Month > 4 & month.Month < 10,
+         PPFD_IN_1_1_1>500)
+
+NEON_D <- ggplot(data=NEON_filter,
+                  aes(x=MGP_D_mean,y=FC)) +
+                  geom_point(shape=20,cex=2,alpha=.2,color="deepskyblue1") +
+                  theme_classic() +
+                  scale_y_continuous(limits=c(-40,40)) +
+                  scale_x_continuous(limits=c(0,1)) +
+                  xlab("Decidious %") +
+                 theme(axis.title.y = element_blank())
+
+NEON_C <-  ggplot(data=NEON_filter,
+                 aes(x=MGP_C_mean,y=FC)) +
+                  geom_point(shape=20,cex=2,alpha=.2,color="deepskyblue1") +
+                  theme_classic() +
+                  scale_y_continuous(limits=c(-40,40)) +
+                  scale_x_continuous(limits=c(0,1)) +
+                  xlab("Conifer %") +
+                    theme(axis.title.y = element_blank())
+
+NEON_CHM <-  ggplot(data=NEON_filter,
+                  aes(x=L_mean,y=FC)) +
+                  geom_point(shape=20,cex=2,alpha=.2,color="deepskyblue1") +
+                  theme_classic() +
+                  scale_y_continuous(limits=c(-40,40)) +
+                  scale_x_continuous(limits=c(18,25)) +
+                  xlab("Canopy Height Model (m)") +
+                  theme(axis.title.y = element_blank())
+
+# NEON_TCTb <-  ggplot(data=NEON_filter,
+#                      aes(x=TCTb_mean,y=FC)) +
+#                     geom_point(shape=20,cex=2,alpha=.2,color="deepskyblue1") +
+#                     theme_classic() +
+#                     scale_y_continuous(limits=c(-40,40)) +
+#                     scale_x_continuous(limits=c(.1,.5)) +
+#                     labs(title="NEON TCTb")
+
+NEON_TCTg <-  ggplot(data=NEON_filter,
+                    aes(x=TCTg_mean,y=FC)) +
+                    geom_point(shape=20,cex=2,alpha=.2,color="deepskyblue1") +
+                    theme_classic() +
+                    scale_y_continuous(limits=c(-40,40)) +
+                    scale_x_continuous(limits=c(.1,.5)) +
+                    xlab("TCT greenness") +
+                    theme(axis.title.y = element_blank())
+
+# NEON_TCTw <-  ggplot(data=NEON_filter,
+#                      aes(x=TCTg_mean,y=FC)) +
+#                     geom_point(shape=20,cex=1,alpha=.5,color="deepskyblue1") +
+#                     theme_classic() +
+#                     scale_y_continuous(limits=c(-40,40)) +
+#                     scale_x_continuous(limits=c(-.5,0)) +
+#                     labs(title="NEON TCTw")
+# 
+# NEON_TCTw
+
+figure <- ggarrange(EMS_D,NEON_D,
+          EMS_C,NEON_C,
+          EMS_CHM,NEON_CHM,
+          #EMS_TCTb,NEON_TCTb,
+          EMS_TCTg,NEON_TCTg,
+          #EMS_TCTw,NEON_TCTw,
+          # labels = c("% Decidious in Megaplot",
+          #            "% Coniferous in Megaplot",
+          #            "Canopy Height Model",
+          #            "TCTb",
+          #            "TCTg",
+          #            "TCTw"),
+          ncol = 2, nrow = 4)
+
+figure
+
+}
+
+
+
+filter()
+
+
+
+  
 
