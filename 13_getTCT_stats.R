@@ -66,7 +66,7 @@ EMS_getTCTStats <- function(FFP_file) {
     } else {
     
   
-      setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+      setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802")
       TCTimage <- stack(TCT_image)
       
       # the following lines extract spatial stats based on tctb,tctg,tctw
@@ -80,9 +80,9 @@ EMS_getTCTStats <- function(FFP_file) {
       
       print(greennessRast)
       
-      stats_brightness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-      stats_greenness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-      stats_wetness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+      stats_brightness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802",FFP_f)
+      stats_greenness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802",FFP_f)
+      stats_wetness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802",FFP_f)
    
       new_row <- c(year,decDay,
                    stats_brightness50[1],
@@ -106,7 +106,7 @@ EMS_getTCTStats <- function(FFP_file) {
 EMS_getRightDataDate <- function(FFP_file,decDay) {
   
   require(lubridate)
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802")
   temp = list.files(pattern="*.tif")
   
   #create blank dataframe for all the dates of TCT files
@@ -228,7 +228,7 @@ NEON_getTCTStats <- function(FFP_file) {
         # otherwise, proceed as normal
       } else {
           
-          setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+          setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802")
           TCTimage <- stack(TCT_image)
           
           # the following lines extract spatial stats based on tctb,tctg,tctw
@@ -241,9 +241,9 @@ NEON_getTCTStats <- function(FFP_file) {
           wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
           
           
-          stats_brightness50 <- NEON_extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-          stats_greenness50 <- NEON_extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
-          stats_wetness50 <- NEON_extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs",FFP_f)
+          stats_brightness50 <- NEON_extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802",FFP_f)
+          stats_greenness50 <- NEON_extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802",FFP_f)
+          stats_wetness50 <- NEON_extractStats_TCT_wm(FFP,decDay,.50,wetnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802",FFP_f)
           
           new_row <- c(year,decDay,
                        stats_brightness50[1],
@@ -267,7 +267,7 @@ NEON_getTCTStats <- function(FFP_file) {
 NEON_getRightDataDate <- function(FFP_file,decDay) {
   
   require(lubridate)
-  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs")
+  setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802")
   temp = list.files(pattern="*.tif")
   
   #create blank dataframe for all the dates of TCT files
