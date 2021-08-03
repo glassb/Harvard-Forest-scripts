@@ -25,12 +25,12 @@ temp = list.files(pattern="*.csv")
 #create master results file (which will be our final product)
 masterResults_all <- data.frame(year=NA,
                             decDay=NA,
-                            MGP_C_mean = NA,
-                            MGP_C_std = NA,
-                            MGP_D_mean = NA,
-                            MGP_D_std = NA,
-                            L_mean = NA,
-                            L_std = NA,
+                            # MGP_C_mean = NA,
+                            # MGP_C_std = NA,
+                            # MGP_D_mean = NA,
+                            # MGP_D_std = NA,
+                            # L_mean = NA,
+                            # L_std = NA,
                             TCTb_mean=NA,
                             TCTb_std=NA,
                             TCTg_mean=NA,
@@ -60,7 +60,7 @@ for (currentFile in temp) {
   
   #currentFile <- "FFP.hr.lines.17.10.csv"
   # FIRST SET OF FUNCTIONS FOR MEGAPLOT
-  
+
   # print("--------------------------------------MGPD")
   # results_MGP_D <- EMS_getMGP_D_stats(currentFile)
   # 
@@ -107,13 +107,14 @@ for (currentFile in temp) {
 
   #MERGE RESULTS
   #get results all together. This is a not-so-elegant way of doing this, but it does work (for now)
-  results <- merge(merge(merge(results_MGP_C,results_MGP_D,by=c("year","decDay")),results_LIDAR,by=c("year","decDay")),results_TCT,by=c("year","decDay"))
+  
+  # results <- merge(merge(merge(results_MGP_C,results_MGP_D,by=c("year","decDay")),results_LIDAR,by=c("year","decDay")),results_TCT,by=c("year","decDay"))
 
   #add new results to the master results file
   
   #just mgp
   #results <- merge(results_MGP_C,results_MGP_D,by=c("year","decDay"))
-  
+  results <- results_TCT
   
   print(paste0(currentFile,":----------------------------------------------------------------------------DONE"))
   masterResults_all <- rbind(masterResults_all,results)

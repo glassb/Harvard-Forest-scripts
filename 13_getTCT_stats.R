@@ -78,7 +78,7 @@ EMS_getTCTStats <- function(FFP_file) {
       greennessRast <- projectRaster(green, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
       wetnessRast <- projectRaster(wet, crs = CRS("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
       
-      print(greennessRast)
+      #print(greennessRast)
       
       stats_brightness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,brightnessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802",FFP_f)
       stats_greenness50 <- EMS_extractStats_TCT_wm(FFP,decDay,.50,greennessRast,"/Users/benjaminglass/Desktop/HF21/00_Datasets/TCT_outputs_0802",FFP_f)

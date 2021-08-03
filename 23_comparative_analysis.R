@@ -20,6 +20,18 @@ results_mutated <- results0712 %>%
 results_EMS <- merge(hfm,results_mutated,by=c("Year.Year","time_days"))
 
 
+results0802 <- as.data.frame(read.csv("EMS_0802.csv"))
+
+results0802_prime <- results0802 %>%
+  mutate(Year.Year = paste0("20",year),
+         time_days = decDay,
+         TCTg_mean_filtered = TCTg_mean)
+
+results_EMS_prime <- merge(results_EMS,results0802_prime,by=c("Year.Year","time_days"))
+
+colnames(results_EMS_prime)
+
+
 #============= NEON
 library(tidyverse)
 
@@ -45,11 +57,19 @@ results_mutated <- results0712 %>%
 
 results_NEON <- merge(NEONmaster_mutated,results_mutated,by=c("Year.Year","time_days"))
 
+results0802 <- as.data.frame(read.csv("NEON_0802.csv"))
+
+results0802_prime <- results0802 %>%
+  mutate(Year.Year = paste0("20",year),
+         time_days = decDay)
+
+results_NEON_prime <- merge(results_NEON,results0802_prime,by=c("Year.Year","time_days"))
 
 
 
-summary(results_EMS)
-summary(results_NEON)
+
+summary(results_EMS_prime)
+summary(results_NEON_prime)
 
 
 
@@ -737,7 +757,7 @@ NEONmaster_mutated <- NEONmaster %>%
          tower = "NEON")
 
 setwd("/Users/benjaminglass/Desktop/HF21/00_Datasets")
-results0712 <- as.data.frame(read.csv("NEON_results_0720_weightedmean.csv"))
+results0712 <- as.data.frame(read.csv("NEON_results_0719_weightedmean.csv"))
 
 summary(results0712)
 
@@ -752,6 +772,11 @@ results_NEON <- merge(NEONmaster_mutated,results_mutated,by=c("Year.Year","time_
 
 
 EMS_filter <- results_EMS %>%
+  filter(obs_Ta_.27m.C>12.4 & obs_Ta_.27m.C<32.1,
+         month.Month > 4 & month.Month < 10,
+         PAR.28m.e.6mol.m2.s>500)
+
+EMS_filter_prime <- results_EMS_prime %>%
   filter(obs_Ta_.27m.C>12.4 & obs_Ta_.27m.C<32.1,
          month.Month > 4 & month.Month < 10,
          PAR.28m.e.6mol.m2.s>500)
@@ -793,8 +818,8 @@ EMS_CHM <-  ggplot(data=EMS_filter,
 #                     scale_x_continuous(limits=c(.1,.5)) +
 #                     labs(title="EMS TCTb")
 
-EMS_TCTg <-  ggplot(data=EMS_filter,
-                   aes(x=TCTg_mean,y=obs.FCO2.e.6mol.m2.s)) +
+EMS_TCTg <-  ggplot(data=EMS_filter_prime,
+                   aes(x=TCTg_mean.y,y=obs.FCO2.e.6mol.m2.s)) +
                   geom_point(shape=20,cex=2,alpha=.2,color="coral1") +
                   theme_classic() +
                   scale_y_continuous(limits=c(-40,40)) +
@@ -811,6 +836,11 @@ EMS_TCTg <-  ggplot(data=EMS_filter,
 #                     labs(title="EMS TCTw")
 
 NEON_filter <- results_NEON %>%
+  filter(TA_1_1_1>12.4 & TA_1_1_1<32.1,
+         month.Month > 4 & month.Month < 10,
+         PPFD_IN_1_1_1>500)
+
+NEON_filter_prime <- results_NEON_prime %>%
   filter(TA_1_1_1>12.4 & TA_1_1_1<32.1,
          month.Month > 4 & month.Month < 10,
          PPFD_IN_1_1_1>500)
@@ -850,8 +880,8 @@ NEON_CHM <-  ggplot(data=NEON_filter,
 #                     scale_x_continuous(limits=c(.1,.5)) +
 #                     labs(title="NEON TCTb")
 
-NEON_TCTg <-  ggplot(data=NEON_filter,
-                    aes(x=TCTg_mean,y=FC)) +
+NEON_TCTg <-  ggplot(data=NEON_filter_prime,
+                    aes(x=TCTg_mean.y,y=FC)) +
                     geom_point(shape=20,cex=2,alpha=.2,color="deepskyblue1") +
                     theme_classic() +
                     scale_y_continuous(limits=c(-40,40)) +
@@ -890,6 +920,8 @@ figure
 
 
 filter()
+
+
 
 
 
