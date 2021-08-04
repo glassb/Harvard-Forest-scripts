@@ -8,28 +8,83 @@ results <- as.data.frame(read.csv("overlapScript_0730_75influence_extrastats.csv
 
 summary(results)
 
-results_prime <- results %>%
+results_points <- results %>%
   dplyr::filter(SpatOverlapPC > 0) %>%
   dplyr::filter(PAR.28m.e.6mol.m2.s > 50) %>%
   mutate(flux_diff_perc = ((obs.FCO2.e.6mol.m2.s-FC)),
          flux_diff_abs = abs(obs.FCO2.e.6mol.m2.s-FC),
          total_overlap = ifelse(Poverlap_NEON> .5,"true","false"),
          SpatOverlapPC_perc = SpatOverlapPC*100)
+
+results_prime <- results %>%
+  dplyr::filter(SpatOverlapPC > 0) %>%
+  dplyr::filter(PAR.28m.e.6mol.m2.s > 50) %>%
+  mutate(flux_diff_perc = ((obs.FCO2.e.6mol.m2.s-FC)),
+         flux_diff_abs = abs(obs.FCO2.e.6mol.m2.s-FC),
+         total_overlap = ifelse(Poverlap_NEON> .5,"true","false"),
+         SpatOverlapPC_perc = SpatOverlapPC*100) %>%
+  mutate(tag = case_when(
+          SpatOverlapPC_perc < 5 ~ "00 <5",
+          SpatOverlapPC_perc >= 5 & SpatOverlapPC_perc < 10 ~ "01 [5,10)",
+          SpatOverlapPC_perc >= 10 & SpatOverlapPC_perc < 15 ~ "02 [10,15)",
+          SpatOverlapPC_perc >= 15 & SpatOverlapPC_perc < 20 ~ "03 [15,20)",
+          SpatOverlapPC_perc >= 20 & SpatOverlapPC_perc < 25 ~ "04 [20,25)",
+          SpatOverlapPC_perc >= 25 & SpatOverlapPC_perc < 30 ~ "05 [25,30)",
+          SpatOverlapPC_perc >= 30 & SpatOverlapPC_perc < 35 ~ "06 [30,35)",
+          SpatOverlapPC_perc >= 35 & SpatOverlapPC_perc < 40 ~ "07 [35,40)",
+          SpatOverlapPC_perc >= 40 & SpatOverlapPC_perc < 45 ~ "08 [40,45)",
+          SpatOverlapPC_perc >= 45 & SpatOverlapPC_perc < 50 ~ "09 [45,50)",
+          SpatOverlapPC_perc >= 50 & SpatOverlapPC_perc < 55 ~ "10 [50,55)",
+          SpatOverlapPC_perc >= 55 & SpatOverlapPC_perc < 60 ~ "11 [55,60)",
+          SpatOverlapPC_perc >= 60 & SpatOverlapPC_perc < 65 ~ "12 [60,65)",
+         ))
+
+results_prime
+
+results_prime <- results_prime[complete.cases(results_prime[,c("SpatOverlapPC_perc", "flux_diff_abs")]), ]
+
+results_prime <- results_prime %>%
+  group_by(tag) %>%
+  summarise(PO_mean = mean(SpatOverlapPC_perc),
+            FD_mean = mean(flux_diff_abs))
          
          #/obs.FCO2.e.6mol.m2.s*100
 
-
+print(results_prime)
 
 ggplot(data = results_prime, aes(x=SpatOverlapPC_perc,y=flux_diff_abs)) +
   #facet_wrap(~ month.Month,ncol=4) +
-  geom_point(shape=20,cex=2,alpha=.3) +
+  geom_point(shape=20,cex=3,alpha=.5) +
   scale_x_continuous(limits=c(0,75)) +
   scale_y_continuous(limits=c(0,20),breaks=seq(-25,25,5)) +
   #geom_smooth() +
   xlab("Percentage Overlap (%)") +
-  ylab("absolute difference in flux values") +
+  ylab("flux value difference (abs)") +
   theme_classic() +
-  labs(title="Overlap of Tower footprints vs. abs Difference in Flux Daytime measurement")
+  #labs(title="Overlap of Tower footprints vs. abs Difference in Flux Daytime measurement") +
+  theme(text=element_text(size=30))
+
+
+ggplot() +
+  #facet_wrap(~ month.Month,ncol=4) +
+  #geom_point(data=results_points,aes(x=SpatOverlapPC_perc,y=flux_diff_abs),fill="gray") +
+  geom_boxplot(data = results_prime,aes(x=PO_mean,y=FD_mean),shape=20,cex=10,alpha=.5) +
+  geom_line(data = results_prime,aes(x=PO_mean,y=FD_mean),cex=2) +
+  scale_x_continuous(limits=c(0,75)) +
+  scale_y_continuous(limits=c(0,20),breaks=seq(-25,25,5)) +
+  #geom_smooth() +
+  xlab("Percentage Overlap (%)") +
+  ylab("flux value difference (abs)") +
+  theme_classic() +
+  #labs(title="Overlap of Tower footprints vs. abs Difference in Flux Daytime measurement") +
+  theme(text=element_text(size=30))
+
+ggplot(results_prime) +
+  geom_boxplot(aes(x=tag,y=flux_diff_abs),
+             show.legend=FALSE) +
+  scale_y_continuous(limits=c(0,10)) +
+  theme_classic()
+
 
 
 

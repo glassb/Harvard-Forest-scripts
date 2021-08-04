@@ -341,6 +341,8 @@ boxplot_vis <- function() {
         data_long <- gather(master_res, spatial_m, perc_of_footprint, EMS_D_mean:NEON_D_mean, factor_key=TRUE)
         data_long$title <- "Decidious %"
         
+        data_long
+        
         #summary(master_res)
         
         MGP_D_bp <- ggplot(data=data_long) +
@@ -349,8 +351,9 @@ boxplot_vis <- function() {
                        show.legend=FALSE) +
           scale_y_continuous(limits=c(.5,.85)) +
           scale_x_discrete(labels=c("EMS_D_mean" = "EMS","NEON_D_mean"="NEON")) +
-          labs(y="dec. %",x="") +
-          theme_bw()
+          labs(y="%",x="") +
+          theme_classic() +
+          theme(text=element_text(size=30))
           #theme(axis.text.x = element_blank())
         
         MGP_D_bp
@@ -392,7 +395,9 @@ boxplot_vis <- function() {
           scale_y_continuous(limits=c(20.75,21.5)) +
           scale_x_discrete(labels=c("EMS_L_mean" = "EMS","NEON_L_mean"="NEON")) +
           labs(y="meters",x="") +
-          theme_bw()
+          theme_classic() +
+          theme(text=element_text(size=30))
+          
         
         
         CHMbp
@@ -426,7 +431,8 @@ boxplot_vis <- function() {
           scale_y_continuous(limits=c(-.1,.2)) +
           scale_x_discrete(labels=c("EMS_TCTg" = "EMS","NEON_TCTg"="NEON")) +
           labs(y="Index value",x="") +
-          theme_bw()
+          theme_classic() +
+          theme(text=element_text(size=30))
         
         TCT_g_bp
         
@@ -448,7 +454,7 @@ boxplot_vis <- function() {
         
         
         
-        figure <- ggarrange(MGP_D_bp,MGP_C_bp,CHMbp,TCT_g_bp,
+        figure <- ggarrange(MGP_D_bp,CHMbp,TCT_g_bp,
                             # labels = c("% Decidious in Megaplot",
                             #            "% Coniferous in Megaplot",
                             #            "Canopy Height Model",
@@ -458,6 +464,10 @@ boxplot_vis <- function() {
                             ncol = 2, nrow = 2)
         
         figure
+        
+        MGP_D_bp
+        CHMbp
+        TCT_g_bp
         
         
         
@@ -783,7 +793,7 @@ EMS_filter_prime <- results_EMS_prime %>%
 
 EMS_D <-  ggplot(data=EMS_filter,
                 aes(x=MGP_D_mean,y=obs.FCO2.e.6mol.m2.s)) +
-                geom_point(shape=20,cex=2,alpha=.2,color="coral1") +
+                geom_hist(shape=20,cex=2,alpha=.2,color="coral1") +
                 theme_classic() +
                 scale_y_continuous(limits=c(-40,40)) +
                 scale_x_continuous(limits=c(0,1)) +
@@ -826,6 +836,7 @@ EMS_TCTg <-  ggplot(data=EMS_filter_prime,
                   scale_x_continuous(limits=c(.1,.5)) +
                   xlab("TCT Greenness") +
                   theme(axis.title.y = element_blank())
+
 
 # EMS_TCTw <-  ggplot(data=EMS_filter,
 #                     aes(x=TCTw_mean,y=obs.FCO2.e.6mol.m2.s)) +
@@ -915,6 +926,9 @@ figure <- ggarrange(EMS_D,NEON_D,
 
 figure
 
+
+
+
 }
 
 
@@ -923,7 +937,38 @@ filter()
 
 
 
-
-
+  TCT_bins <- EMS_filter_prime %>%
+      #filter(!is.na(obs.FCO2.e.6mol.m2.s)) %>%
+      mutate(TCTg_mean = TCTg_mean.y,
+              tag = case_when(
+                TCTg_mean < .1 ~ "<.1",
+                TCTg_mean >= .1 & TCTg_mean < .15 ~ "[.1,.15)",
+                TCTg_mean >= .15 & TCTg_mean < .2 ~ "[.15,.2)",
+                TCTg_mean >= .2 & TCTg_mean < .25 ~ "[.2,.25)",
+                TCTg_mean >= .25 & TCTg_mean < .3 ~ "[.25,.3)",
+                TCTg_mean >= .3 & TCTg_mean < .35 ~ "[.3,.35)",
+                TCTg_mean >= .35 & TCTg_mean < .4 ~ "[.35,.4)"
+              ))
   
+TCT_bins <- TCT_bins[complete.cases(TCT_bins[,c("TCTg_mean", "obs.FCO2.e.6mol.m2.s")]), ]
+
+TCT_bins <- TCT_bins %>%
+      group_by(tag) %>%
+      summarise(x_axis = mean(TCTg_mean),
+                flux = mean(obs.FCO2.e.6mol.m2.s))
+  
+  
+print(TCT_bins)
+
+
+ggplot(data=TCT_bins,
+        aes(x=x_axis,y=flux)) +
+        geom_point(shape=20,cex=30,color="coral1") +
+        geom_line(color = "coral1",cex=5)+
+        theme_classic() +
+        scale_y_continuous(limits=c(-25,10)) +
+        scale_x_continuous(limits=c(.1,.4)) +
+        xlab("TCT Greenness") +
+        ylab("Carbon flux") +
+        theme(text=element_text(size=30))
 
